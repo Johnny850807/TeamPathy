@@ -15,7 +15,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.ood.clean.waterball.teampathy.Domain.Model.Member.Member;
+import com.ood.clean.waterball.teampathy.Domain.Model.Project;
 import com.ood.clean.waterball.teampathy.Domain.Model.ProjectSection;
 import com.ood.clean.waterball.teampathy.MyApp;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.TabLayoutView;
@@ -28,6 +30,7 @@ import butterknife.ButterKnife;
 
 public class TabLayoutFragment extends BaseFragment implements TabLayoutView{
     @Inject Member member;
+    @Inject Project project;
     @BindView(R.id.viewpager) ViewPager viewPager;
     @BindView(R.id.tablayout) TabLayout tabLayout;
 
@@ -62,6 +65,7 @@ public class TabLayoutFragment extends BaseFragment implements TabLayoutView{
         ButterKnife.bind(this,view);
         MyApp.getProjectComponent(getActivity()).inject(this);
         setupPages();
+        registerToFirebaseProjectTopic();
     }
 
     @Override
@@ -74,6 +78,10 @@ public class TabLayoutFragment extends BaseFragment implements TabLayoutView{
         // keep all fragments within viewpager alive
         viewPager.setOffscreenPageLimit(ProjectSection.values().length);
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    private void registerToFirebaseProjectTopic(){
+        FirebaseMessaging.getInstance().subscribeToTopic(project);
     }
 
 

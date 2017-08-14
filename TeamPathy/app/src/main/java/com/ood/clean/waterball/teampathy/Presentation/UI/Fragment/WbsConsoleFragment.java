@@ -58,7 +58,7 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.save_task_analytics_menu_on_toolbar,menu);  //Task analysis button on the toolbar
+        inflater.inflate(R.menu.wbs_console_menu,menu);  //Task analysis button on the toolbar
         super.onCreateOptionsMenu(menu, inflater);
     }
 

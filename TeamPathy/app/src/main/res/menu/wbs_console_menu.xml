@@ -2,7 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/save_and_update_wbs"
-        android:name="@string/task_analysis"
+        android:orderInCategory="0"
+        android:name="@string/save_charts"
         app:showAsAction="ifRoom"
-        android:title="@string/task_analysis" />
+        android:title="@string/save_charts" />
 </menu>
