@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <import type="android.view.View" />
+
+        <import type="android.widget.Button" />
+        <variable
+            name="obj"
+            type="com.ood.clean.waterball.teampathy.Domain.Model.Project"/>
+        <variable
+            name="handler"
+            type="com.ood.clean.waterball.teampathy.Presentation.UI.Dialog.SearchProjectDialogFragment.ProjectSearchResultAdapter.EventHandler"/>
+
+    </data>
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="@dimen/item_margin_top"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardBackgroundColor="@color/app_textword_color"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="50dp"
+        app:contentPadding="7dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minWidth="270dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/member_head_icon_id_card_size"
+                    android:layout_weight="4.4"
+                    android:scaleType="fitCenter"
+                    app:circleImageUrl="@{obj.imageUrl}" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:text="@{obj.name}"
+                    android:textColor="@color/app_black_word_color"
+                    android:textSize="15sp" />
+
+                <!--todo issue: "joined" text will be out of line-->
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3.6"
+                    android:text="@{handler.hasProjectBeenJoined(obj)?@string/already_in_project : @string/join}"
+                    android:textSize="12sp"
+                    android:clickable="@{handler.hasProjectBeenJoined(obj)?false:true}"
+                    android:onClick="@{()->handler.joinProjectOnClick(obj)}"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="1dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/project_description"
+                    android:textColor="#3e9bec"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="2dp"
+                    android:text="@{obj.description}"
+                    android:textColor="@color/app_black_word_color" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</layout>

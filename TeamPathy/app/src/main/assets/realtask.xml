@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TaskGroup name="TeamPathy">
+    <TaskGroup name="Frontend">
+        <TaskGroup name="UI Crud Implement">
+            <Task name="Design APP data transferring Process" Description="To design all the data transferring processes during the APP running." StartDate="2017 25 Jul." EndDate="2017 26 Jul." Contribution="400" Dependency="Api Document"/>
+            <Task name="Create All Repositorie stubs" Description="To design all the repository stubs for supporting the processes then make sure all the repository control flows are correct during APP running." StartDate="2017 26 Jul." EndDate="2017 27 Jul." Contribution="400" Dependency="Design APP data transferring Process"/>
+            <Task name="Implement All dialog UIs" Description="To implement all the dialogs which implement the CRUD." StartDate="2017 27 Jul." EndDate="2017 28 Jul." Contribution="600" Dependency="Create All Repositorie stubs"/>
+            <Task name="Finish all task commiting processing UI" Description="To implement all the process UI which the member commit the task or the PM review the pending task." StartDate="2017 29 Jul." EndDate="2017 30 Jul." Contribution="1400" Dependency="Create All Repositorie stubs"/>
+            <Task name="Finish push Notification mechanism" Description="Use Firebase to create the push notification updating UI mechanism." StartDate="2017 1 Aug." EndDate="2017 5 Aug." Contribution="1300" Dependency="Create All Repositorie stubs"/>
+        </TaskGroup>
+    </TaskGroup>
+	<TaskGroup name="Backend">
+        <TaskGroup name="Design">
+            <Task name="Table Schema" Description="Design the db table's schema." StartDate="2017 26 Jul." EndDate="2017 28 Jul." Contribution="1000" Dependency="Api Document"/>
+            <Task name="Api Document" Description="Design the api blueprint." StartDate="2017 23 Jul." EndDate="2017 24 Jul." Contribution="700" Dependency=""/>
+        </TaskGroup>
+        <TaskGroup name="Web API Implement">
+            <Task name="Create Datebase tables" Description="Create all designed tables on SQL Server." StartDate="2017 29 Jul." EndDate="2017 3 Aug." Contribution="800" Dependency="Table Schema"/>
+            <Task name="ASP.NET web api" Description="Create the api implementation in ASP.NET" StartDate="2017 4 Aug." EndDate="2017 10 Aug." Contribution="2000" Dependency="Create Datebase tables"/>
+            <Task name="API Deployment" Description="Deploy the api on IIS Server." StartDate="2017 11 Aug." EndDate="2017 12 Aug." Contribution="300" Dependency="ASP.NET web api"/>
+        </TaskGroup>
+    </TaskGroup>
+</TaskGroup>

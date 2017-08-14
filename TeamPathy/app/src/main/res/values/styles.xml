@@ -1,0 +1,31 @@
+<resources>
+
+    <style name="TeamPathyStyle" parent="Theme.AppCompat">
+        <item name="colorAccent">@color/app_textword_color</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="TeamPathyStyle2" parent="Theme.AppCompat">
+        <item name="colorAccent">@color/app_textword_color</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="TeamPathyTextView">
+        <item name="android:textColor">@color/app_textword_color</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+    </style>
+
+    <style name="gray_textinputlayout" parent="Widget.Design.TextInputLayout">
+        <item name="android:textColorHint">@color/app_hint_color</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+    </style>
+
+    <style name="TeamPathy.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+    </style>
+    <style name="TeamPathy.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
+
+    </style>
+
+</resources>
