@@ -42,7 +42,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 if (key.equals(EVENTTYPE))
                     intent.setAction(data.get(EVENTTYPE));
                 else
-                    intent.putExtra(key, data.get(EVENTTYPE));
+                    intent.putExtra(key, data.get(key));
             }
             LocalBroadcastManager.getInstance(getApplicationContext())
                     .sendBroadcast(intent);
