@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -19,10 +20,11 @@ import com.ood.clean.waterball.teampathy.R;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Map;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "Firebase";
-
+    private static final String EVENTTYPE = "eventType";
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
@@ -33,6 +35,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
+            Map<String,String> data = remoteMessage.getData();
+            Intent intent = new Intent();
+            for (String key : data.keySet())
+            {
+                if (key.equals(EVENTTYPE))
+                    intent.setAction(data.get(EVENTTYPE));
+                else
+                    intent.putExtra(key, data.get(EVENTTYPE));
+            }
+            LocalBroadcastManager.getInstance(getApplicationContext())
+                    .sendBroadcast(intent);
         }
 
         // Check if message contains a notification payload.

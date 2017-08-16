@@ -175,6 +175,13 @@ public class TimelinesFragment extends BaseFragment implements CrudPresenter.Cru
         Toast.makeText(getContext(),err.getMessage(),Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        /*LocalBroadcastManager.getInstance(getActivity()).registerReceiver((receiver),
+                new IntentFilter()
+        );*/
+    }
 
     @Override
     public void onResume() {

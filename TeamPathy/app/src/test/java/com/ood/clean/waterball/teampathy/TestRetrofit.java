@@ -41,9 +41,7 @@ import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNotSame;
 import static junit.framework.Assert.assertTrue;
 
-/**
- * Created by User on 2017/8/3.
- */
+
 
 public class TestRetrofit {
     private Retrofit retrofit;

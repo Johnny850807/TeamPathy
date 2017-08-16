@@ -26,7 +26,7 @@ public class RetrofitApplicationModule {
     @Singleton
     public Retrofit provideRetrofit(){
         Gson gson = new GsonBuilder()  //to correctly parse the date from json
-                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
                 .create();
 
         final OkHttpClient okHttpClient = new OkHttpClient.Builder()

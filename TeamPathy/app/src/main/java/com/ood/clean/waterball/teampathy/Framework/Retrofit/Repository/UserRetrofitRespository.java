@@ -1,5 +1,6 @@
 package com.ood.clean.waterball.teampathy.Framework.Retrofit.Repository;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionConverter;
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
 import com.ood.clean.waterball.teampathy.Domain.Repository.UserRepository;
@@ -28,7 +29,8 @@ public class UserRetrofitRespository implements UserRepository{
 
     @Override
     public User signIn(SignIn.Params params) throws Exception {
-        ResponseModel<User> response =  userAPI.signIn(params.getAccount(), params.getPassword())
+        String firebaseToken = FirebaseInstanceId.getInstance().getToken();
+        ResponseModel<User> response =  userAPI.signIn(params.getAccount(), params.getPassword(), firebaseToken)
                 .execute().body();
 
         if (!exceptionConverter.isSuccessful(response))
@@ -39,10 +41,12 @@ public class UserRetrofitRespository implements UserRepository{
 
     @Override
     public User signUp(SignUp.Params params) throws Exception {
+        String firebaseToken = FirebaseInstanceId.getInstance().getToken();
         ResponseModel<User> response =  userAPI.signUp(params.getName(),
                 params.getAccount(),
                 params.getPassword(),
-                params.getImageUrl()).execute().body();
+                params.getImageUrl(),
+                firebaseToken).execute().body();
 
         if (!exceptionConverter.isSuccessful(response))
             throw exceptionConverter.convert(response);
@@ -63,11 +67,13 @@ public class UserRetrofitRespository implements UserRepository{
         public Call<ResponseModel<User>> signUp(@Field("name") String name,
                                  @Field("account") String account,
                                  @Field("password") String password,
-                                 @Field("imageUrl") String imageUrl);
+                                 @Field("imageUrl") String imageUrl,
+                                 @Field("firebaseToken") String token);
 
         @FormUrlEncoded
         @POST(RESOURCE + "/SignIn")
         public Call<ResponseModel<User>> signIn(@Field("account") String account,
-                           @Field("password") String password);
+                           @Field("password") String password,
+                           @Field("firebaseToken") String token);
     }
 }
