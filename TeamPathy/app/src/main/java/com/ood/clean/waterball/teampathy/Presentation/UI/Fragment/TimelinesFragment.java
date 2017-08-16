@@ -1,11 +1,15 @@
 package com.ood.clean.waterball.teampathy.Presentation.UI.Fragment;
 
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -48,6 +52,7 @@ public class TimelinesFragment extends BaseFragment implements CrudPresenter.Cru
     @Inject TimelinesPresenterImp presenterImp;
     FragmentTimelinePageBinding binding;
     List<Timeline> timelineList = new ArrayList<>();
+    BroadcastReceiver receiver = new TimelineBroadcastReceiver();
 
     @Nullable
     @Override
@@ -175,11 +180,26 @@ public class TimelinesFragment extends BaseFragment implements CrudPresenter.Cru
         Toast.makeText(getContext(),err.getMessage(),Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("postTimeline");
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver((receiver),
+                intentFilter
+        );
+    }
 
     @Override
     public void onResume() {
         super.onResume();
         presenterImp.onResume();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(receiver);
     }
 
     @Override
@@ -241,6 +261,27 @@ public class TimelinesFragment extends BaseFragment implements CrudPresenter.Cru
                 animation.setDuration(600);
                 contentTxt.startAnimation(animation);
             }
+        }
+    }
+
+    class TimelineBroadcastReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String eventType = intent.getAction();
+            String category = intent.getStringExtra("category");
+            String content = intent.getStringExtra("content");
+            String posterImageUrl = intent.getStringExtra("posterImageUrl");
+            String posterName = intent.getStringExtra("posterName");
+            User poster = new User();
+            poster.setImageUrl(posterImageUrl);
+            poster.setName(posterName);
+            Timeline timeline = new Timeline();
+            timeline.setCategory(Timeline.Category.valueOf(category));
+            timeline.setContent(content);
+            //todo create a converter class between Firebase model to the Domain Model
+            // todo should get the user id to detect if the poster is the self !
+            if (eventType.contains("post") && !poster.getName().equals(user.getName()))
+                loadEntity(timeline);
         }
     }
 }
