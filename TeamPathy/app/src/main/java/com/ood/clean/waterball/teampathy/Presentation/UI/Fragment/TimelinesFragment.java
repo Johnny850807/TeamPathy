@@ -272,6 +272,7 @@ public class TimelinesFragment extends BaseFragment implements CrudPresenter.Cru
         public void onReceive(Context context, Intent intent) {
             try{
                 String eventType = intent.getAction();
+                int timelineId = Integer.parseInt(intent.getStringExtra("id"));
                 String category = intent.getStringExtra("category");
                 String content = intent.getStringExtra("content");
                 String postDate = intent.getStringExtra("postDate");
@@ -284,7 +285,7 @@ public class TimelinesFragment extends BaseFragment implements CrudPresenter.Cru
                 Timeline timeline = new Timeline(poster, content);
                 timeline.setPostDate(NormalDateConverter.stringToDate(postDate));
                 timeline.setCategory(Timeline.Category.valueOf(category));
-
+                timeline.setId(timelineId);
                 if (projectId == project.getId() && !poster.equals(user))
                 {
                     if (eventType.contains("post"))

@@ -208,6 +208,7 @@ public class IssuesFragment extends BaseFragment implements CrudPresenter.CrudVi
         public void onReceive(Context context, Intent intent) {
             try{
                 String eventType = intent.getAction();
+                int issueId = Integer.parseInt(intent.getStringExtra("id"));
                 String name = intent.getStringExtra("name");
                 String category = intent.getStringExtra("category");
                 String content = intent.getStringExtra("content");
@@ -219,6 +220,7 @@ public class IssuesFragment extends BaseFragment implements CrudPresenter.CrudVi
                 User poster = new User(posterName, posterImageUrl);
                 poster.setId(posterId);
                 Issue issue = new Issue(poster, name, content, category);
+                issue.setId(issueId);
                 issue.setPostDate(NormalDateConverter.stringToDate(postDate));
                 if (projectId == project.getId() && !poster.equals(user))
                 {

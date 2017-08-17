@@ -202,6 +202,7 @@ public class IssueDetailsFragment extends BaseFragment implements CrudPresenter.
         public void onReceive(Context context, Intent intent) {
             try{
                 String eventType = intent.getAction();
+                int commentId = Integer.parseInt(intent.getStringExtra("id"));
                 String content = intent.getStringExtra("content");
                 String posterImageUrl = intent.getStringExtra("posterImageUrl");
                 String postDate = intent.getStringExtra("postDate");
@@ -211,6 +212,7 @@ public class IssueDetailsFragment extends BaseFragment implements CrudPresenter.
                 User poster = new User(posterName, posterImageUrl);
                 poster.setId(posterId);
                 IssueComment comment = new IssueComment(poster, content);
+                comment.setId(commentId);
                 comment.setPostDate(NormalDateConverter.stringToDate(postDate));
                 if (projectId == project.getId() && !poster.equals(user))
                 {
