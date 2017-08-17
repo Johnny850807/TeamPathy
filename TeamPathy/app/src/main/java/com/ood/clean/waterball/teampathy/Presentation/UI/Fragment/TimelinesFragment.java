@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.ood.clean.waterball.teampathy.Domain.Model.Timeline;
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
 import com.ood.clean.waterball.teampathy.MyApp;
+import com.ood.clean.waterball.teampathy.MyUtils.IndexTreeSet;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.CrudPresenter;
 import com.ood.clean.waterball.teampathy.Presentation.Presenter.TimelinesPresenterImp;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Adapter.BindingViewHolder;
@@ -33,9 +34,6 @@ import com.ood.clean.waterball.teampathy.Presentation.UI.Animation.TargetHeightA
 import com.ood.clean.waterball.teampathy.R;
 import com.ood.clean.waterball.teampathy.databinding.FragmentTimelinePageBinding;
 import com.ood.clean.waterball.teampathy.databinding.TimelineItemBinding;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -51,7 +49,7 @@ public class TimelinesFragment extends BaseFragment implements CrudPresenter.Cru
     @Inject User user;
     @Inject TimelinesPresenterImp presenterImp;
     FragmentTimelinePageBinding binding;
-    List<Timeline> timelineList = new ArrayList<>();
+    IndexTreeSet<Timeline> timelines = new IndexTreeSet<>();
     BroadcastReceiver receiver = new TimelineBroadcastReceiver();
 
     @Nullable
@@ -114,7 +112,7 @@ public class TimelinesFragment extends BaseFragment implements CrudPresenter.Cru
 
     @Override
     public void loadEntity(Timeline timeline) {
-        timelineList.add(timeline);
+        timelines.add(timeline);
         adapter.notifyDataSetChanged();
     }
 
@@ -220,24 +218,24 @@ public class TimelinesFragment extends BaseFragment implements CrudPresenter.Cru
 
         @Override
         public void onBindViewHolder(BindingViewHolder holder, int position) {
-            Object obj = timelineList.get(position);
+            Object obj = timelines.get(position);
             holder.bind(obj);
             ((TimelineItemBinding)holder.getBinding()).setHandler(new EventHandler());
         }
 
         @Override  //prevent from the animation influence multiple views
         public long getItemId(int position) {
-            return timelineList.get(position).getId();
+            return timelines.get(position).getId();
         }
 
         @Override
         public int getItemViewType(int position) {
-            return timelineList.get(position).getId();
+            return timelines.get(position).getId();
         }
 
         @Override
         public int getItemCount() {
-            return timelineList.size();
+            return timelines.size();
         }
 
         public class EventHandler{
