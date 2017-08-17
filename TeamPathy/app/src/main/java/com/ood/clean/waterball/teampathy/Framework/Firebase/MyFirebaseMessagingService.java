@@ -25,38 +25,39 @@ import java.util.Map;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "Firebase";
     private static final String EVENTTYPE = "eventType";
+    private NotificationParser notificationParser;
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-
-        // TODO(developer): Handle FCM messages here.
-        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
-        // Check if message contains a data payload.
+        notificationParser = new NotificationParser(this);
+
         if (remoteMessage.getData().size() > 0) {
-            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
             Map<String,String> data = remoteMessage.getData();
-            Intent intent = new Intent();
-            for (String key : data.keySet())
-            {
-                if (key.equals(EVENTTYPE))
-                    intent.setAction(data.get(EVENTTYPE));
-                else
-                    intent.putExtra(key, data.get(key));
-            }
-            LocalBroadcastManager.getInstance(getApplicationContext())
-                    .sendBroadcast(intent);
+            Log.i(TAG, "Message data payload: " + data);
+            Intent intent = parseIntent(data);
+            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+            sendNotification(notificationParser.parseModel(data));
         }
 
-        // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
-            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+            Log.i(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
         }
-
-        //sendNotification();
     }
 
-    private void sendNotification(String messageBody, Bitmap image) {
+    private Intent parseIntent(Map<String,String> data){
+        Intent intent = new Intent();
+        for (String key : data.keySet())
+        {
+            if (key.equals(EVENTTYPE))  // eventType defines an action which all the UIs listening.
+                intent.setAction(data.get(EVENTTYPE));
+            else  // other data is about the properties UI needs
+                intent.putExtra(key, data.get(key));
+        }
+        return intent;
+    }
+
+    private void sendNotification(NotificationModel model) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
@@ -64,13 +65,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setLargeIcon(image)/*Notification icon image*/
                 .setSmallIcon(R.drawable.logo_icon)
-                .setStyle(new NotificationCompat.BigPictureStyle()
-                        .bigPicture(image))/*Notification with Image*/
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
-                .setContentIntent(pendingIntent);
+                .setContentIntent(pendingIntent)
+                .setContentTitle(model.title)
+                .setContentText(model.message);
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -78,6 +78,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
 
+
+    //todo don't know how to show custom icon on the notification
     public Bitmap getBitmapfromUrl(String imageUrl) {
         try {
             URL url = new URL(imageUrl);
@@ -91,6 +93,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             e.printStackTrace();
             return null;
 
+        }
+    }
+
+    static class NotificationModel{
+        private String title;
+        private String message;
+        public NotificationModel(String title, String message) {
+            this.title = title;
+            this.message = message;
         }
     }
 
