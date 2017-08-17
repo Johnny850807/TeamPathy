@@ -22,7 +22,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import static com.ood.clean.waterball.teampathy.MyUtils.EnglishAbbrDateConvert.timeToDate;
+import static com.ood.clean.waterball.teampathy.MyUtils.EnglishAbbrDateConverter.timeToDate;
 
 
 public class TaskXmlTranslatorImp implements TaskXmlTranslator {

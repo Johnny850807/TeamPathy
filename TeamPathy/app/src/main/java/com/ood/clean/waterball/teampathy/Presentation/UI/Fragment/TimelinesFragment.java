@@ -23,10 +23,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ood.clean.waterball.teampathy.Domain.Model.Project;
+import com.ood.clean.waterball.teampathy.Domain.Model.ProjectSection;
 import com.ood.clean.waterball.teampathy.Domain.Model.Timeline;
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
 import com.ood.clean.waterball.teampathy.MyApp;
-import com.ood.clean.waterball.teampathy.MyUtils.IndexTreeSet;
+import com.ood.clean.waterball.teampathy.MyUtils.IndexSet;
+import com.ood.clean.waterball.teampathy.MyUtils.NormalDateConverter;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.CrudPresenter;
 import com.ood.clean.waterball.teampathy.Presentation.Presenter.TimelinesPresenterImp;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Adapter.BindingViewHolder;
@@ -34,6 +37,9 @@ import com.ood.clean.waterball.teampathy.Presentation.UI.Animation.TargetHeightA
 import com.ood.clean.waterball.teampathy.R;
 import com.ood.clean.waterball.teampathy.databinding.FragmentTimelinePageBinding;
 import com.ood.clean.waterball.teampathy.databinding.TimelineItemBinding;
+
+import java.text.ParseException;
+import java.util.TreeSet;
 
 import javax.inject.Inject;
 
@@ -46,10 +52,11 @@ public class TimelinesFragment extends BaseFragment implements CrudPresenter.Cru
     @BindView(R.id.swiperefreshlayout) SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.input_timeline_ed) EditText timelineInputEd;
     TimelinesAdapter adapter;
+    @Inject Project project;
     @Inject User user;
     @Inject TimelinesPresenterImp presenterImp;
     FragmentTimelinePageBinding binding;
-    IndexTreeSet<Timeline> timelines = new IndexTreeSet<>();
+    IndexSet<Timeline> timelines = new IndexSet<>(new TreeSet<Timeline>());
     BroadcastReceiver receiver = new TimelineBroadcastReceiver();
 
     @Nullable
@@ -119,7 +126,6 @@ public class TimelinesFragment extends BaseFragment implements CrudPresenter.Cru
     @Override  //todo  single line field would reduce the UX, so change it to multiple lines should have a better design
     public void onCreateFinishNotify(final Timeline timeline) {
         clearInputEdittextStatus();
-        //todo timeline should be at the 0 position of adapter
         getBaseView().hideProgressBar();
         Snackbar.make(binding.getRoot(),getString(R.string.timeline_created_completed),Snackbar.LENGTH_LONG)
                 .setAction("UNDO", new View.OnClickListener() {
@@ -181,8 +187,7 @@ public class TimelinesFragment extends BaseFragment implements CrudPresenter.Cru
     @Override
     public void onStart() {
         super.onStart();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("postTimeline");
+        IntentFilter intentFilter = ProjectSection.TIMELINE.getIntentFilter();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver((receiver),
                 intentFilter
         );
@@ -265,21 +270,38 @@ public class TimelinesFragment extends BaseFragment implements CrudPresenter.Cru
     class TimelineBroadcastReceiver extends BroadcastReceiver{
         @Override
         public void onReceive(Context context, Intent intent) {
-            String eventType = intent.getAction();
-            String category = intent.getStringExtra("category");
-            String content = intent.getStringExtra("content");
-            String posterImageUrl = intent.getStringExtra("posterImageUrl");
-            String posterName = intent.getStringExtra("posterName");
-            User poster = new User();
-            poster.setImageUrl(posterImageUrl);
-            poster.setName(posterName);
-            Timeline timeline = new Timeline();
-            timeline.setCategory(Timeline.Category.valueOf(category));
-            timeline.setContent(content);
-            //todo create a converter class between Firebase model to the Domain Model
-            // todo should get the user id to detect if the poster is the self !
-            if (eventType.contains("post") && !poster.getName().equals(user.getName()))
-                loadEntity(timeline);
+            try{
+                String eventType = intent.getAction();
+                String category = intent.getStringExtra("category");
+                String content = intent.getStringExtra("content");
+                String postDate = intent.getStringExtra("postDate");
+                String posterImageUrl = intent.getStringExtra("posterImageUrl");
+                int posterId = Integer.parseInt(intent.getStringExtra("posterId"));
+                int projectId = Integer.parseInt(intent.getStringExtra("projectId"));
+                String posterName = intent.getStringExtra("posterName");
+                User poster = new User(posterName, posterImageUrl);
+                poster.setId(posterId);
+                Timeline timeline = new Timeline(poster, content);
+                timeline.setPostDate(NormalDateConverter.stringToDate(postDate));
+                timeline.setCategory(Timeline.Category.valueOf(category));
+
+                if (projectId == project.getId() && !poster.equals(user))
+                {
+                    if (eventType.contains("post"))
+                        timelines.add(timeline);
+                    else if (eventType.contains("delete"))
+                        timelines.remove(timeline);
+                    else if (eventType.contains("put"))
+                        timelines.update(timeline);
+
+                    adapter.notifyDataSetChanged();
+                }
+            }catch (ParseException err){
+                onOperationTimeout(err);
+                err.printStackTrace();
+            }
+
+
         }
     }
 }

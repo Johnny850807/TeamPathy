@@ -54,6 +54,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             else  // other data is about the properties UI needs
                 intent.putExtra(key, data.get(key));
         }
+
         return intent;
     }
 

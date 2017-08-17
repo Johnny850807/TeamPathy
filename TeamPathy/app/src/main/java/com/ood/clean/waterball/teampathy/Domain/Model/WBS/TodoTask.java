@@ -1,7 +1,7 @@
 package com.ood.clean.waterball.teampathy.Domain.Model.WBS;
 
 
-import com.ood.clean.waterball.teampathy.MyUtils.EnglishAbbrDateConvert;
+import com.ood.clean.waterball.teampathy.MyUtils.EnglishAbbrDateConverter;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.ood.clean.waterball.teampathy.MyUtils.EnglishAbbrDateConvert.dateToTime;
+import static com.ood.clean.waterball.teampathy.MyUtils.EnglishAbbrDateConverter.dateToTime;
 
 public class TodoTask extends TaskEntity implements TaskItem {
     public static int UNASSIGNED_ID = -1;
@@ -112,11 +112,11 @@ public class TodoTask extends TaskEntity implements TaskItem {
     }
 
     public String getStartDateString(){
-        return EnglishAbbrDateConvert.dateToTime(startDate,false);
+        return EnglishAbbrDateConverter.dateToTime(startDate,false);
     }
 
     public String getEndDateString(){
-        return EnglishAbbrDateConvert.dateToTime(endDate,false);
+        return EnglishAbbrDateConverter.dateToTime(endDate,false);
     }
 
     @Override

@@ -4,7 +4,7 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
-public class EnglishAbbrDateConvert {
+public class EnglishAbbrDateConverter {
     public final static String[] DATE_NAME_ENG_ABR = {"Jan.","Feb.","Mar.","Apr.","May.","Jun.",
             "Jul.","Aug.","Sep.","Oct.","Nov.","Dec."};
 

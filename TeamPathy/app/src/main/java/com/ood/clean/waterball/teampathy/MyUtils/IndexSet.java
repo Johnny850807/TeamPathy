@@ -5,11 +5,14 @@ import android.support.annotation.NonNull;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.TreeSet;
 
 
-public class IndexTreeSet<E> implements Set<E> {
-    private Set<E> elementData = new TreeSet<E>();
+public class IndexSet<E> implements Set<E> {
+    private Set<E> elementData;
+
+    public IndexSet(Set<E> elementData) {
+        this.elementData = elementData;
+    }
 
     @Override
     public int size() {
@@ -86,5 +89,10 @@ public class IndexTreeSet<E> implements Set<E> {
                 return e;
 
         throw new IndexOutOfBoundsException();
+    }
+
+    public void update(E e){
+        elementData.remove(e);
+        elementData.add(e);
     }
 }
