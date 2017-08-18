@@ -110,6 +110,7 @@ public class TabLayoutFragment extends BaseFragment implements TabLayoutView{
         public int getCount() {
             return projectSections.length;
         }
+
     }
 
 }
