@@ -42,6 +42,12 @@ public class TimelinesPresenterImp implements CrudPresenter<Timeline>{
             public void onComplete() {
                 timelinesView.onLoadFinishNotify();
             }
+
+            @Override
+            public void onError(Throwable exception) {
+                exception.printStackTrace();
+                timelinesView.onOperationTimeout(exception);
+            }
         } , page);
     }
 

@@ -50,6 +50,12 @@ public class IssueDetailsPresenterImp implements CrudPresenter<IssueComment> {
                 issueDetailsView.loadEntity(issueComment);
                 issueDetailsView.onCreateFinishNotify(issueComment);
             }
+
+            @Override
+            public void onError(Throwable exception) {
+                super.onError(exception);
+                issueDetailsView.onOperationTimeout(exception);
+            }
         }, issueComment);
     }
 

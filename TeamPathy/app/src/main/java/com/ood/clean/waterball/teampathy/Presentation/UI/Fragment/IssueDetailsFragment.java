@@ -1,9 +1,14 @@
 package com.ood.clean.waterball.teampathy.Presentation.UI.Fragment;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +19,11 @@ import android.widget.Toast;
 
 import com.ood.clean.waterball.teampathy.Domain.Model.Issue;
 import com.ood.clean.waterball.teampathy.Domain.Model.IssueComment;
+import com.ood.clean.waterball.teampathy.Domain.Model.Project;
+import com.ood.clean.waterball.teampathy.Domain.Model.ProjectSection;
+import com.ood.clean.waterball.teampathy.Domain.Model.User;
 import com.ood.clean.waterball.teampathy.MyApp;
+import com.ood.clean.waterball.teampathy.MyUtils.NormalDateConverter;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.CrudPresenter;
 import com.ood.clean.waterball.teampathy.Presentation.Presenter.IssueDetailsPresenterImp;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Adapter.BindingViewHolder;
@@ -22,6 +31,8 @@ import com.ood.clean.waterball.teampathy.Presentation.UI.Dialog.CreateIssueComme
 import com.ood.clean.waterball.teampathy.R;
 import com.ood.clean.waterball.teampathy.databinding.FragmentIssueDetailsPageBinding;
 import com.ood.clean.waterball.teampathy.databinding.IssueCommentItemBinding;
+
+import java.text.ParseException;
 
 import javax.inject.Inject;
 
@@ -33,12 +44,15 @@ import static com.ood.clean.waterball.teampathy.MyUtils.MyLog.Log;
 
 public class IssueDetailsFragment extends BaseFragment implements CrudPresenter.CrudView<IssueComment>, SwipeRefreshLayout.OnRefreshListener {
     int page = 1;
-    @Inject Issue issue;
-    @Inject IssueDetailsPresenterImp presenterImp;
     @BindView(R.id.recyclerview) RecyclerView recyclerView;
     @BindView(R.id.swiperefreshlayout) SwipeRefreshLayout swipeRefreshLayout;
+    @Inject IssueDetailsPresenterImp presenterImp;
+    @Inject Issue issue;
+    @Inject Project project;
+    @Inject User user;
     IssueCommentsAdapter adapter;
     LinearLayoutManager layoutManager;
+    private BroadcastReceiver receiver = new IssueDetailsBroadcastReceiver();
 
     @Nullable
     @Override
@@ -125,6 +139,20 @@ public class IssueDetailsFragment extends BaseFragment implements CrudPresenter.
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        IntentFilter intentFilter = ProjectSection.ISSUECOMMENT.getIntentFilter();
+
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(receiver, intentFilter);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(receiver);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         presenterImp.onResume();
@@ -159,7 +187,6 @@ public class IssueDetailsFragment extends BaseFragment implements CrudPresenter.
                 public void onClick(View view) {
                     IssueComment issueComment = issue.getComments().get(position);
                     Log("IssueComment on click " + issueComment.getContent());
-                    //todo IssueComment on click change to details
                 }
             });
         }
@@ -167,6 +194,44 @@ public class IssueDetailsFragment extends BaseFragment implements CrudPresenter.
         @Override
         public int getItemCount() {
             return issue.getComments().size();
+        }
+    }
+
+    class IssueDetailsBroadcastReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try{
+                String eventType = intent.getAction();
+                int commentId = Integer.parseInt(intent.getStringExtra("id"));
+                String content = intent.getStringExtra("content");
+                String posterImageUrl = intent.getStringExtra("posterImageUrl");
+                String postDate = intent.getStringExtra("postDate");
+                int posterId = Integer.parseInt(intent.getStringExtra("posterId"));
+                int projectId = Integer.parseInt(intent.getStringExtra("projectId"));
+                String posterName = intent.getStringExtra("posterName");
+                User poster = new User(posterName, posterImageUrl);
+                poster.setId(posterId);
+                IssueComment comment = new IssueComment(poster, content);
+                comment.setId(commentId);
+                comment.setPostDate(NormalDateConverter.stringToDate(postDate));
+                if (projectId == project.getId() && !poster.equals(user))
+                {
+                    if (eventType.contains("post"))
+                        issue.getComments().add(comment);
+                    else if (eventType.contains("delete"))
+                        issue.getComments().remove(comment);
+                    else if (eventType.contains("put"))
+                    {
+                        issue.getComments().remove(comment);
+                        issue.getComments().add(comment);
+                    }
+
+                    adapter.notifyDataSetChanged();
+                }
+            }catch (ParseException err){
+                onOperationTimeout(err);
+            }
+
         }
     }
 }

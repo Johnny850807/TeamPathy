@@ -14,12 +14,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.UserScope;
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
 import com.ood.clean.waterball.teampathy.MyApp;
@@ -56,7 +54,6 @@ public class BaseActivity extends AppCompatActivity implements BasePresenter.Bas
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base_page);
-        Log.d("Firebase", "Refreshed token: " + FirebaseInstanceId.getInstance().getToken());
         ButterKnife.bind(this);
         MyApp.getUserComponent(this)
                 .inject(this);

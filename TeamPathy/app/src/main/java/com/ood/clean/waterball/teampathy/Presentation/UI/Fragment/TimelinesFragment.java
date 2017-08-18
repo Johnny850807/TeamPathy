@@ -1,11 +1,15 @@
 package com.ood.clean.waterball.teampathy.Presentation.UI.Fragment;
 
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,9 +23,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ood.clean.waterball.teampathy.Domain.Model.Project;
+import com.ood.clean.waterball.teampathy.Domain.Model.ProjectSection;
 import com.ood.clean.waterball.teampathy.Domain.Model.Timeline;
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
 import com.ood.clean.waterball.teampathy.MyApp;
+import com.ood.clean.waterball.teampathy.MyUtils.IndexSet;
+import com.ood.clean.waterball.teampathy.MyUtils.NormalDateConverter;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.CrudPresenter;
 import com.ood.clean.waterball.teampathy.Presentation.Presenter.TimelinesPresenterImp;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Adapter.BindingViewHolder;
@@ -30,8 +38,8 @@ import com.ood.clean.waterball.teampathy.R;
 import com.ood.clean.waterball.teampathy.databinding.FragmentTimelinePageBinding;
 import com.ood.clean.waterball.teampathy.databinding.TimelineItemBinding;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.ParseException;
+import java.util.TreeSet;
 
 import javax.inject.Inject;
 
@@ -44,10 +52,12 @@ public class TimelinesFragment extends BaseFragment implements CrudPresenter.Cru
     @BindView(R.id.swiperefreshlayout) SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.input_timeline_ed) EditText timelineInputEd;
     TimelinesAdapter adapter;
+    @Inject Project project;
     @Inject User user;
     @Inject TimelinesPresenterImp presenterImp;
     FragmentTimelinePageBinding binding;
-    List<Timeline> timelineList = new ArrayList<>();
+    IndexSet<Timeline> timelines = new IndexSet<>(new TreeSet<Timeline>());
+    BroadcastReceiver receiver = new TimelineBroadcastReceiver();
 
     @Nullable
     @Override
@@ -109,14 +119,13 @@ public class TimelinesFragment extends BaseFragment implements CrudPresenter.Cru
 
     @Override
     public void loadEntity(Timeline timeline) {
-        timelineList.add(timeline);
+        timelines.add(timeline);
         adapter.notifyDataSetChanged();
     }
 
     @Override  //todo  single line field would reduce the UX, so change it to multiple lines should have a better design
     public void onCreateFinishNotify(final Timeline timeline) {
         clearInputEdittextStatus();
-        //todo timeline should be at the 0 position of adapter
         getBaseView().hideProgressBar();
         Snackbar.make(binding.getRoot(),getString(R.string.timeline_created_completed),Snackbar.LENGTH_LONG)
                 .setAction("UNDO", new View.OnClickListener() {
@@ -175,11 +184,25 @@ public class TimelinesFragment extends BaseFragment implements CrudPresenter.Cru
         Toast.makeText(getContext(),err.getMessage(),Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        IntentFilter intentFilter = ProjectSection.TIMELINE.getIntentFilter();
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver((receiver),
+                intentFilter
+        );
+    }
 
     @Override
     public void onResume() {
         super.onResume();
         presenterImp.onResume();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(receiver);
     }
 
     @Override
@@ -200,24 +223,24 @@ public class TimelinesFragment extends BaseFragment implements CrudPresenter.Cru
 
         @Override
         public void onBindViewHolder(BindingViewHolder holder, int position) {
-            Object obj = timelineList.get(position);
+            Object obj = timelines.get(position);
             holder.bind(obj);
             ((TimelineItemBinding)holder.getBinding()).setHandler(new EventHandler());
         }
 
         @Override  //prevent from the animation influence multiple views
         public long getItemId(int position) {
-            return timelineList.get(position).getId();
+            return timelines.get(position).getId();
         }
 
         @Override
         public int getItemViewType(int position) {
-            return timelineList.get(position).getId();
+            return timelines.get(position).getId();
         }
 
         @Override
         public int getItemCount() {
-            return timelineList.size();
+            return timelines.size();
         }
 
         public class EventHandler{
@@ -241,6 +264,45 @@ public class TimelinesFragment extends BaseFragment implements CrudPresenter.Cru
                 animation.setDuration(600);
                 contentTxt.startAnimation(animation);
             }
+        }
+    }
+
+    class TimelineBroadcastReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try{
+                String eventType = intent.getAction();
+                int timelineId = Integer.parseInt(intent.getStringExtra("id"));
+                String category = intent.getStringExtra("category");
+                String content = intent.getStringExtra("content");
+                String postDate = intent.getStringExtra("postDate");
+                String posterImageUrl = intent.getStringExtra("posterImageUrl");
+                int posterId = Integer.parseInt(intent.getStringExtra("posterId"));
+                int projectId = Integer.parseInt(intent.getStringExtra("projectId"));
+                String posterName = intent.getStringExtra("posterName");
+                User poster = new User(posterName, posterImageUrl);
+                poster.setId(posterId);
+                Timeline timeline = new Timeline(poster, content);
+                timeline.setPostDate(NormalDateConverter.stringToDate(postDate));
+                timeline.setCategory(Timeline.Category.valueOf(category));
+                timeline.setId(timelineId);
+                if (projectId == project.getId() && !poster.equals(user))
+                {
+                    if (eventType.contains("post"))
+                        timelines.add(timeline);
+                    else if (eventType.contains("delete"))
+                        timelines.remove(timeline);
+                    else if (eventType.contains("put"))
+                        timelines.update(timeline);
+
+                    adapter.notifyDataSetChanged();
+                }
+            }catch (ParseException err){
+                onOperationTimeout(err);
+                err.printStackTrace();
+            }
+
+
         }
     }
 }
