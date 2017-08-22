@@ -34,6 +34,7 @@ public class NotificationParser {
     }
 
     private String parseWhereByData(Map<String,String> data) {
+        //todo server side doesn't send a projectName as a data key back
         if (data.containsKey("projectName"))
             return data.get("projectName") + "-";
         return "";

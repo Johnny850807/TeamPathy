@@ -30,6 +30,8 @@ public class MyApp extends Application {
     private IssueComponent issueComponent;
     private WbsComponent wbsComponent;
 
+
+
     @Override
     public void onCreate() {
         super.onCreate();
