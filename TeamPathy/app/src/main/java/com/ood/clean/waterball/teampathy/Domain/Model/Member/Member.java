@@ -27,7 +27,7 @@ public class Member {
         this.user = user;
     }
 
-    public boolean isMemberPosition(){
+    public boolean isNotManager(){
         return memberDetails.getPosition().isMember();
     }
 

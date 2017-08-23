@@ -85,7 +85,7 @@ public class TaskAnalyticsFragment extends BaseFragment {
         }
         @Override
         public int getCount() {
-            if (!member.isMemberPosition())  // manager and leader has one more workspace to review the tasks
+            if (!member.isNotManager())  // manager and leader has one more workspace to review the tasks
                 return taskAnalysisSections.size() ;
             return taskAnalysisSections.size() - 1;
         }

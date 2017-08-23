@@ -25,6 +25,8 @@ import com.ood.clean.waterball.teampathy.MyApp;
 import com.ood.clean.waterball.teampathy.MyUtils.TeamPathyDialogFactory;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.WbsConsolePresenter;
 import com.ood.clean.waterball.teampathy.Presentation.Presenter.WbsConsolePresenterImp;
+import com.ood.clean.waterball.teampathy.Presentation.UI.Dialog.CreateTaskGroupDialogFragment;
+import com.ood.clean.waterball.teampathy.Presentation.UI.Dialog.CreateTodoTaskDialogFragment;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Factory.TaskItemViewFactory;
 import com.ood.clean.waterball.teampathy.R;
 
@@ -39,9 +41,12 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
     private final int EDIT_TASK = 0;
     private final int DELETE_TASK = 1;
     private final int ASSIGN_TODOTASK = 2;
+    private final int CREATE_TASK_GROUP = 0;
+    private final int CREATE_TODOTASK = 1;
 
     private String[] todotaskActions;
     private String[] todoGroupActions;
+    private String[] createTaskTypeActions;
 
     @BindView(R.id.flowlayout) FlowLayout flowLayout;
     @Inject TaskItemViewFactory taskItemViewFactory;
@@ -66,7 +71,7 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId())
         {
-            case R.id.save_and_update_wbs:
+            case R.id.save_and_update_wbs:  //todo no longer needed
                 getBaseView().showProgressDialog();
                 presenterImp.updateTasks(taskRoot);
                 break;
@@ -86,6 +91,7 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
 
     private void init() {
         todotaskActions = getResources().getStringArray(R.array.wbs_console_todotask_actions);
+        createTaskTypeActions = getResources().getStringArray(R.array.create_task_type_list);
     }
 
     private void setupConsoleView() {
@@ -135,15 +141,34 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
     /** taskview visitor's overloading functions **/
 
     @Override
-    public void taskViewOnClick(TaskGroup TaskGoup) {
-        showDialogForCreateTaskChild();
+    public void taskViewOnClick(final TaskGroup taskGroup) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, createTaskTypeActions);
+        new AlertDialog.Builder(getActivity())
+                .setAdapter(adapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int position) {
+                        switch (position)
+                        {
+                            case CREATE_TASK_GROUP:
+                                showDialogForCreateTaskChild(taskGroup);
+                                break;
+                            case CREATE_TODOTASK:
+                                showDialogForCreateTodoTask(taskGroup);
+                                break;
+                        }
+                    }
+                })
+                .show();
     }
 
-    private void showDialogForCreateTaskChild() {
-        if (!member.isMemberPosition())
-        {
-            //todo create task child
-        }
+    private void showDialogForCreateTodoTask(TaskItem parent) {
+        if (!member.isNotManager())
+            showAlertDialogFragment(CreateTodoTaskDialogFragment.newInstance(parent.getName()));
+    }
+
+    private void showDialogForCreateTaskChild(TaskItem parent) {
+        if (!member.isNotManager())
+            showAlertDialogFragment(CreateTaskGroupDialogFragment.newInstance(parent.getName()));
     }
 
     @Override
@@ -164,7 +189,7 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
 
     private void showDialogListForTaskItemLongClickActions(final TaskItem taskItem) {
         MyLongClickActionsAdapter adapter = new MyLongClickActionsAdapter();
-        new AlertDialog.Builder(getContext())
+        new AlertDialog.Builder(getActivity())
                 .setAdapter(adapter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int position) {
@@ -192,7 +217,7 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
         @Override
         public int getCount() {
             // if the member not a management position, he can't do anything
-            return member.isMemberPosition() ? 0 : 3;
+            return member.isNotManager() ? 0 : 3;
         }
     }
 

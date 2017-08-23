@@ -94,4 +94,6 @@ public class MyApp extends Application {
     public static WbsComponent getWbsComponent(Activity activity){
         return ((MyApp)activity.getApplication()).wbsComponent;
     }
+
+
 }

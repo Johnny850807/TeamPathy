@@ -159,5 +159,13 @@
     <string name="timeline">動態</string>
     <string name="issue">文章</string>
     <string name="issueComment">留言</string>
+    <string name="create_task_group">創建工作群組</string>
+    <string name="create_todotask">創建工作項目</string>
+    <string name="name_cannot_be_empty">名稱不能為空</string>
+
+    <string-array name="create_task_type_list">
+        <item>創建工作群組</item>
+        <item>創建工作項目</item>
+    </string-array>
 
 </resources>
