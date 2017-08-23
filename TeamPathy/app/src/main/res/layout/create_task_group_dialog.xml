@@ -32,26 +32,5 @@
 
         </android.support.design.widget.TextInputLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/cancel"
-                android:id="@+id/cancelBTN_taskGroup_dialog"
-                android:layout_weight="1"
-                android:layout_margin="12dp"/>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/confirm"
-                android:id="@+id/confirmBTN_taskGroup_dialog"
-                android:layout_weight="1"
-                android:layout_margin="12dp"/>
-        </LinearLayout>
-
     </LinearLayout>
 </ScrollView>
