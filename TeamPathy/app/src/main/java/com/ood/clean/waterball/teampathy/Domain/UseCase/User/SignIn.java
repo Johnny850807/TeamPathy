@@ -46,10 +46,12 @@ public class SignIn extends UseCase<User,SignIn.Params> {
     public static class Params{
         private String account;
         private String password;
+        private String pushNotificationToken;
 
-        public Params(String account, String password) {
+        public Params(String account, String password, String pushNotificationToken) {
             this.account = account;
             this.password = password;
+            this.pushNotificationToken = pushNotificationToken;
         }
 
         public String getAccount() {
@@ -66,6 +68,14 @@ public class SignIn extends UseCase<User,SignIn.Params> {
 
         public void setPassword(String password) {
             this.password = password;
+        }
+
+        public String getPushNotificationToken() {
+            return pushNotificationToken;
+        }
+
+        public void setPushNotificationToken(String pushNotificationToken) {
+            this.pushNotificationToken = pushNotificationToken;
         }
 
         @Override

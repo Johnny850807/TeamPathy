@@ -5,7 +5,7 @@ import android.content.Context;
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ProjectScope;
 import com.ood.clean.waterball.teampathy.Domain.Model.Project;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskItem;
-import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskXmlTranslator;
+import com.ood.clean.waterball.teampathy.Domain.Model.WBS.WbsCommand;
 import com.ood.clean.waterball.teampathy.Domain.Repository.WbsRepository;
 
 import java.util.HashMap;
@@ -18,15 +18,12 @@ import javax.inject.Inject;
 public class WbsRepositoryStub implements WbsRepository {
     private static Map<Project,String> wbsMap = new HashMap<>();
     private Project project;
-    private TaskXmlTranslator taskXmlTranslatorImp;
     private Context context;
 
     @Inject
     public WbsRepositoryStub(Project project,
-                             TaskXmlTranslator taskXmlTranslatorImp,
                              Context context) {
         this.project = project;
-        this.taskXmlTranslatorImp = taskXmlTranslatorImp;
         this.context = context;
     }
 
@@ -38,17 +35,9 @@ public class WbsRepositoryStub implements WbsRepository {
     }
 
     @Override
-    public TaskItem updateWbs(TaskItem taskRoot) throws Exception {
-        String wbs = taskXmlTranslatorImp.taskToXml(taskRoot);
-        wbsMap.put(project,wbs);
-        return taskRoot;
+    public <Data extends TaskItem> String executeWbsCommand(WbsCommand<Data> taskRoot) throws Exception {
+        return null;
     }
 
-    @Override
-    public TaskItem getTaskTree() throws Exception {
-        if (!wbsMap.containsKey(project))
-            wbsMap.put(project,AssetXmlStub.getXml(context));
-        return taskXmlTranslatorImp.xmlToTasks(wbsMap.get(project));
-    }
 
 }

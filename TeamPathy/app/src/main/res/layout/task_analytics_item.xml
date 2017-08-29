@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
                 android:textSize="12sp"
-                android:text="@{task.ofGroupName}"
+                android:text="@{task.parent}"
                 android:textColor="@color/app_black_word_color"/>
         </LinearLayout>
 

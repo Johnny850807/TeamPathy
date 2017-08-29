@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.ood.clean.waterball.teampathy.MyApp;
+import com.ood.clean.waterball.teampathy.Presentation.Interfaces.WbsConsolePresenter;
 import com.ood.clean.waterball.teampathy.R;
 
 import butterknife.ButterKnife;
@@ -16,6 +17,7 @@ import butterknife.ButterKnife;
 
 public class CreateTodoTaskDialogFragment extends MakeSureToCancelBaseDialogFragment{
     private static final String PARENT = "ParentName";
+    private WbsConsolePresenter wbsConsolePresenter;
     private String parentName;
 
     public static CreateTodoTaskDialogFragment newInstance(String parentName){
@@ -24,6 +26,10 @@ public class CreateTodoTaskDialogFragment extends MakeSureToCancelBaseDialogFrag
         bundle.putString(PARENT, parentName);
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    public void setWbsConsolePresenter(WbsConsolePresenter wbsConsolePresenter) {
+        this.wbsConsolePresenter = wbsConsolePresenter;
     }
 
     @Override

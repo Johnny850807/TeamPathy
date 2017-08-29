@@ -162,6 +162,8 @@
     <string name="create_task_group">創建工作群組</string>
     <string name="create_todotask">創建工作項目</string>
     <string name="name_cannot_be_empty">名稱不能為空</string>
+    <string name="error">錯誤</string>
+    <string name="please_reconnect_network">錯誤，請確認網路是否連接，並重啟APP。</string>
 
     <string-array name="create_task_type_list">
         <item>創建工作群組</item>

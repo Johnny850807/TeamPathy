@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 
+// The set which has an index on each element
 public class IndexSet<E> implements Set<E> {
     private Set<E> elementData;
 

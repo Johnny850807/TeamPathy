@@ -1,15 +1,14 @@
 package com.ood.clean.waterball.teampathy.Presentation.Interfaces;
 
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskItem;
+import com.ood.clean.waterball.teampathy.Domain.Model.WBS.WbsCommand;
 
-/**
- * Created by User on 2017/7/19.
- */
+
 
 public interface WbsConsolePresenter extends LifetimePresenter{
 
     void loadTasks();
-    void updateTasks(TaskItem taskRoot);
+    void executeCommand(WbsCommand<? extends TaskItem> wbsCommand);
 
     public interface WbsView{
         public void onLoadTasksFinish(TaskItem taskroot);

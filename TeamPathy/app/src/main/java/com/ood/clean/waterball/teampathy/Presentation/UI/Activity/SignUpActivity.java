@@ -4,10 +4,12 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ActivityScope;
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.User.SignUp;
@@ -45,15 +47,27 @@ public class SignUpActivity extends AppCompatActivity implements SignUpPresenter
 
     public void onSignUpClick(View view) {
         progressDialog.show();
-        SignUp.Params params = new SignUp.Params(
-            accountEd.getText().toString(),
-                passwordEd.getText().toString(),
-                nameEd.getText().toString(),
-                imageUrl
+        FirebaseInstanceId instnaceId = FirebaseInstanceId.getInstance();
+        if (instnaceId != null && instnaceId.getToken() != null)
+        {
+            String pushNotificationToken = instnaceId.getToken();
+            SignUp.Params params = new SignUp.Params(
+                    accountEd.getText().toString(),
+                    passwordEd.getText().toString(),
+                    nameEd.getText().toString(),
+                    imageUrl,
+                    pushNotificationToken);
 
-        );
-        if (checkInputAvailable(params))
-            signUpPresenter.signUp(params);
+            Log.d("Push" ,  pushNotificationToken);
+            if (checkInputAvailable(params))
+                signUpPresenter.signUp(params);
+        }
+        else
+            showErrorDialog();
+    }
+
+    private void showErrorDialog(){
+        TeamPathyDialogFactory.networkErrorDialogBuilder(this).show();
     }
 
     private boolean checkInputAvailable(SignUp.Params params){

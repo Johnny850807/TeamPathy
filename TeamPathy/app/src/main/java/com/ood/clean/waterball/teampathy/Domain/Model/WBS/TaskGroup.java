@@ -146,19 +146,10 @@ public class TaskGroup extends TaskEntity implements TaskItem {
 		return true;
 	}
 
-    @Override
-    public void acceptOnEditVisitor(TaskOnEditVisitor visitor) {
-        visitor.taskOnEdit(this);
-    }
-
 	@Override
-    public void acceptOnClickVisitor(TaskOnClickVisitor visitor) {
-		visitor.taskViewOnClick(this);
+	public void acceptEventVisitor(TaskEventVisitor visitor) {
+		visitor.eventOnTask(this);
 	}
 
-	@Override
-	public void acceptOnLongClickVisitor(TaskOnClickVisitor visitor) {
-		visitor.taskViewOnLongClick(this);
-	}
 
 }

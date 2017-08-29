@@ -40,12 +40,22 @@ public class SignUp extends UseCase<User, SignUp.Params> {
         private String password;
         private String name;
         private String imageUrl;
+        private String pushNotificationToken;
 
-        public Params(String account, String password, String name, String imageUrl) {
+        public Params(String account, String password, String name, String imageUrl, String pushNotificationToken) {
             this.account = account;
             this.password = password;
             this.name = name;
             this.imageUrl = imageUrl;
+            this.pushNotificationToken = pushNotificationToken;
+        }
+
+        public String getPushNotificationToken() {
+            return pushNotificationToken;
+        }
+
+        public void setPushNotificationToken(String pushNotificationToken) {
+            this.pushNotificationToken = pushNotificationToken;
         }
 
         public String getName() {

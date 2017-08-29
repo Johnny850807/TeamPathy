@@ -14,8 +14,8 @@ import com.ood.clean.waterball.teampathy.Domain.Repository.TimeLineRepository;
 import com.ood.clean.waterball.teampathy.Domain.Repository.WbsRepository;
 import com.ood.clean.waterball.teampathy.Framework.Retrofit.Repository.IssueRetrofitRepository;
 import com.ood.clean.waterball.teampathy.Framework.Retrofit.Repository.TimelineRetrofitRepository;
+import com.ood.clean.waterball.teampathy.Framework.Retrofit.Repository.WbsRetrofitRepository;
 import com.ood.clean.waterball.teampathy.Stub.OfficeRepositoryStub;
-import com.ood.clean.waterball.teampathy.Stub.WbsRepositoryStub;
 
 import dagger.Module;
 import dagger.Provides;
@@ -61,8 +61,9 @@ public class RetrofitProjectModule {
     }
 
     @Provides @ProjectScope
-    public WbsRepository provideWbsRepository(Project project, TaskXmlTranslator taskXmlTranslator, Context context){
-        return new WbsRepositoryStub(project, taskXmlTranslator,context);
+    public WbsRepository provideWbsRepository(ExceptionConverter exceptionConverter, Retrofit retrofit,
+                                              Project project, TaskXmlTranslator taskXmlTranslator){
+        return new WbsRetrofitRepository(exceptionConverter, retrofit, project);
     }
 
 }

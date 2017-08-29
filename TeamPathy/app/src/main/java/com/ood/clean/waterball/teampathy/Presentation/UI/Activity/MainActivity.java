@@ -62,6 +62,11 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Mai
                 .show();
     }
 
+    @Override
+    public void onPushNotificationNotPrepared() {
+        TeamPathyDialogFactory.networkErrorDialogBuilder(this).show();
+    }
+
     public void registerOnClick(View view) {
         startActivity(new Intent(this, SignUpActivity.class));
     }

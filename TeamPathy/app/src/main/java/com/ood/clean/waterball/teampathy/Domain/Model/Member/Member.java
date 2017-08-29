@@ -31,6 +31,10 @@ public class Member {
         return memberDetails.getPosition().isMember();
     }
 
+    public boolean isManager(){
+        return !memberDetails.getPosition().isMember();
+    }
+
     public MemberDetails getMemberDetails() {
         return memberDetails;
     }

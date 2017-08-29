@@ -11,8 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskGroup;
-import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskItem;
+import com.ood.clean.waterball.teampathy.Domain.Model.WBS.WbsCommand;
 import com.ood.clean.waterball.teampathy.MyApp;
+import com.ood.clean.waterball.teampathy.Presentation.Presenter.WbsConsolePresenterImp;
 import com.ood.clean.waterball.teampathy.R;
 
 import butterknife.BindView;
@@ -22,6 +23,7 @@ import butterknife.ButterKnife;
 public class CreateTaskGroupDialogFragment extends MakeSureToCancelBaseDialogFragment{
     private static final String PARENT = "ParentName";
     private String parentName;
+    private WbsConsolePresenterImp wbsConsolePresenterImp;
     @BindView(R.id.nameEd) TextInputEditText nameEd;
 
     public static CreateTaskGroupDialogFragment newInstance(String parentName){
@@ -30,6 +32,10 @@ public class CreateTaskGroupDialogFragment extends MakeSureToCancelBaseDialogFra
         bundle.putString(PARENT, parentName);
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    public void setWbsConsolePresenterImp(WbsConsolePresenterImp wbsConsolePresenterImp) {
+        this.wbsConsolePresenterImp = wbsConsolePresenterImp;
     }
 
     @Override
@@ -46,7 +52,7 @@ public class CreateTaskGroupDialogFragment extends MakeSureToCancelBaseDialogFra
 
     @Override
     protected View onViewCreated() {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.create_taskgroup_dialog,null);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.create_task_group_dialog,null);
         bind(view);
         return view;
     }
@@ -63,8 +69,10 @@ public class CreateTaskGroupDialogFragment extends MakeSureToCancelBaseDialogFra
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (checkValid())
                 {
-                    TaskItem taskGroup = new TaskGroup(nameEd.getText().toString(), parentName);
+                    TaskGroup taskGroup = new TaskGroup(nameEd.getText().toString(), parentName);
+                    WbsCommand<TaskGroup> command = WbsCommand.createTaskChild(parentName, taskGroup);
                     Log.d("TaskGroup", taskGroup.toString());
+                    wbsConsolePresenterImp.executeCommand(command);
                 }
             }
         };

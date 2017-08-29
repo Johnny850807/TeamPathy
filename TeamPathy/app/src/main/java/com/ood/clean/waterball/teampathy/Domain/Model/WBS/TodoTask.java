@@ -125,8 +125,8 @@ public class TodoTask extends TaskEntity implements TaskItem {
     }
 
     @Override
-    public String getOfGroupName() {
-        return ofGroupName;
+    public String getParent() {
+        return parent;
     }
 
     @Override
@@ -185,18 +185,8 @@ public class TodoTask extends TaskEntity implements TaskItem {
     }
 
     @Override
-    public void acceptOnEditVisitor(TaskOnEditVisitor visitor) {
-        visitor.taskOnEdit(this);
-    }
-
-    @Override
-    public void acceptOnClickVisitor(TaskOnClickVisitor visitor) {
-        visitor.taskViewOnClick(this);
-    }
-
-    @Override
-    public void acceptOnLongClickVisitor(TaskOnClickVisitor visitor) {
-        visitor.taskViewOnLongClick(this);
+    public void acceptEventVisitor(TaskEventVisitor visitor) {
+        visitor.eventOnTask(this);
     }
 
 

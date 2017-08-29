@@ -28,9 +28,9 @@ public interface TaskItem extends Iterable<TaskItem>{
 
     public int getDegree();
 
-    public String getOfGroupName();
+    public String getParent();
 
-    public void setOfGroupName(String ofGroupName);
+    public void setParent(String parent);
 
     public String getName();
 
@@ -65,10 +65,5 @@ public interface TaskItem extends Iterable<TaskItem>{
     public boolean hasChild();
 
     //visitor
-    public void acceptOnEditVisitor(TaskOnEditVisitor visitor);
-
-    public void acceptOnClickVisitor(TaskOnClickVisitor visitor);
-
-    public void acceptOnLongClickVisitor(TaskOnClickVisitor visitor);
-
+    public void acceptEventVisitor(TaskEventVisitor visitor);
 }

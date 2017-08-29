@@ -1,9 +1,10 @@
 package com.ood.clean.waterball.teampathy.Presentation.Presenter;
 
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.WbsScope;
+import com.ood.clean.waterball.teampathy.Domain.Model.WBS.WbsCommand;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Base.DefaultObserver;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Wbs.GetTaskTree;
-import com.ood.clean.waterball.teampathy.Domain.UseCase.Wbs.UpdateWbs;
+import com.ood.clean.waterball.teampathy.Domain.UseCase.Wbs.ExecuteWbsCommand;
 import com.ood.clean.waterball.teampathy.Domain.Model.Member.Member;
 import com.ood.clean.waterball.teampathy.Domain.Model.Project;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskItem;
@@ -13,23 +14,23 @@ import javax.inject.Inject;
 
 import io.reactivex.annotations.NonNull;
 
-/*wbs presenter cannot have a scope because the use cases
+/* wbs presenter cannot have a project scope because the use cases
     will be disposed on destroy and never works again.
 */
 @WbsScope
 public class WbsConsolePresenterImp implements WbsConsolePresenter {
     private Project project;
     private GetTaskTree getTaskTree;
-    private UpdateWbs updateWbs;
+    private ExecuteWbsCommand executeWbsCommand;
     private WbsView wbsView;
 
     @Inject
     public WbsConsolePresenterImp(Project project,
                                   GetTaskTree getTaskTree,
-                                  UpdateWbs updateWbs) {
+                                  ExecuteWbsCommand executeWbsCommand) {
         this.project = project;
         this.getTaskTree = getTaskTree;
-        this.updateWbs = updateWbs;
+        this.executeWbsCommand = executeWbsCommand;
     }
 
     public void setWbsView(WbsView wbsView){
@@ -48,14 +49,15 @@ public class WbsConsolePresenterImp implements WbsConsolePresenter {
     }
 
     @Override
-    public void updateTasks(TaskItem taskRoot) {
-        updateWbs.execute(new DefaultObserver<TaskItem>() {
+    public void executeCommand(WbsCommand<? extends TaskItem> wbsCommand) {
+        executeWbsCommand.execute(new DefaultObserver<TaskItem>() {
             @Override
             public void onNext(@NonNull TaskItem taskRoot) {
                 wbsView.onUpdateTasksFinish(taskRoot);
             }
-        }, taskRoot);
+        }, wbsCommand);
     }
+
 
     public void assignTask(TaskItem taskItem, Member assignedMember){
         //todo
@@ -69,7 +71,7 @@ public class WbsConsolePresenterImp implements WbsConsolePresenter {
     @Override
     public void onDestroy() {
         getTaskTree.dispose();
-        updateWbs.dispose();
+        executeWbsCommand.dispose();
     }
 
 }

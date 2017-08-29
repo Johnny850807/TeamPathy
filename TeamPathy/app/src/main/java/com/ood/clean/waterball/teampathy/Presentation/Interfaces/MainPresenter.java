@@ -8,6 +8,7 @@ public interface MainPresenter extends LifetimePresenter{
     public interface MainView{
         void signInSuccessfully(User user);
         void onUserNotFound();
+        void onPushNotificationNotPrepared();
     }
 
     void signIn(String account, String password);

@@ -2,7 +2,6 @@ package com.ood.clean.waterball.teampathy.Domain.UseCase.Wbs;
 
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ProjectScope;
 import com.ood.clean.waterball.teampathy.Domain.Model.Member.Member;
-import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskItem;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask;
 import com.ood.clean.waterball.teampathy.Domain.Repository.WbsRepository;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Base.UseCase;
@@ -31,12 +30,7 @@ public class GetMemberTodoList extends UseCase<TodoTask,Member> {
         return Observable.create(new ObservableOnSubscribe<TodoTask>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<TodoTask> e) throws Exception {
-                TaskItem taskRoot = wbsRepository.getTaskTree();
-                for (TaskItem taskItem : taskRoot)
-                    if ( taskItem instanceof TodoTask)
-                        if (taskItem.getAssignedUserId() == member.getUser().getId())
-                        e.onNext((TodoTask)taskItem);
-                e.onComplete();
+                e.onComplete(); //todo
             }
         });
     }

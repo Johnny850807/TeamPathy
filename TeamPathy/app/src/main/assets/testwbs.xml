@@ -4,18 +4,18 @@
     <TaskGroup Name="伺服器">
         <TaskGroup Name="工作分析網頁">
             <Task Name="XML定義" Description="Xml define"
-                StartDate="2017 17 Jun." EndDate="2017 1 Jul."
+                StartDate="2017 17 Jun." EndDate="2017 01 Jul."
                 Contribution="0" Dependency="" Status="pending" AssignedId="1"/>
             <Task Name="Gantt Chart" Description="時程分析規劃"
-                StartDate="2017 7 Jul." EndDate="2017 15 Jul."
+                StartDate="2017 07 Jul." EndDate="2017 15 Jul."
                 Contribution="0" Dependency="XML定義" Status="assigned" AssignedId="0"/>
             <Task Name="Web Chart" Description="網路餅乾"
-                StartDate="2017 7 Jul." EndDate="2017 18 Jul."
+                StartDate="2017 07 Jul." EndDate="2017 18 Jul."
                 Contribution="0" Dependency="XML定義" Status="pending" AssignedId="0"/>
         </TaskGroup>
         <TaskGroup Name="Web API">
             <Task Name="CRUD" Description="API開發"
-                StartDate="2017 20 Jul." EndDate="2017 7 Aug."
+                StartDate="2017 20 Jul." EndDate="2017 07 Aug."
                 Contribution="0" Dependency="Web Chart" Status="assigned" AssignedId="0"/>
         </TaskGroup>
     </TaskGroup>
@@ -23,21 +23,21 @@
     <TaskGroup Name="文案">
         <TaskGroup Name="初審">
             <Task Name="製作初審Word" Description="展示品"
-                StartDate="2017 22 Jun." EndDate="2017 9 Aug."
+                StartDate="2017 22 Jun." EndDate="2017 09 Aug."
                 Contribution="0" Dependency="" Status="none" AssignedId="-1"/>
             <Task Name="投影片PPT及簡報製作" Description="展示"
                 StartDate="2017 13 Jul." EndDate="2017 18 Jul."
                 Contribution="0" Dependency="" Status="assigned" AssignedId="0"/>
             <Task Name="報告練習" Description="報告詮釋"
-                StartDate="2017 4 Aug." EndDate="2017 18 Aug."
+                StartDate="2017 04 Aug." EndDate="2017 18 Aug."
                 Contribution="0" Dependency="投影片PPT及簡報製作" Status="none" AssignedId="-1"/>
         </TaskGroup>
         <TaskGroup Name="影片">
             <Task Name="導片" Description="製片功夫"
-                StartDate="2017 5 Aug." EndDate="2017 17 Sep."
+                StartDate="2017 05 Aug." EndDate="2017 17 Sep."
                 Contribution="0" Dependency="投影片PPT及簡報製作" Status="pass" AssignedId="1"/>
             <Task Name="製片" Description="導演"
-                StartDate="2017 10 Sep." EndDate="2017 7 Oct."
+                StartDate="2017 10 Sep." EndDate="2017 07 Oct."
                 Contribution="0" Dependency="導片" Status="pass" AssignedId="0"/>
         </TaskGroup>
     </TaskGroup>
