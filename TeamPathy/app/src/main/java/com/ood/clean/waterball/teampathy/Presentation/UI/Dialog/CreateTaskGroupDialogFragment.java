@@ -16,6 +16,8 @@ import com.ood.clean.waterball.teampathy.MyApp;
 import com.ood.clean.waterball.teampathy.Presentation.Presenter.WbsConsolePresenterImp;
 import com.ood.clean.waterball.teampathy.R;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -23,7 +25,7 @@ import butterknife.ButterKnife;
 public class CreateTaskGroupDialogFragment extends MakeSureToCancelBaseDialogFragment{
     private static final String PARENT = "ParentName";
     private String parentName;
-    private WbsConsolePresenterImp wbsConsolePresenterImp;
+    @Inject WbsConsolePresenterImp wbsConsolePresenterImp;
     @BindView(R.id.nameEd) TextInputEditText nameEd;
 
     public static CreateTaskGroupDialogFragment newInstance(String parentName){
@@ -32,10 +34,6 @@ public class CreateTaskGroupDialogFragment extends MakeSureToCancelBaseDialogFra
         bundle.putString(PARENT, parentName);
         fragment.setArguments(bundle);
         return fragment;
-    }
-
-    public void setWbsConsolePresenterImp(WbsConsolePresenterImp wbsConsolePresenterImp) {
-        this.wbsConsolePresenterImp = wbsConsolePresenterImp;
     }
 
     @Override
@@ -59,7 +57,7 @@ public class CreateTaskGroupDialogFragment extends MakeSureToCancelBaseDialogFra
 
     private void bind(View view){
         ButterKnife.bind(this,view);
-        MyApp.getProjectComponent(getActivity()).inject(this);
+        MyApp.getWbsComponent(getActivity()).inject(this);
     }
 
     @Override

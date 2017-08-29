@@ -5,8 +5,6 @@ import com.ood.clean.waterball.teampathy.Domain.DI.Module.Retrofit.RetrofitProje
 import com.ood.clean.waterball.teampathy.Domain.DI.Module.WbsModule;
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ProjectScope;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Dialog.CreateIssueDialogFragment;
-import com.ood.clean.waterball.teampathy.Presentation.UI.Dialog.CreateTaskGroupDialogFragment;
-import com.ood.clean.waterball.teampathy.Presentation.UI.Dialog.CreateTodoTaskDialogFragment;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Fragment.IssuesFragment;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Fragment.OfficeFragment;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Fragment.TabLayoutFragment;
@@ -33,6 +31,4 @@ public interface ProjectComponent {
     void inject(TaskAnalyticsFragment taskAnalyticsFragment);
 
     void inject(CreateIssueDialogFragment createIssueDialogFragment);
-    void inject(CreateTaskGroupDialogFragment createTaskGroupDialogFragment);
-    void inject(CreateTodoTaskDialogFragment createTodoTaskDialogFragment);
 }

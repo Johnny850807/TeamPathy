@@ -161,13 +161,11 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
 
     private void showDialogForCreatingTodoTask(TaskItem parent) {
         CreateTodoTaskDialogFragment fragment = CreateTodoTaskDialogFragment.newInstance(parent.getName());
-        fragment.setWbsConsolePresenter(presenterImp);
         showAlertDialogFragment(fragment);
     }
 
     private void showDialogForCreateTaskChild(TaskItem parent) {
         CreateTaskGroupDialogFragment fragment = CreateTaskGroupDialogFragment.newInstance(parent.getName());
-        fragment.setWbsConsolePresenterImp(presenterImp);
         showAlertDialogFragment(fragment);
     }
 
