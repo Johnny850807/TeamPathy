@@ -25,6 +25,10 @@
             <Task Name="製作初審Word" Description="展示品"
                 StartDate="2017 22 Jun." EndDate="2017 09 Aug."
                 Contribution="0" Dependency="" Status="none" AssignedId="-1"/>
+            <Task Name="sgsg" Status="none"
+                Contribution="55" Dependency=""
+                Description="fbdgg" StartDate="2017 15 Aug."
+                EndDate="2017 31 Aug." AssignedId="0" />
             <Task Name="投影片PPT及簡報製作" Description="展示"
                 StartDate="2017 13 Jul." EndDate="2017 18 Jul."
                 Contribution="0" Dependency="" Status="assigned" AssignedId="0"/>

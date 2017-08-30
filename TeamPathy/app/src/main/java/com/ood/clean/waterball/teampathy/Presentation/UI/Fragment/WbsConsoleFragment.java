@@ -247,7 +247,7 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
     }
 
     private void showDialogForAssigningTaskItem(TaskItem taskItem) {
-        //presenterImp.assignTask(task, TodoTask.Status.ASSIGNED);
+        //presenterImp.assignTask(task, TodoTask.Status.assigned);
     }
 
 }

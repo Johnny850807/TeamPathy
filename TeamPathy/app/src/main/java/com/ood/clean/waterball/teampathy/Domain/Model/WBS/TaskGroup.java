@@ -114,9 +114,9 @@ public class TaskGroup extends TaskEntity implements TaskItem {
 	@Override
 	public TodoTask.Status getStatus() {
 		for (TaskItem task : taskList)
-			if (task.getStatus() != TodoTask.Status.PASS)
-				return TodoTask.Status.NONE;
-		return TodoTask.Status.PASS;
+			if (task.getStatus() != TodoTask.Status.pass)
+				return TodoTask.Status.none;
+		return TodoTask.Status.pass;
 	}
 
 	@Override

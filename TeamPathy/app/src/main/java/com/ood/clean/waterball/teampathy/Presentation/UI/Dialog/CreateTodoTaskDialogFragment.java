@@ -7,13 +7,17 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 
+import com.google.gson.Gson;
 import com.ood.clean.waterball.teampathy.Domain.Model.Project;
+import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask;
+import com.ood.clean.waterball.teampathy.Domain.Model.WBS.WbsCommand;
 import com.ood.clean.waterball.teampathy.MyApp;
 import com.ood.clean.waterball.teampathy.MyUtils.EnglishAbbrDateConverter;
 import com.ood.clean.waterball.teampathy.MyUtils.TeamPathyDialogFactory;
@@ -101,12 +105,14 @@ public class CreateTodoTaskDialogFragment extends MakeSureToCancelBaseDialogFrag
                     try{
                         Date startDate = EnglishAbbrDateConverter.timeToDate(startDateBtn.getText().toString());
                         Date endDate = EnglishAbbrDateConverter.timeToDate(endDateBtn.getText().toString());
-                        /*TodoTask todoTask = new TodoTask(nameEd.getText().toString(), parentName,
+                        TodoTask todoTask = new TodoTask(nameEd.getText().toString(), parentName,
                                 descriptionEd.getText().toString(), Integer.parseInt(contributionEd.getText().toString()),
-                                startDate, endDate);*/
-                        //WbsCommand<TodoTask> command = WbsCommand.createTaskChild(parentName, todoTask);
+                                startDate, endDate, "", TodoTask.Status.none, TodoTask.UNASSIGNED_ID);
+                        WbsCommand<TodoTask> command = WbsCommand.createTaskChild(parentName, todoTask);
+                        wbsConsolePresenterImp.executeCommand(command);
+                        Log.d("Wbs",new Gson().toJson(command));
                     }catch (Exception err){
-
+                        err.printStackTrace();
                     }
 
                 }
@@ -115,19 +121,30 @@ public class CreateTodoTaskDialogFragment extends MakeSureToCancelBaseDialogFrag
     }
 
     private boolean checkValid() {
-        boolean valid;
+        boolean valid = true;
         String startDate = startDateBtn.getText().toString();
         String endDate = endDateBtn.getText().toString();
-        if (valid = startDate.contains(getString(R.string.start_date)))
+        if (startDate.contains(getString(R.string.start_date)))
+        {
+            valid = false;
             createAndShowErrorMessage(getString(R.string.please_select_start_date));
+        }
         else if (endDate.contains(getString(R.string.end_date)))
+        {
+            valid = false;
             createAndShowErrorMessage(getString(R.string.please_select_end_date));
-        if (valid &= nameEd.length() == 0)
+        }
+        if (nameEd.length() == 0)
+        {
+            valid = false;
             nameEd.setError(getString(R.string.name_cannot_be_empty));
-        if (valid &= descriptionEd.length() == 0)
+        }
+
+        if (descriptionEd.length() == 0)
+        {
+            valid = false;
             descriptionEd.setError(getString(R.string.description_cannot_be_empty));
-
-
+        }
 
         return valid;
     }

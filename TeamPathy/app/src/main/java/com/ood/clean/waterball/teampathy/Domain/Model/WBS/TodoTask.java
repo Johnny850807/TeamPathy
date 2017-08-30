@@ -191,7 +191,7 @@ public class TodoTask extends TaskEntity implements TaskItem {
 
 
     public enum Status{
-        NONE("none"), ASSIGNED("assigned"), PENDING("pending"), PASS("pass");
+        none("none"), assigned("assigned"), pending("pending"), pass("pass");
         private String attr;
         private Status(String attr) {
             this.attr = attr;

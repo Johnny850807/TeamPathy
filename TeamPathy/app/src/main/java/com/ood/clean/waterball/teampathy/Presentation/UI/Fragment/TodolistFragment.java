@@ -151,7 +151,7 @@ public class TodolistFragment extends BaseFragment implements TodoListPresenter.
         DialogInterface.OnClickListener listener;
 
         // if the task has been committed, show the different action list and different listener.
-        if (todoTask.getStatus() == TodoTask.Status.PENDING)
+        if (todoTask.getStatus() == TodoTask.Status.pending)
         {
             actions = committedTodoTaskActions;
             listener = createCommittedTodoTaskActionListener(todoTask);

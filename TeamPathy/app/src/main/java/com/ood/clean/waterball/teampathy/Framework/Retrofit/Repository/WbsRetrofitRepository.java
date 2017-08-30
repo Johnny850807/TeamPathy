@@ -1,5 +1,7 @@
 package com.ood.clean.waterball.teampathy.Framework.Retrofit.Repository;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ProjectScope;
 import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionConverter;
 import com.ood.clean.waterball.teampathy.Domain.Model.Project;
@@ -9,6 +11,8 @@ import com.ood.clean.waterball.teampathy.Domain.Repository.WbsRepository;
 
 import javax.inject.Inject;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.http.Body;
@@ -28,6 +32,8 @@ public class WbsRetrofitRepository implements WbsRepository {
                                  Retrofit retrofit,
                                  Project project) {
         this.exceptionConverter = exceptionConverter;
+
+
         this.wbsApi = retrofit.create(WbsApi.class);
         this.project = project;
     }
@@ -44,7 +50,11 @@ public class WbsRetrofitRepository implements WbsRepository {
 
     @Override
     public <Data extends TaskItem> String executeWbsCommand(WbsCommand<Data> command) throws Exception {
-        ResponseModel<String> response = wbsApi.executeWbsCommand(project.getId(), command).execute().body();
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy dd MMM.")
+                .create();
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), gson.toJson(command));
+        ResponseModel<String> response = wbsApi.executeWbsCommand(project.getId(), body).execute().body();
 
         if (!exceptionConverter.isSuccessful(response))
             throw exceptionConverter.convert(response);
@@ -61,6 +71,6 @@ public class WbsRetrofitRepository implements WbsRepository {
         @Headers("Content-Type: application/json")
         @POST(RESOURCE)
         public Call<ResponseModel<String>> executeWbsCommand(@Path("projectId") int projectId,
-                                                             @Body WbsCommand command);
+                                                             @Body RequestBody command);
     }
 }

@@ -33,9 +33,13 @@ public class GetTaskTree extends UseCase<TaskItem,Project> {
         return Observable.create(new ObservableOnSubscribe<TaskItem>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<TaskItem> e) throws Exception {
-                String wbs = wbsRepository.getWbs();
-                e.onNext(translator.xmlToTasks(wbs));
-                e.onComplete();
+                try{
+                    String wbs = wbsRepository.getWbs();
+                    e.onNext(translator.xmlToTasks(wbs));
+                    e.onComplete();
+                }catch (Exception err){
+                    err.printStackTrace();
+                }
             }
         });
     }
