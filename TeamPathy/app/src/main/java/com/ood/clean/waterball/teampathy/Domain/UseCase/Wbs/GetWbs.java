@@ -6,7 +6,7 @@ import com.ood.clean.waterball.teampathy.Domain.UseCase.Base.UseCase;
 import com.ood.clean.waterball.teampathy.Domain.Model.Project;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskItem;
 import com.ood.clean.waterball.teampathy.Domain.Repository.WbsRepository;
-import com.ood.clean.waterball.teampathy.Threading.ThreadingObserverFactory;
+import com.ood.clean.waterball.teampathy.Threading.ThreadingObservableFactory;
 
 import javax.inject.Inject;
 
@@ -16,14 +16,14 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.annotations.NonNull;
 
 @WbsScope
-public class GetTaskTree extends UseCase<TaskItem,Project> {
+public class GetWbs extends UseCase<TaskItem,Project> {
     private WbsRepository wbsRepository;
     private TaskXmlTranslator translator;
 
     @Inject
-    public GetTaskTree(ThreadingObserverFactory threadingObserverFactory,
-                       WbsRepository wbsRepository, TaskXmlTranslator translator) {
-        super(threadingObserverFactory);
+    public GetWbs(ThreadingObservableFactory threadingObservableFactory,
+                  WbsRepository wbsRepository, TaskXmlTranslator translator) {
+        super(threadingObservableFactory);
         this.wbsRepository = wbsRepository;
         this.translator = translator;
     }

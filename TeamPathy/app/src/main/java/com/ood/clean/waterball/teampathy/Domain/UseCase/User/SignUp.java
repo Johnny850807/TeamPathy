@@ -4,7 +4,7 @@ import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ActivityScope;
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
 import com.ood.clean.waterball.teampathy.Domain.Repository.UserRepository;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Base.UseCase;
-import com.ood.clean.waterball.teampathy.Threading.ThreadingObserverFactory;
+import com.ood.clean.waterball.teampathy.Threading.ThreadingObservableFactory;
 
 import javax.inject.Inject;
 
@@ -19,8 +19,8 @@ public class SignUp extends UseCase<User, SignUp.Params> {
     private UserRepository userRepository;
 
     @Inject
-    public SignUp(ThreadingObserverFactory threadingObserverFactory, UserRepository userRepository) {
-        super(threadingObserverFactory);
+    public SignUp(ThreadingObservableFactory threadingObservableFactory, UserRepository userRepository) {
+        super(threadingObservableFactory);
         this.userRepository = userRepository;
     }
 

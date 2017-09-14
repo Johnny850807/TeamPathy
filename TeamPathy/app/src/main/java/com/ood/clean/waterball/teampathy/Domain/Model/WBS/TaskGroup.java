@@ -53,13 +53,11 @@ public class TaskGroup extends TaskEntity implements TaskItem {
 	}
 
 
-	@Override
-	public void setAssignedUserId(int assignedUserId) {
-		throw new RuntimeException("Task group does not support setAssignedUserId()");
+	public void setAssignedId(int assignedId) {
+		throw new RuntimeException("Task group does not support setAssignedId()");
 	}
 
-	@Override
-	public int getAssignedUserId() {
+	public int getAssignedId() {
 		return NO_USER_ID;
 	}
 

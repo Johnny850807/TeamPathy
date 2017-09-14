@@ -17,14 +17,14 @@ import android.widget.ArrayAdapter;
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask;
 import com.ood.clean.waterball.teampathy.MyApp;
+import com.ood.clean.waterball.teampathy.MyUtils.IndexSet;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.TodoListPresenter;
 import com.ood.clean.waterball.teampathy.Presentation.Presenter.TodolistPresenterImp;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Adapter.BindingViewHolder;
 import com.ood.clean.waterball.teampathy.R;
 import com.ood.clean.waterball.teampathy.databinding.TodotaskItemBinding;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.TreeSet;
 
 import javax.inject.Inject;
 
@@ -44,7 +44,7 @@ public class TodolistFragment extends BaseFragment implements TodoListPresenter.
 
     String[] uncommittedTodoTaskActions;
     String[] committedTodoTaskActions;
-    List<TodoTask> todoList = new ArrayList<>();
+    IndexSet<TodoTask> todoList = new IndexSet<>(new TreeSet<TodoTask>());
 
     @Nullable
     @Override
@@ -96,6 +96,7 @@ public class TodolistFragment extends BaseFragment implements TodoListPresenter.
 
     @Override
     public void onRefresh() {
+        todoList.clear();
         getBaseView().showProgressBar();
         presenterImp.loadTodoList();
     }

@@ -136,6 +136,11 @@
         <item>指派工作 (管理者及團長)</item>
     </string-array>
 
+    <string-array name="wbs_console_taskgroup_actions">
+        <item>編輯工作群組</item>
+        <item>刪除工作群組</item>
+    </string-array>
+
     <string-array name="member_uncommitted_todolist_actions">
         <item>提交工作</item>
         <item>設為執行中</item>
@@ -167,6 +172,8 @@
     <string name="please_select_end_date">請選擇結束日期</string>
     <string name="please_select_start_date">請選擇起始日期</string>
     <string name="description_cannot_be_empty">描述不可為空</string>
+    <string name="assign_task">指派工作</string>
+    <string name="are_u_sure_to_change_assigned_member">此工作已被指派，請問是否要更換指派成員?</string>
 
     <string-array name="create_task_type_list">
         <item>創建工作群組</item>

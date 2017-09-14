@@ -2,6 +2,7 @@ package com.ood.clean.waterball.teampathy.Domain.DI.Component;
 
 import com.ood.clean.waterball.teampathy.Domain.DI.Module.WbsModule;
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.WbsScope;
+import com.ood.clean.waterball.teampathy.Presentation.UI.Dialog.AssignTaskDialogFragment;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Dialog.CreateTaskGroupDialogFragment;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Dialog.CreateTodoTaskDialogFragment;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Fragment.ChartWebViewFragment;
@@ -22,4 +23,5 @@ public interface WbsComponent {
 
     void inject(CreateTodoTaskDialogFragment createTodoTaskDialogFragment);
     void inject(CreateTaskGroupDialogFragment createTodoTaskDialogFragment);
+    void inject(AssignTaskDialogFragment assignTaskDialogFragment);
 }

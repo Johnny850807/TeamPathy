@@ -4,7 +4,7 @@ import com.ood.clean.waterball.teampathy.Domain.DI.Scope.IssueScope;
 import com.ood.clean.waterball.teampathy.Domain.Model.IssueComment;
 import com.ood.clean.waterball.teampathy.Domain.Repository.IssueCommentRepository;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Base.UseCase;
-import com.ood.clean.waterball.teampathy.Threading.ThreadingObserverFactory;
+import com.ood.clean.waterball.teampathy.Threading.ThreadingObservableFactory;
 
 import java.util.List;
 
@@ -21,8 +21,8 @@ public class GetIssueCommentList extends UseCase<IssueComment, Integer> {
     private IssueCommentRepository issueCommentRepository;
 
     @Inject
-    public GetIssueCommentList(ThreadingObserverFactory threadingObserverFactory, IssueCommentRepository issueCommentRepository) {
-        super(threadingObserverFactory);
+    public GetIssueCommentList(ThreadingObservableFactory threadingObservableFactory, IssueCommentRepository issueCommentRepository) {
+        super(threadingObservableFactory);
         this.issueCommentRepository = issueCommentRepository;
     }
 

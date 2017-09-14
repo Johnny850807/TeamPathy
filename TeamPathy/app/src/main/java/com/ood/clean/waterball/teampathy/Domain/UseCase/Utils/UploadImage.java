@@ -3,7 +3,7 @@ package com.ood.clean.waterball.teampathy.Domain.UseCase.Utils;
 
 import com.ood.clean.waterball.teampathy.Domain.Repository.ImageUploadRepository;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Base.UseCase;
-import com.ood.clean.waterball.teampathy.Threading.ThreadingObserverFactory;
+import com.ood.clean.waterball.teampathy.Threading.ThreadingObservableFactory;
 
 import java.io.File;
 
@@ -18,9 +18,9 @@ public class UploadImage extends UseCase<String,File> {
     private ImageUploadRepository imageUploadRepository;
 
     @Inject
-    public UploadImage(ThreadingObserverFactory threadingObserverFactory,
+    public UploadImage(ThreadingObservableFactory threadingObservableFactory,
                        ImageUploadRepository imageUploadRepository) {
-        super(threadingObserverFactory);
+        super(threadingObservableFactory);
         this.imageUploadRepository = imageUploadRepository;
     }
 

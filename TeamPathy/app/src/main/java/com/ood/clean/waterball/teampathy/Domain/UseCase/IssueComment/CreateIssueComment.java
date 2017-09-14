@@ -4,7 +4,7 @@ import com.ood.clean.waterball.teampathy.Domain.DI.Scope.IssueScope;
 import com.ood.clean.waterball.teampathy.Domain.Model.IssueComment;
 import com.ood.clean.waterball.teampathy.Domain.Repository.IssueCommentRepository;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Base.UseCase;
-import com.ood.clean.waterball.teampathy.Threading.ThreadingObserverFactory;
+import com.ood.clean.waterball.teampathy.Threading.ThreadingObservableFactory;
 
 import javax.inject.Inject;
 
@@ -21,9 +21,9 @@ public class CreateIssueComment extends UseCase<IssueComment, IssueComment> {
     private IssueCommentRepository issueCommentRepository;
 
     @Inject
-    public CreateIssueComment(ThreadingObserverFactory threadingObserverFactory,
+    public CreateIssueComment(ThreadingObservableFactory threadingObservableFactory,
                               IssueCommentRepository issueCommentRepository) {
-        super(threadingObserverFactory);
+        super(threadingObservableFactory);
         this.issueCommentRepository = issueCommentRepository;
     }
 

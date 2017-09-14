@@ -4,6 +4,7 @@ package com.ood.clean.waterball.teampathy.Presentation.Presenter;
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ProjectScope;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Timeline.CreateTimeLine;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Base.DefaultObserver;
+import com.ood.clean.waterball.teampathy.Domain.UseCase.Timeline.DeleteTimeLine;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Timeline.GetTimeLineList;
 import com.ood.clean.waterball.teampathy.Domain.Model.Project;
 import com.ood.clean.waterball.teampathy.Domain.Model.Timeline;
@@ -19,12 +20,10 @@ public class TimelinesPresenterImp implements CrudPresenter<Timeline>{
     @Inject Project project;
     @Inject GetTimeLineList getTimeLineList;
     @Inject CreateTimeLine createTimeLine;
+    @Inject DeleteTimeLine deleteTimeLine;
 
     @Inject
-    public TimelinesPresenterImp(Project project, GetTimeLineList getTimeLineList) {
-        this.project = project;
-        this.getTimeLineList = getTimeLineList;
-    }
+    public TimelinesPresenterImp() {}
 
     public void setTimelinesView(CrudView<Timeline> timelinesView){
         this.timelinesView = timelinesView;
@@ -69,7 +68,12 @@ public class TimelinesPresenterImp implements CrudPresenter<Timeline>{
 
     @Override
     public void delete(Timeline timeline) {
-        //todo
+        deleteTimeLine.execute(new DefaultObserver<Timeline>() {
+            @Override
+            public void onNext(@NonNull Timeline timeline) {
+                timelinesView.onDeleteFinishNotify(timeline);
+            }
+        }, timeline);
     }
 
     @Override
@@ -79,5 +83,6 @@ public class TimelinesPresenterImp implements CrudPresenter<Timeline>{
     public void onDestroy() {
         createTimeLine.dispose();
         getTimeLineList.dispose();
+        deleteTimeLine.dispose();
     }
 }

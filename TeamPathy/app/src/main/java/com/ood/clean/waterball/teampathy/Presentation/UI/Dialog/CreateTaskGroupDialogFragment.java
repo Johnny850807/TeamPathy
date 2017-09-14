@@ -13,6 +13,7 @@ import android.view.View;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskGroup;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.WbsCommand;
 import com.ood.clean.waterball.teampathy.MyApp;
+import com.ood.clean.waterball.teampathy.Presentation.Interfaces.BasePresenter;
 import com.ood.clean.waterball.teampathy.Presentation.Presenter.WbsConsolePresenterImp;
 import com.ood.clean.waterball.teampathy.R;
 
@@ -24,6 +25,7 @@ import butterknife.ButterKnife;
 
 public class CreateTaskGroupDialogFragment extends MakeSureToCancelBaseDialogFragment{
     private static final String PARENT = "ParentName";
+    private BasePresenter.BaseView baseView;
     private String parentName;
     @Inject WbsConsolePresenterImp wbsConsolePresenterImp;
     @BindView(R.id.nameEd) TextInputEditText nameEd;
@@ -34,6 +36,10 @@ public class CreateTaskGroupDialogFragment extends MakeSureToCancelBaseDialogFra
         bundle.putString(PARENT, parentName);
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    public void setBaseView(BasePresenter.BaseView baseView) {
+        this.baseView = baseView;
     }
 
     @Override
@@ -70,6 +76,7 @@ public class CreateTaskGroupDialogFragment extends MakeSureToCancelBaseDialogFra
                     TaskGroup taskGroup = new TaskGroup(nameEd.getText().toString(), parentName);
                     WbsCommand command = WbsCommand.createTaskChild(parentName, taskGroup);
                     Log.d("TaskGroup", taskGroup.toString());
+                    baseView.showProgressDialog();
                     wbsConsolePresenterImp.executeCommand(command);
                 }
             }

@@ -1,12 +1,12 @@
 package com.ood.clean.waterball.teampathy.Domain.UseCase.Wbs;
 
-import com.ood.clean.waterball.teampathy.Domain.DI.Scope.WbsScope;
+import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ProjectScope;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskItem;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskXmlTranslator;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.WbsCommand;
 import com.ood.clean.waterball.teampathy.Domain.Repository.WbsRepository;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Base.UseCase;
-import com.ood.clean.waterball.teampathy.Threading.ThreadingObserverFactory;
+import com.ood.clean.waterball.teampathy.Threading.ThreadingObservableFactory;
 
 import javax.inject.Inject;
 
@@ -15,15 +15,15 @@ import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.annotations.NonNull;
 
-@WbsScope
+@ProjectScope
 public class ExecuteWbsCommand extends UseCase<TaskItem,WbsCommand> {
     private WbsRepository wbsRepository;
     private TaskXmlTranslator translator;
 
     @Inject
-    public ExecuteWbsCommand(ThreadingObserverFactory threadingObserverFactory,
+    public ExecuteWbsCommand(ThreadingObservableFactory threadingObservableFactory,
                              WbsRepository wbsRepository, TaskXmlTranslator translator) {
-        super(threadingObserverFactory);
+        super(threadingObservableFactory);
         this.wbsRepository = wbsRepository;
         this.translator = translator;
     }

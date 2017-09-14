@@ -23,6 +23,7 @@ import com.ood.clean.waterball.teampathy.MyApp;
 import com.ood.clean.waterball.teampathy.MyUtils.TeamPathyDialogFactory;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.WbsConsolePresenter;
 import com.ood.clean.waterball.teampathy.Presentation.Presenter.WbsConsolePresenterImp;
+import com.ood.clean.waterball.teampathy.Presentation.UI.Dialog.AssignTaskDialogFragment;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Dialog.CreateTaskGroupDialogFragment;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Dialog.CreateTodoTaskDialogFragment;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Factory.TaskItemViewFactory;
@@ -43,7 +44,7 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
     private final int CREATE_TODOTASK = 1;
 
     private String[] todotaskActions;
-    private String[] todoGroupActions;
+    private String[] taskGroupActions;
     private String[] createTaskTypeActions;
 
     @BindView(R.id.flowlayout) FlowLayout flowLayout;
@@ -78,6 +79,7 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
         onEditEventVisitor = new OnEditEventVisitor();
         onLongClickEventVisitor = new OnLongClickEventVisitor();
         todotaskActions = getResources().getStringArray(R.array.wbs_console_todotask_actions);
+        taskGroupActions = getResources().getStringArray(R.array.wbs_console_taskgroup_actions);
         createTaskTypeActions = getResources().getStringArray(R.array.create_task_type_list);
     }
 
@@ -164,11 +166,13 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
 
     private void showDialogForCreatingTodoTask(TaskItem parent) {
         CreateTodoTaskDialogFragment fragment = CreateTodoTaskDialogFragment.newInstance(parent.getName());
+        fragment.setBaseView(getBaseView());
         showAlertDialogFragment(fragment);
     }
 
     private void showDialogForCreateTaskChild(TaskItem parent) {
         CreateTaskGroupDialogFragment fragment = CreateTaskGroupDialogFragment.newInstance(parent.getName());
+        fragment.setBaseView(getBaseView());
         showAlertDialogFragment(fragment);
     }
 
@@ -181,17 +185,18 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
 
         @Override
         public void eventOnTask(TaskGroup taskGroup) {
-            showDialogListForTaskItemOnLongClickActions(taskGroup);
+            // taskgroup actions should not contain the assign task option
+            showDialogListForTaskItemOnLongClickActions(taskGroupActions, taskGroup);
         }
 
         @Override
         public void eventOnTask(TodoTask task) {
-            showDialogListForTaskItemOnLongClickActions(task);
+            showDialogListForTaskItemOnLongClickActions(todotaskActions, task);
         }
     }
 
-    private void showDialogListForTaskItemOnLongClickActions(final TaskItem taskItem) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, todotaskActions);
+    private void showDialogListForTaskItemOnLongClickActions(final String[] actions, final TaskItem taskItem) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, actions);
         if (member.isManager()) // if the member is not a management level position, he can't do anything
             TeamPathyDialogFactory.templateBuilder(getActivity())
                     .setAdapter(adapter, new DialogInterface.OnClickListener() {
@@ -242,6 +247,7 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
                     public void onClick(DialogInterface dialogInterface, int i) {
                         WbsCommand command = WbsCommand.removeTaskItem(taskItem);
                         Log.d("wbs",new Gson().toJson(command));
+                        getBaseView().showProgressDialog();
                         presenterImp.executeCommand(command);
                     }
                 }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -251,7 +257,10 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
     }
 
     private void showDialogForAssigningTaskItem(TaskItem taskItem) {
-        //presenterImp.assignTask(task, TodoTask.Status.assigned);
+        AssignTaskDialogFragment fragment = AssignTaskDialogFragment.getInstance(taskItem);
+        fragment.setWbsPresenter(presenterImp);
+        fragment.setBaseView(getBaseView());
+        showAlertDialogFragment(fragment);
     }
 
 }

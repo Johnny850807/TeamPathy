@@ -19,7 +19,7 @@ public class WbsCommand {
     }
 
     private Data parseData(TaskItem data){
-        return new Data(data.getName(), data.getAssignedUserId(), data.getDescription(),
+        return new Data(data.getName(), data.getAssignedId(), data.getDescription(),
                 data.getStartDate(), data.getEndDate(), data.getContribution(), data.getDependency(), data.getStatus());
     }
 
@@ -52,7 +52,7 @@ public class WbsCommand {
 
     public class Data{
         private String name;
-        private int assignedUserId;
+        private int assignedId;
         private String description;
         private Date startDate;
         private Date endDate;
@@ -60,9 +60,9 @@ public class WbsCommand {
         private String dependency;
         private TodoTask.Status status;
 
-        public Data(String name, int assignedUserId, String description, Date startDate, Date endDate, int contribution, String dependency, TodoTask.Status status) {
+        public Data(String name, int assignedId, String description, Date startDate, Date endDate, int contribution, String dependency, TodoTask.Status status) {
             this.name = name;
-            this.assignedUserId = assignedUserId;
+            this.assignedId = assignedId;
             this.description = description;
             this.startDate = startDate;
             this.endDate = endDate;
@@ -71,12 +71,12 @@ public class WbsCommand {
             this.status = status;
         }
 
-        public int getAssignedUserId() {
-            return assignedUserId;
+        public int getAssignedId() {
+            return assignedId;
         }
 
-        public void setAssignedUserId(int assignedUserId) {
-            this.assignedUserId = assignedUserId;
+        public void setAssignedId(int assignedId) {
+            this.assignedId = assignedId;
         }
 
         public String getDescription() {

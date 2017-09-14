@@ -22,8 +22,11 @@ public class TodolistPresenterImp implements TodoListPresenter {
     private Member member;
 
     @Inject
-    public TodolistPresenterImp(GetMemberTodoList getMemberTodoList, Member member) {
+    public TodolistPresenterImp(GetMemberTodoList getMemberTodoList,
+                                ExecuteWbsCommand executeWbsCommand,
+                                Member member) {
         this.getMemberTodoList = getMemberTodoList;
+        this.executeWbsCommand = executeWbsCommand;
         this.member = member;
     }
 
@@ -51,6 +54,7 @@ public class TodolistPresenterImp implements TodoListPresenter {
     public void alterTaskStatus(final TodoTask todoTask, final TodoTask.Status status) {
         try {
             TodoTask clone = todoTask.clone();
+            clone.setStatus(status);
             WbsCommand wbsCommand = WbsCommand.updateTaskItem(todoTask.getName(), clone);
             executeWbsCommand.execute(new DefaultObserver<TaskItem>() {
                 @Override
@@ -69,6 +73,7 @@ public class TodolistPresenterImp implements TodoListPresenter {
     @Override
     public void onDestroy() {
         getMemberTodoList.dispose();
+        executeWbsCommand.dispose();
     }
 
 }

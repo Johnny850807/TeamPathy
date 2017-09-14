@@ -21,6 +21,7 @@ import com.ood.clean.waterball.teampathy.Domain.Model.WBS.WbsCommand;
 import com.ood.clean.waterball.teampathy.MyApp;
 import com.ood.clean.waterball.teampathy.MyUtils.EnglishAbbrDateConverter;
 import com.ood.clean.waterball.teampathy.MyUtils.TeamPathyDialogFactory;
+import com.ood.clean.waterball.teampathy.Presentation.Interfaces.BasePresenter;
 import com.ood.clean.waterball.teampathy.Presentation.Presenter.WbsConsolePresenterImp;
 import com.ood.clean.waterball.teampathy.R;
 
@@ -37,6 +38,7 @@ import butterknife.OnClick;
 public class CreateTodoTaskDialogFragment extends MakeSureToCancelBaseDialogFragment{
     private static final String PARENT = "ParentName";
     private String parentName;
+    private BasePresenter.BaseView baseView;
     @Inject WbsConsolePresenterImp wbsConsolePresenterImp;
     @Inject Project project;
     @BindView(R.id.startDateBtn) Button startDateBtn;
@@ -52,6 +54,10 @@ public class CreateTodoTaskDialogFragment extends MakeSureToCancelBaseDialogFrag
         bundle.putString(PARENT, parentName);
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    public void setBaseView(BasePresenter.BaseView baseView) {
+        this.baseView = baseView;
     }
 
     @Override
@@ -109,6 +115,7 @@ public class CreateTodoTaskDialogFragment extends MakeSureToCancelBaseDialogFrag
                                 descriptionEd.getText().toString(), Integer.parseInt(contributionEd.getText().toString()),
                                 startDate, endDate, "", TodoTask.Status.none, TodoTask.UNASSIGNED_ID);
                         WbsCommand command = WbsCommand.createTaskChild(parentName, todoTask);
+                        baseView.showProgressDialog();
                         wbsConsolePresenterImp.executeCommand(command);
                         Log.d("Wbs",new Gson().toJson(command));
                     }catch (Exception err){

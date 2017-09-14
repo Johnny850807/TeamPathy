@@ -1,6 +1,8 @@
 package com.ood.clean.waterball.teampathy.Domain.Model.WBS;
 
 
+import android.support.annotation.NonNull;
+
 import com.ood.clean.waterball.teampathy.MyUtils.EnglishAbbrDateConverter;
 
 import org.w3c.dom.Document;
@@ -13,9 +15,9 @@ import java.util.List;
 
 import static com.ood.clean.waterball.teampathy.MyUtils.EnglishAbbrDateConverter.dateToTime;
 
-public class TodoTask extends TaskEntity implements TaskItem, Cloneable{
+public class TodoTask extends TaskEntity implements TaskItem, Cloneable, Comparable<TodoTask>{
     public static int UNASSIGNED_ID = -1;
-    private int assignedUserId;
+    private int assignedId;
     private String description;
     private Date startDate;
     private Date endDate;
@@ -32,13 +34,13 @@ public class TodoTask extends TaskEntity implements TaskItem, Cloneable{
                     Date endDate,
                     String dependency,
                     Status status,
-                    int assignedUserId) {
+                    int assignedId) {
         super(name, ofGroupName);
         this.description = description;
         this.status = status;
         this.contribution = contribution;
         this.dependency = dependency;
-        this.assignedUserId = assignedUserId;
+        this.assignedId = assignedId;
         this.startDate = startDate;
         this.endDate = endDate;
     }
@@ -50,8 +52,8 @@ public class TodoTask extends TaskEntity implements TaskItem, Cloneable{
                     int contribution,
                     String dependency,
                     Status status,
-                    int assignedUserId) {
-        this(name, ofGroupName, description, contribution, new Date(), new Date(), dependency, status, assignedUserId);
+                    int assignedId) {
+        this(name, ofGroupName, description, contribution, new Date(), new Date(), dependency, status, assignedId);
     }
 
 
@@ -82,7 +84,7 @@ public class TodoTask extends TaskEntity implements TaskItem, Cloneable{
         element.setAttribute(TaskXmlTranslatorImp.ENDDATE_ATT,dateToTime(endDate,false));
         element.setAttribute(TaskXmlTranslatorImp.CONTRIBUTION_ATT, String.valueOf(contribution));
         element.setAttribute(TaskXmlTranslatorImp.STATUS_ATT,status.attr);
-        element.setAttribute(TaskXmlTranslatorImp.ASSIGNED_ID_ATT, String.valueOf(assignedUserId));
+        element.setAttribute(TaskXmlTranslatorImp.ASSIGNED_ID_ATT, String.valueOf(assignedId));
         return element;
     }
 
@@ -149,14 +151,12 @@ public class TodoTask extends TaskEntity implements TaskItem, Cloneable{
         this.contribution = contribution;
     }
 
-    @Override
-    public int getAssignedUserId() {
-        return assignedUserId;
+    public int getAssignedId() {
+        return assignedId;
     }
 
-    @Override
-    public void setAssignedUserId(int assignedUserId) {
-        this.assignedUserId = assignedUserId;
+    public void setAssignedId(int assignedId) {
+        this.assignedId = assignedId;
     }
 
     @Override
@@ -191,6 +191,13 @@ public class TodoTask extends TaskEntity implements TaskItem, Cloneable{
 
     public TodoTask clone() throws CloneNotSupportedException {
         return (TodoTask)super.clone();
+    }
+
+    @Override
+    public int compareTo(@NonNull TodoTask todoTask) {
+        if (todoTask.getStatus() == Status.pass || this.status == Status.doing)
+            return 1;
+        return this.endDate.compareTo(todoTask.getEndDate());
     }
 
     public enum Status{

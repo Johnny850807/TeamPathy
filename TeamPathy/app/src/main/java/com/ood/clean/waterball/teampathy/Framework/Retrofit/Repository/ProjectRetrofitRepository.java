@@ -102,6 +102,11 @@ public class ProjectRetrofitRepository implements ProjectRepository {
         exceptionConverter.validate(response);
     }
 
+    @Override
+    public List<Member> getMemberList() throws Exception {
+        return null;
+    }
+
 
     interface ProjectApi{
         String RESOURCE = "projects";

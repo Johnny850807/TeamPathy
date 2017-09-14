@@ -63,7 +63,7 @@ public class RetrofitProjectModule {
 
     @Provides @ProjectScope
     public WbsRepository provideWbsRepository(ExceptionConverter exceptionConverter,
-                                              @Named("DateFormatRetrofit")Retrofit retrofit,
+                                              @Named("WbsRetrofit")Retrofit retrofit,
                                               Project project){
         return new WbsRetrofitRepository(exceptionConverter, retrofit, project);
     }
