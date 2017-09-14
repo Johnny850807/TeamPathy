@@ -134,7 +134,7 @@ public class TaskGroup extends TaskEntity implements TaskItem {
 
 	@Override
 	public String getDependency() {
-		throw new RuntimeException("Task group does not support getDependency()");
+		return "";
 	}
 
 	@Override

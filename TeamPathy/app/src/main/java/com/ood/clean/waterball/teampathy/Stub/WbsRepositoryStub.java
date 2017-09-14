@@ -4,11 +4,12 @@ import android.content.Context;
 
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ProjectScope;
 import com.ood.clean.waterball.teampathy.Domain.Model.Project;
-import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskItem;
+import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.WbsCommand;
 import com.ood.clean.waterball.teampathy.Domain.Repository.WbsRepository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -35,7 +36,12 @@ public class WbsRepositoryStub implements WbsRepository {
     }
 
     @Override
-    public <Data extends TaskItem> String executeWbsCommand(WbsCommand<Data> taskRoot) throws Exception {
+    public String executeWbsCommand(WbsCommand taskRoot) throws Exception {
+        return null;
+    }
+
+    @Override
+    public List<TodoTask> getTodolist(int userId) throws Exception {
         return null;
     }
 

@@ -16,7 +16,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.annotations.NonNull;
 
 @WbsScope
-public class ExecuteWbsCommand extends UseCase<TaskItem,WbsCommand<? extends TaskItem>> {
+public class ExecuteWbsCommand extends UseCase<TaskItem,WbsCommand> {
     private WbsRepository wbsRepository;
     private TaskXmlTranslator translator;
 
@@ -29,7 +29,7 @@ public class ExecuteWbsCommand extends UseCase<TaskItem,WbsCommand<? extends Tas
     }
 
     @Override
-    protected Observable<TaskItem> buildUseCaseObservable(final WbsCommand<? extends TaskItem> wbsCommand) {
+    protected Observable<TaskItem> buildUseCaseObservable(final WbsCommand wbsCommand) {
         return Observable.create(new ObservableOnSubscribe<TaskItem>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<TaskItem> e) throws Exception {

@@ -25,6 +25,7 @@ public class RetrofitApplicationModule {
 
     @Provides
     @Singleton
+    @Named("DateFormatRetrofit")
     public Retrofit provideRetrofit(Retrofit.Builder builder){
         Gson gson = new GsonBuilder()  //to correctly parse the date from json
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
@@ -61,7 +62,8 @@ public class RetrofitApplicationModule {
 
     @Provides
     @Singleton
-    public UserRepository provideUserRepository(Retrofit retrofit, ExceptionConverter exceptionConverter){
+    public UserRepository provideUserRepository(@Named("DateFormatRetrofit") Retrofit retrofit,
+                                                ExceptionConverter exceptionConverter){
         return new UserRetrofitRespository(retrofit, exceptionConverter);
     }
 

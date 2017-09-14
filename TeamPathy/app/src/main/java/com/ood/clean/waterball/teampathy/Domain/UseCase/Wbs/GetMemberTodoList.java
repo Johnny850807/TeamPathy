@@ -7,6 +7,8 @@ import com.ood.clean.waterball.teampathy.Domain.Repository.WbsRepository;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Base.UseCase;
 import com.ood.clean.waterball.teampathy.Threading.ThreadingObserverFactory;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
@@ -30,7 +32,10 @@ public class GetMemberTodoList extends UseCase<TodoTask,Member> {
         return Observable.create(new ObservableOnSubscribe<TodoTask>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<TodoTask> e) throws Exception {
-                e.onComplete(); //todo
+                List<TodoTask> todoTaskList = wbsRepository.getTodolist(member.getUser().getId());
+                for (TodoTask todoTask : todoTaskList)
+                    e.onNext(todoTask);
+                e.onComplete();
             }
         });
     }

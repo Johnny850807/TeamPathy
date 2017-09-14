@@ -10,6 +10,8 @@ import com.ood.clean.waterball.teampathy.Domain.Repository.TimeLineRepository;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.http.DELETE;
@@ -28,6 +30,7 @@ public class TimelineRetrofitRepository implements TimeLineRepository {
     private User user;
     private TimelineApi timelineApi;
 
+    @Inject
     public TimelineRetrofitRepository(ExceptionConverter exceptionConverter,
                                       Project project,
                                       User user,
@@ -44,9 +47,7 @@ public class TimelineRetrofitRepository implements TimeLineRepository {
         ResponseModel<Timeline> response = timelineApi.create(project.getId(), user.getId(), entity.toFieldMap())
                 .execute().body();
 
-        if (!exceptionConverter.isSuccessful(response))
-            throw exceptionConverter.convert(response);
-
+        exceptionConverter.validate(response);
         return response.getData();
     }
 
@@ -60,9 +61,7 @@ public class TimelineRetrofitRepository implements TimeLineRepository {
         ResponseModel<Void> response = timelineApi.delete(project.getId(), entity.getId())
                 .execute().body();
 
-        if (!exceptionConverter.isSuccessful(response))
-            throw exceptionConverter.convert(response);
-
+        exceptionConverter.validate(response);
         return entity;
     }
 
@@ -71,9 +70,7 @@ public class TimelineRetrofitRepository implements TimeLineRepository {
         ResponseModel<List<Timeline>> response = timelineApi.getList(project.getId(), page)
                 .execute().body();
 
-        if (!exceptionConverter.isSuccessful(response))
-            throw exceptionConverter.convert(response);
-
+        exceptionConverter.validate(response);
         return response.getData();
     }
 

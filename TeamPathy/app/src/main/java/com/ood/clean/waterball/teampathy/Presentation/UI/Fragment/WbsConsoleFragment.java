@@ -5,17 +5,20 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.ood.clean.waterball.teampathy.Domain.Model.Member.Member;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskEventVisitor;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskGroup;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskItem;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask;
+import com.ood.clean.waterball.teampathy.Domain.Model.WBS.WbsCommand;
 import com.ood.clean.waterball.teampathy.MyApp;
 import com.ood.clean.waterball.teampathy.MyUtils.TeamPathyDialogFactory;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.WbsConsolePresenter;
@@ -237,8 +240,9 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
                 .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        taskRoot.removeTaskChild(taskItem);
-                        refreshFlowLayout();
+                        WbsCommand command = WbsCommand.removeTaskItem(taskItem);
+                        Log.d("wbs",new Gson().toJson(command));
+                        presenterImp.executeCommand(command);
                     }
                 }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override

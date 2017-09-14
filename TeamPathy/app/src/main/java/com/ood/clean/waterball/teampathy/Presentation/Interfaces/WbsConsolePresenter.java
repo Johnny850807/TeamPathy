@@ -8,7 +8,7 @@ import com.ood.clean.waterball.teampathy.Domain.Model.WBS.WbsCommand;
 public interface WbsConsolePresenter extends LifetimePresenter{
 
     void loadTasks();
-    void executeCommand(WbsCommand<? extends TaskItem> wbsCommand);
+    void executeCommand(WbsCommand wbsCommand);
 
     public interface WbsView{
         public void onLoadTasksFinish(TaskItem taskroot);

@@ -41,6 +41,11 @@ public class OfficePresenterImp implements OfficePresenter {
             public void onComplete() {
                 officeView.onLoadFinish();
             }
+
+            @Override
+            public void onError(Throwable exception) {
+                officeView.onOperationTimeout(exception);
+            }
         }, member);
     }
 

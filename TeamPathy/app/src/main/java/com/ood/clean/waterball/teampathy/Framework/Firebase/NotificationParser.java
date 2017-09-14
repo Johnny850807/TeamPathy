@@ -21,7 +21,7 @@ public class NotificationParser {
      * Title phrase : {where : optional} - {who} {action} {entity : optional}
      * Message phrase : {content}
      * **/
-    public MyFirebaseMessagingService.NotificationModel parseModel(Map<String,String> data){
+    public MyFirebaseMessagingService.NotificationModel parseModel(Map<String, String> data) {
         String event = data.get(EVENTTYPE).toLowerCase();
         String where = parseWhereByData(data);
         String who = parseWhoByData(data);

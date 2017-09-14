@@ -79,7 +79,7 @@
                         android:textColor="#ff0500"
                         android:layout_weight=".3"
                         android:textSize="16sp"
-                        android:text="@{obj.todoTask.name}"
+                        android:text="@{obj.dointTask.name}"
                         android:id="@+id/member_current_task_name_id_card_item"/>
                     <TextView
                         android:layout_width="match_parent"
@@ -88,7 +88,7 @@
                         android:gravity="end"
                         android:textColor="@color/task_group_color"
                         android:textSize="14sp"
-                        android:text="@{obj.todoTask.parent}"
+                        android:text="@{obj.dointTask.parent}"
                         android:id="@+id/member_current_task_groupname_id_card_item"/>
                 </LinearLayout>
             </LinearLayout>

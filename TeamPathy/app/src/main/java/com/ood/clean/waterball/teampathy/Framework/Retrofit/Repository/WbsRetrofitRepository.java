@@ -2,12 +2,15 @@ package com.ood.clean.waterball.teampathy.Framework.Retrofit.Repository;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.ood.clean.waterball.teampathy.Domain.DI.Module.Retrofit.RetrofitHelper;
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ProjectScope;
 import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionConverter;
 import com.ood.clean.waterball.teampathy.Domain.Model.Project;
-import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskItem;
+import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.WbsCommand;
 import com.ood.clean.waterball.teampathy.Domain.Repository.WbsRepository;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -34,7 +37,7 @@ public class WbsRetrofitRepository implements WbsRepository {
         this.exceptionConverter = exceptionConverter;
 
 
-        this.wbsApi = retrofit.create(WbsApi.class);
+        this.wbsApi = RetrofitHelper.provideWbsRetrofit().create(WbsApi.class);
         this.project = project;
     }
 
@@ -42,23 +45,27 @@ public class WbsRetrofitRepository implements WbsRepository {
     public String getWbs() throws Exception {
         ResponseModel<String> response = wbsApi.getWbs(project.getId()).execute().body();
 
-        if (!exceptionConverter.isSuccessful(response))
-            throw exceptionConverter.convert(response);
-
+        exceptionConverter.validate(response);
         return response.getData();
     }
 
     @Override
-    public <Data extends TaskItem> String executeWbsCommand(WbsCommand<Data> command) throws Exception {
+    public String executeWbsCommand(WbsCommand command) throws Exception {
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy dd MMM.")
                 .create();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), gson.toJson(command));
         ResponseModel<String> response = wbsApi.executeWbsCommand(project.getId(), body).execute().body();
 
-        if (!exceptionConverter.isSuccessful(response))
-            throw exceptionConverter.convert(response);
+        exceptionConverter.validate(response);
+        return response.getData();
+    }
 
+    @Override
+    public List<TodoTask> getTodolist(int userId) throws Exception {
+        ResponseModel<List<TodoTask>> response = wbsApi.getTodolist(project.getId(), userId).execute().body();
+
+        exceptionConverter.validate(response);
         return response.getData();
     }
 
@@ -67,6 +74,10 @@ public class WbsRetrofitRepository implements WbsRepository {
 
         @GET(RESOURCE)
         public Call<ResponseModel<String>> getWbs(@Path("projectId") int projectId);
+
+        @GET(RESOURCE + "/todolist/{userId}")
+        public Call<ResponseModel<List<TodoTask>>> getTodolist(@Path("projectId") int projectId,
+                                                               @Path("userId") int userId);
 
         @Headers("Content-Type: application/json")
         @POST(RESOURCE)

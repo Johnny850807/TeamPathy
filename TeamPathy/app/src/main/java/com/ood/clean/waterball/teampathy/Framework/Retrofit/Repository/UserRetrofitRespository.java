@@ -21,7 +21,8 @@ public class UserRetrofitRespository implements UserRepository{
     private UserAPI userAPI;
 
     @Inject
-    public UserRetrofitRespository(Retrofit retrofit, ExceptionConverter exceptionConverter) {
+    public UserRetrofitRespository(Retrofit retrofit,
+                                   ExceptionConverter exceptionConverter) {
         userAPI = retrofit.create(UserAPI.class);
         this.exceptionConverter = exceptionConverter;
     }
@@ -31,9 +32,7 @@ public class UserRetrofitRespository implements UserRepository{
         ResponseModel<User> response =  userAPI.signIn(params.getAccount(), params.getPassword(), params.getPushNotificationToken())
                 .execute().body();
 
-        if (!exceptionConverter.isSuccessful(response))
-            throw exceptionConverter.convert(response);
-
+        exceptionConverter.validate(response);
         return response.getData();
     }
 
@@ -45,9 +44,7 @@ public class UserRetrofitRespository implements UserRepository{
                 params.getImageUrl(),
                 params.getPushNotificationToken()).execute().body();
 
-        if (!exceptionConverter.isSuccessful(response))
-            throw exceptionConverter.convert(response);
-
+        exceptionConverter.validate(response);
         return response.getData();
     }
 
@@ -60,7 +57,7 @@ public class UserRetrofitRespository implements UserRepository{
         String RESOURCE = "users";
 
         @FormUrlEncoded
-        @POST(RESOURCE + "/SignUp")
+        @POST(RESOURCE + "/signup")
         public Call<ResponseModel<User>> signUp(@Field("name") String name,
                                  @Field("account") String account,
                                  @Field("password") String password,
@@ -68,7 +65,7 @@ public class UserRetrofitRespository implements UserRepository{
                                  @Field("firebaseToken") String token);
 
         @FormUrlEncoded
-        @POST(RESOURCE + "/SignIn")
+        @POST(RESOURCE + "/signin")
         public Call<ResponseModel<User>> signIn(@Field("account") String account,
                            @Field("password") String password,
                            @Field("firebaseToken") String token);

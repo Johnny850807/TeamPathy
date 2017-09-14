@@ -40,6 +40,8 @@ public class MainPresenterImp implements MainPresenter {
                 public void onError(Throwable exception) {
                     if (exception instanceof UserNotFoundException)
                         mainView.onUserNotFound();
+                    else
+                        mainView.onOperationTimeOut(exception);
                 }
             }, params);
         }

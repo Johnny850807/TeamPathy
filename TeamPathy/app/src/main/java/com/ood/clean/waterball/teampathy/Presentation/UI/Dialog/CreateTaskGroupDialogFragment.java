@@ -68,7 +68,7 @@ public class CreateTaskGroupDialogFragment extends MakeSureToCancelBaseDialogFra
                 if (checkValid())
                 {
                     TaskGroup taskGroup = new TaskGroup(nameEd.getText().toString(), parentName);
-                    WbsCommand<TaskGroup> command = WbsCommand.createTaskChild(parentName, taskGroup);
+                    WbsCommand command = WbsCommand.createTaskChild(parentName, taskGroup);
                     Log.d("TaskGroup", taskGroup.toString());
                     wbsConsolePresenterImp.executeCommand(command);
                 }

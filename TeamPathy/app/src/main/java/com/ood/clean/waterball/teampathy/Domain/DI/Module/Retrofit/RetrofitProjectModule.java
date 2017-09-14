@@ -1,21 +1,20 @@
 package com.ood.clean.waterball.teampathy.Domain.DI.Module.Retrofit;
 
-import android.content.Context;
-
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ProjectScope;
 import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionConverter;
 import com.ood.clean.waterball.teampathy.Domain.Model.Member.Member;
 import com.ood.clean.waterball.teampathy.Domain.Model.Project;
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
-import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskXmlTranslator;
 import com.ood.clean.waterball.teampathy.Domain.Repository.IssueRepository;
 import com.ood.clean.waterball.teampathy.Domain.Repository.OfficeRepository;
 import com.ood.clean.waterball.teampathy.Domain.Repository.TimeLineRepository;
 import com.ood.clean.waterball.teampathy.Domain.Repository.WbsRepository;
 import com.ood.clean.waterball.teampathy.Framework.Retrofit.Repository.IssueRetrofitRepository;
+import com.ood.clean.waterball.teampathy.Framework.Retrofit.Repository.OfficeRetrofitRepository;
 import com.ood.clean.waterball.teampathy.Framework.Retrofit.Repository.TimelineRetrofitRepository;
 import com.ood.clean.waterball.teampathy.Framework.Retrofit.Repository.WbsRetrofitRepository;
-import com.ood.clean.waterball.teampathy.Stub.OfficeRepositoryStub;
+
+import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
@@ -43,7 +42,7 @@ public class RetrofitProjectModule {
     }
 
     @Provides @ProjectScope
-    public IssueRepository provideIssueRepository(User user, Retrofit retrofit, ExceptionConverter exceptionConverter){
+    public IssueRepository provideIssueRepository(User user, @Named("DateFormatRetrofit")Retrofit retrofit, ExceptionConverter exceptionConverter){
         return new IssueRetrofitRepository(project, retrofit, exceptionConverter, user);
     }
 
@@ -51,18 +50,21 @@ public class RetrofitProjectModule {
     public TimeLineRepository provideTimelineRepository(ExceptionConverter exceptionConverter,
                                                         User user,
                                                         Project project,
-                                                        Retrofit retrofit){
+                                                        @Named("DateFormatRetrofit")Retrofit retrofit){
         return new TimelineRetrofitRepository(exceptionConverter, project, user, retrofit);
     }
 
     @Provides @ProjectScope
-    public OfficeRepository provideOfficeRepository(Project project, Context context){
-        return new OfficeRepositoryStub(project, context);
+    public OfficeRepository provideOfficeRepository(ExceptionConverter exceptionConverter,
+                                                    @Named("WbsRetrofit") Retrofit retrofit,
+                                                    Project project){
+        return new OfficeRetrofitRepository(exceptionConverter, retrofit, project);
     }
 
     @Provides @ProjectScope
-    public WbsRepository provideWbsRepository(ExceptionConverter exceptionConverter, Retrofit retrofit,
-                                              Project project, TaskXmlTranslator taskXmlTranslator){
+    public WbsRepository provideWbsRepository(ExceptionConverter exceptionConverter,
+                                              @Named("DateFormatRetrofit")Retrofit retrofit,
+                                              Project project){
         return new WbsRetrofitRepository(exceptionConverter, retrofit, project);
     }
 

@@ -49,7 +49,7 @@ public class WbsConsolePresenterImp implements WbsConsolePresenter {
     }
 
     @Override
-    public void executeCommand(WbsCommand<? extends TaskItem> wbsCommand) {
+    public void executeCommand(WbsCommand wbsCommand) {
         executeWbsCommand.execute(new DefaultObserver<TaskItem>() {
             @Override
             public void onNext(@NonNull TaskItem taskRoot) {

@@ -11,7 +11,5 @@ public interface TodoListPresenter extends LifetimePresenter{
     }
 
     void loadTodoList();
-    void commitTask(TodoTask todoTask);
-    void setAsDoingTask(TodoTask todoTask);
-    void cancelCommit(TodoTask todoTask);
+    void alterTaskStatus(final TodoTask todoTask, final TodoTask.Status status);
 }

@@ -108,7 +108,7 @@ public class CreateTodoTaskDialogFragment extends MakeSureToCancelBaseDialogFrag
                         TodoTask todoTask = new TodoTask(nameEd.getText().toString(), parentName,
                                 descriptionEd.getText().toString(), Integer.parseInt(contributionEd.getText().toString()),
                                 startDate, endDate, "", TodoTask.Status.none, TodoTask.UNASSIGNED_ID);
-                        WbsCommand<TodoTask> command = WbsCommand.createTaskChild(parentName, todoTask);
+                        WbsCommand command = WbsCommand.createTaskChild(parentName, todoTask);
                         wbsConsolePresenterImp.executeCommand(command);
                         Log.d("Wbs",new Gson().toJson(command));
                     }catch (Exception err){

@@ -13,7 +13,7 @@ import java.util.List;
 
 import static com.ood.clean.waterball.teampathy.MyUtils.EnglishAbbrDateConverter.dateToTime;
 
-public class TodoTask extends TaskEntity implements TaskItem {
+public class TodoTask extends TaskEntity implements TaskItem, Cloneable{
     public static int UNASSIGNED_ID = -1;
     private int assignedUserId;
     private String description;
@@ -189,9 +189,12 @@ public class TodoTask extends TaskEntity implements TaskItem {
         visitor.eventOnTask(this);
     }
 
+    public TodoTask clone() throws CloneNotSupportedException {
+        return (TodoTask)super.clone();
+    }
 
     public enum Status{
-        none("none"), assigned("assigned"), pending("pending"), pass("pass");
+        none("none"), assigned("assigned"), doing("doing"), pending("pending"), pass("pass");
         private String attr;
         private Status(String attr) {
             this.attr = attr;

@@ -1,34 +1,41 @@
 package com.ood.clean.waterball.teampathy.Domain.Model.WBS;
 
 
-public class WbsCommand<Data extends TaskItem> {
+import java.util.Date;
+
+public class WbsCommand {
     private Action action;
     private String parent;
     private String name;
     private Type type;
     private Data data;
 
-    public WbsCommand(Action action, String parent, String name, Type type, Data data) {
+    public WbsCommand(Action action, String parent, String name, Type type, TaskItem data) {
         this.action = action;
         this.parent = parent;
         this.name = name;
         this.type = type;
-        this.data = data;
+        this.data = parseData(data);
     }
 
-    public static <Data extends TaskItem> WbsCommand<Data> createTaskChild(String parentName, Data data){
-        Type type = getType(data);
-        return new WbsCommand<Data>(Action.create, parentName, data.getName(), type, data);
+    private Data parseData(TaskItem data){
+        return new Data(data.getName(), data.getAssignedUserId(), data.getDescription(),
+                data.getStartDate(), data.getEndDate(), data.getContribution(), data.getDependency(), data.getStatus());
     }
 
-    public static <Data extends TaskItem> WbsCommand<Data> updateTaskItem(String originalName, Data data){
+    public static WbsCommand createTaskChild(String parentName, TaskItem data){
         Type type = getType(data);
-        return new WbsCommand<Data>(Action.update, "", originalName, type, data);
+        return new WbsCommand(Action.create, parentName, data.getName(), type, data);
     }
 
-    public static <Data extends TaskItem> WbsCommand<Data> removeTaskItem(Data data){
+    public static WbsCommand updateTaskItem(String originalName,TaskItem data){
         Type type = getType(data);
-        return new WbsCommand<Data>(Action.remove, "", data.getName(), type, data);
+        return new WbsCommand(Action.update, "", originalName, type, data);
+    }
+
+    public static WbsCommand removeTaskItem(TaskItem data){
+        Type type = getType(data);
+        return new WbsCommand(Action.remove, "", data.getName(), type, data);
     }
 
     private static <T extends TaskItem> Type getType(T data){
@@ -41,6 +48,84 @@ public class WbsCommand<Data extends TaskItem> {
 
     public enum Type{
         Task, TaskGroup
+    }
+
+    public class Data{
+        private String name;
+        private int assignedUserId;
+        private String description;
+        private Date startDate;
+        private Date endDate;
+        private int contribution;
+        private String dependency;
+        private TodoTask.Status status;
+
+        public Data(String name, int assignedUserId, String description, Date startDate, Date endDate, int contribution, String dependency, TodoTask.Status status) {
+            this.name = name;
+            this.assignedUserId = assignedUserId;
+            this.description = description;
+            this.startDate = startDate;
+            this.endDate = endDate;
+            this.contribution = contribution;
+            this.dependency = dependency;
+            this.status = status;
+        }
+
+        public int getAssignedUserId() {
+            return assignedUserId;
+        }
+
+        public void setAssignedUserId(int assignedUserId) {
+            this.assignedUserId = assignedUserId;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public Date getStartDate() {
+            return startDate;
+        }
+
+        public void setStartDate(Date startDate) {
+            this.startDate = startDate;
+        }
+
+        public Date getEndDate() {
+            return endDate;
+        }
+
+        public void setEndDate(Date endDate) {
+            this.endDate = endDate;
+        }
+
+        public int getContribution() {
+            return contribution;
+        }
+
+        public void setContribution(int contribution) {
+            this.contribution = contribution;
+        }
+
+        public String getDependency() {
+            return dependency;
+        }
+
+        public void setDependency(String dependency) {
+            this.dependency = dependency;
+        }
+
+        public TodoTask.Status getStatus() {
+            return status;
+        }
+
+        public void setStatus(TodoTask.Status status) {
+            this.status = status;
+        }
     }
 
     public Action getAction() {

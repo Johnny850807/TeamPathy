@@ -178,10 +178,10 @@ public class TodolistFragment extends BaseFragment implements TodoListPresenter.
             public void onClick(DialogInterface dialogInterface, int position) {
                 switch (position) {
                     case COMMIT_TASK:
-                        presenterImp.commitTask(todoTask);
+                        presenterImp.alterTaskStatus(todoTask, TodoTask.Status.pending);
                         break;
                     case SET_AS_DOING_TASK:
-                        presenterImp.setAsDoingTask(todoTask);
+                        presenterImp.alterTaskStatus(todoTask, TodoTask.Status.doing);
                         break;
                 }
             }
@@ -195,7 +195,7 @@ public class TodolistFragment extends BaseFragment implements TodoListPresenter.
             public void onClick(DialogInterface dialogInterface, int position) {
                 switch (position) {
                     case CANCEL_COMMIT:
-                        presenterImp.cancelCommit(todoTask);
+                        presenterImp.alterTaskStatus(todoTask, TodoTask.Status.assigned);
                         break;
                 }
             }
