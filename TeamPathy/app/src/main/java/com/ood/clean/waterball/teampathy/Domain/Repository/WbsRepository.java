@@ -11,4 +11,6 @@ public interface WbsRepository {
      String getWbs() throws Exception;
      <Data extends TaskItem> String executeWbsCommand(WbsCommand command) throws Exception;
      List<TodoTask> getTodolist(int userId) throws Exception;
+     List<TodoTask> filterTasksByStatus(TodoTask.Status status) throws Exception;
+
 }

@@ -93,7 +93,8 @@ public class IndexSet<E> implements Set<E> {
     }
 
     public void update(E e){
-        elementData.remove(e);
+        if (elementData.contains(e))
+            elementData.remove(e);
         elementData.add(e);
     }
 }

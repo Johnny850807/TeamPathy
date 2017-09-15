@@ -53,14 +53,14 @@ public class TodolistPresenterImp implements TodoListPresenter {
     @Override
     public void alterTaskStatus(final TodoTask todoTask, final TodoTask.Status status) {
         try {
-            TodoTask clone = todoTask.clone();
+            final TodoTask clone = todoTask.clone();  // making a data of updated todotask without changing to the real task before done
             clone.setStatus(status);
             WbsCommand wbsCommand = WbsCommand.updateTaskItem(todoTask.getName(), clone);
             executeWbsCommand.execute(new DefaultObserver<TaskItem>() {
                 @Override
-                public void onNext(@NonNull TaskItem taskItem) {
+                public void onNext(@NonNull TaskItem taskRoot) {
                     todoTask.setStatus(status);
-                    todoListView.onAlterFinishNotify(taskItem, status);
+                    todoListView.onAlterFinishNotify(todoTask, status);
                 }
             },wbsCommand);
         } catch (CloneNotSupportedException e) {
