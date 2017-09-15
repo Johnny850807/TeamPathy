@@ -47,6 +47,7 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.0'
     compile files('libs/Input.jar')
+    compile project(path: ':cropper')
 }
 
 
