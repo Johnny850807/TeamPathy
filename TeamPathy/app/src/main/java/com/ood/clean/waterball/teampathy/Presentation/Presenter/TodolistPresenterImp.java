@@ -60,6 +60,7 @@ public class TodolistPresenterImp implements TodoListPresenter {
                 @Override
                 public void onNext(@NonNull TaskItem taskItem) {
                     todoTask.setStatus(status);
+                    todoListView.onAlterFinishNotify(taskItem, status);
                 }
             },wbsCommand);
         } catch (CloneNotSupportedException e) {

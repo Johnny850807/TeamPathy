@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
+import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskItem;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask;
 import com.ood.clean.waterball.teampathy.MyApp;
 import com.ood.clean.waterball.teampathy.MyUtils.IndexSet;
@@ -93,6 +95,13 @@ public class TodolistFragment extends BaseFragment implements TodoListPresenter.
         getBaseView().hideProgressBar();
         swipeRefreshLayout.setRefreshing(false);
     }
+
+    @Override
+    public void onAlterFinishNotify(TaskItem todoTask, TodoTask.Status status) {
+        String text = status == TodoTask.Status.doing ? getString(R.string.task_has_set_doing) : getString(R.string.task_has_been_commited);
+        Snackbar.make(getView(), text, Snackbar.LENGTH_SHORT).show();
+    }
+
 
     @Override
     public void onRefresh() {
