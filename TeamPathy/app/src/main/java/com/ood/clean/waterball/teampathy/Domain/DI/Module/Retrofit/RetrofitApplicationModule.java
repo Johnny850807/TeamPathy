@@ -69,7 +69,10 @@ public class RetrofitApplicationModule {
 
     @Provides @Singleton
     public ImageUploadRepository provideImageUploadRepository(){
-        return new ImgurRepository();
+        return new ImgurRepository(new Retrofit.Builder()
+                .baseUrl(ImgurRepository.ImgurAPI.SERVER)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build());
     }
 
 }

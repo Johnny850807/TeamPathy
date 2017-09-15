@@ -8,8 +8,12 @@ public interface SignUpPresenter {
 
     public interface SignUpView{
         void onSignUpSuccessfully(User user);
+        void onImageUploadSuccessfully(String imageUrl);
+        void onImageUploadError(Throwable err);
+
         void onAccountDuplicated();
     }
 
     void signUp(SignUp.Params params);
+    void uploadImage(String imagePath);
 }

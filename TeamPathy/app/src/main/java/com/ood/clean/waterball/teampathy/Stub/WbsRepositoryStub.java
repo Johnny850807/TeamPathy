@@ -45,5 +45,10 @@ public class WbsRepositoryStub implements WbsRepository {
         return null;
     }
 
+    @Override
+    public List<TodoTask> filterTasksByStatus(TodoTask.Status status) throws Exception {
+        return null;
+    }
+
 
 }

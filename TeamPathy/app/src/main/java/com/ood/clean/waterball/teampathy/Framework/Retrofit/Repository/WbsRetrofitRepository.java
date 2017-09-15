@@ -69,6 +69,11 @@ public class WbsRetrofitRepository implements WbsRepository {
         return response.getData();
     }
 
+    @Override
+    public List<TodoTask> filterTasksByStatus(TodoTask.Status status) throws Exception {
+        return null;
+    }
+
     private interface WbsApi{
         String RESOURCE = "projects/{projectId}/wbs";
 

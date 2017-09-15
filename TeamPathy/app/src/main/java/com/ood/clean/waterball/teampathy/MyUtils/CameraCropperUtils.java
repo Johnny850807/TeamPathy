@@ -71,7 +71,6 @@ public class CameraCropperUtils {
                     .setAspectRatio(1,1)
                     .setGuidelines(CropImageView.Guidelines.ON)
                     .start(activity);
-
     }
 
 }

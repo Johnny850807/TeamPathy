@@ -17,5 +17,9 @@ public interface BasePresenter {
         void finish();
 
         PageController getPageController();
+
+        void launchCamera();
+
+        void pickPhotoFromGallery();
     }
 }

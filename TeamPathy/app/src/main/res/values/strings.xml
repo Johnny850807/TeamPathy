@@ -196,6 +196,8 @@
     <string name="todotask_doing">執行中</string>
     <string name="todotask_todo">待辦</string>
     <string name="alter_complete">變更完成</string>
+    <string name="photo_uploaded_complete">照片上傳完畢</string>
+    <string name="photo_has_not_been_uploaded">照片尚未上傳完畢 ...</string>
 
 
 </resources>

@@ -149,6 +149,16 @@ public class BaseActivity extends AppCompatActivity implements BasePresenter.Bas
         return pageController;
     }
 
+    @Override
+    public void launchCamera() {
+
+    }
+
+    @Override
+    public void pickPhotoFromGallery() {
+
+    }
+
 
     private class PageControllerImp extends PageController {
 
