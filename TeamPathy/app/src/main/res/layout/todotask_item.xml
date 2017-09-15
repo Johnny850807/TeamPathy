@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
     <data>
+        <import type="com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask.Status"/>
         <variable
             name="obj"
             type="com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask"/>
@@ -13,11 +14,12 @@
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
         app:cardCornerRadius="12dp"
-        app:cardBackgroundColor="@color/app_textword_color"
+        app:cardBackgroundColor="@{obj.status == obj.status.doing ? @color/todotask_doing_color : obj.status == obj.status.pending ? @color/todotask_pending_color : obj.status == obj.status.pass ? @color/todotask_pass_color : @color/almost_white}"
         android:layout_marginTop="@dimen/item_margin_top"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         xmlns:android="http://schemas.android.com/apk/res/android">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -27,60 +29,76 @@
                 android:layout_height="wrap_content"
                 android:layout_weight=".1"
                 android:orientation="vertical">
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@{obj.parent}"
-                        android:textColor="@color/task_group_color"
-                        android:textSize="17sp"/>
-                    <TextView
-                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@{obj.name}"
                         android:textColor="@color/app_black_word_color"
                         android:layout_marginStart="5sp"
                         android:layout_marginLeft="5sp"
                         android:textSize="17sp"/>
-                </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{obj.parent}"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/task_group_color"
+                        android:textSize="17sp" />
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/task_start_date"
+                                android:textColor="@color/task_startdate_color"
+                                android:textSize="17sp"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="7dp"
+                                android:textColor="@color/app_black_word_color"
+                                android:text="@{obj.startDateString}"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/task_end_date"
+                                android:textColor="@color/task_enddate_color"
+                                android:textSize="17sp"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="7dp"
+                                android:textColor="@color/app_black_word_color"
+                                android:text="@{obj.endDateString}"/>
+                        </LinearLayout>
+                    </LinearLayout>
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/task_start_date"
-                        android:textColor="@color/task_startdate_color"
-                        android:textSize="17sp"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="7dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
                         android:textColor="@color/app_black_word_color"
-                        android:text="@{obj.startDateString}"/>
+                        android:text="@{obj.status == obj.status.doing ? @string/todotask_doing : obj.status == obj.status.pending ? @string/todotask_pending : obj.status == obj.status.pass ? @string/todotask_pass : @string/todotask_todo}"/>
                 </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/task_end_date"
-                        android:textColor="@color/task_enddate_color"
-                        android:textSize="17sp"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="7dp"
-                        android:textColor="@color/app_black_word_color"
-                        android:text="@{obj.endDateString}"/>
-                </LinearLayout>
-
-
 
             </LinearLayout>
 

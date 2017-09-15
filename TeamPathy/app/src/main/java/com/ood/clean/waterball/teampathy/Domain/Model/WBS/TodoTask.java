@@ -197,6 +197,7 @@ public class TodoTask extends TaskEntity implements TaskItem, Cloneable, Compara
     public int compareTo(@NonNull TodoTask todoTask) {
         if (todoTask.getStatus() == Status.pass || this.status == Status.doing && this.getStatus() != todoTask.getStatus())
             return -1;
+
         return this.endDate.compareTo(todoTask.getEndDate());
     }
 

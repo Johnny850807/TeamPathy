@@ -182,4 +182,10 @@
         <item>創建工作項目</item>
     </string-array>
 
+    <string name="todotask_pending">審核中</string>
+    <string name="todotask_pass">完成</string>
+    <string name="todotask_doing">執行中</string>
+    <string name="todotask_todo">待辦</string>
+
+
 </resources>
