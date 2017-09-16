@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,16 +16,17 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
+import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskItem;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask;
 import com.ood.clean.waterball.teampathy.MyApp;
+import com.ood.clean.waterball.teampathy.MyUtils.IndexSet;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.TodoListPresenter;
 import com.ood.clean.waterball.teampathy.Presentation.Presenter.TodolistPresenterImp;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Adapter.BindingViewHolder;
 import com.ood.clean.waterball.teampathy.R;
 import com.ood.clean.waterball.teampathy.databinding.TodotaskItemBinding;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.TreeSet;
 
 import javax.inject.Inject;
 
@@ -35,6 +37,7 @@ public class TodolistFragment extends BaseFragment implements TodoListPresenter.
     private final int COMMIT_TASK = 0;
     private final int CANCEL_COMMIT = 0;
     private final int SET_AS_DOING_TASK = 1;
+    private final int CANCEL_DOING = 1;
 
     @BindView(R.id.recyclerview) RecyclerView recyclerView;
     @BindView(R.id.swiperefreshlayout) SwipeRefreshLayout swipeRefreshLayout;
@@ -43,8 +46,9 @@ public class TodolistFragment extends BaseFragment implements TodoListPresenter.
     @Inject TodolistPresenterImp presenterImp;
 
     String[] uncommittedTodoTaskActions;
-    String[] committedTodoTaskActions;
-    List<TodoTask> todoList = new ArrayList<>();
+    String[] undoingTodoTaskActions;
+    String[] todoActions;
+    IndexSet<TodoTask> todoList = new IndexSet<>(new TreeSet<TodoTask>());
 
     @Nullable
     @Override
@@ -65,7 +69,8 @@ public class TodolistFragment extends BaseFragment implements TodoListPresenter.
 
     private void init() {
         uncommittedTodoTaskActions = getResources().getStringArray(R.array.member_uncommitted_todolist_actions);
-        committedTodoTaskActions = getResources().getStringArray(R.array.member_committed_todolist_actions);
+        undoingTodoTaskActions = getResources().getStringArray(R.array.member_undoing_todolist_actions);
+        todoActions = getResources().getStringArray(R.array.member_todo_todolist_actions);
     }
 
     private void binding(View view){
@@ -95,7 +100,16 @@ public class TodolistFragment extends BaseFragment implements TodoListPresenter.
     }
 
     @Override
+    public void onAlterFinishNotify(TaskItem todoTask, TodoTask.Status status) {
+        getBaseView().hideProgressBar();
+        Snackbar.make(getView(), R.string.alter_complete, Snackbar.LENGTH_SHORT).show();
+        adapter.notifyDataSetChanged();
+    }
+
+
+    @Override
     public void onRefresh() {
+        todoList.clear();
         getBaseView().showProgressBar();
         presenterImp.loadTodoList();
     }
@@ -147,20 +161,8 @@ public class TodolistFragment extends BaseFragment implements TodoListPresenter.
     }
 
     private void showTodoTaskActionList(final TodoTask todoTask) {
-        String[] actions;
-        DialogInterface.OnClickListener listener;
-
-        // if the task has been committed, show the different action list and different listener.
-        if (todoTask.getStatus() == TodoTask.Status.PENDING)
-        {
-            actions = committedTodoTaskActions;
-            listener = createCommittedTodoTaskActionListener(todoTask);
-        }
-        else
-        {
-            actions = uncommittedTodoTaskActions;
-            listener = createUncommittedTodoTaskActionListener(todoTask);
-        }
+        String[] actions = createActionsUponStatus(todoTask);
+        DialogInterface.OnClickListener listener = createListenerUponStatus(todoTask);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>
                 (getContext(), android.R.layout.simple_list_item_1,
@@ -171,17 +173,45 @@ public class TodolistFragment extends BaseFragment implements TodoListPresenter.
                 .show();
     }
 
-    private DialogInterface.OnClickListener createUncommittedTodoTaskActionListener
+    private String[] createActionsUponStatus(TodoTask todoTask){
+        return todoTask.getStatus() == TodoTask.Status.pending ? uncommittedTodoTaskActions :
+                todoTask.getStatus() == TodoTask.Status.doing ? undoingTodoTaskActions :
+                        todoActions;
+    }
+
+    private DialogInterface.OnClickListener createListenerUponStatus(TodoTask todoTask){
+        return todoTask.getStatus() == TodoTask.Status.pending ? createCommittedTodoTaskActionListener(todoTask) :
+                todoTask.getStatus() == TodoTask.Status.doing ? createDoingActionListener(todoTask) :
+                        createTodoActionListener(todoTask);
+    }
+
+    private DialogInterface.OnClickListener createTodoActionListener
             (final TodoTask todoTask) {
         return new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int position) {
                 switch (position) {
                     case COMMIT_TASK:
-                        presenterImp.commitTask(todoTask);
+                        alterTaskStatus(todoTask, TodoTask.Status.pending);
                         break;
                     case SET_AS_DOING_TASK:
-                        presenterImp.setAsDoingTask(todoTask);
+                        alterTaskStatus(todoTask, TodoTask.Status.doing);
+                        break;
+                }
+            }
+        };
+    }
+
+    private DialogInterface.OnClickListener createDoingActionListener(final TodoTask todoTask){
+        return new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int position) {
+                switch (position) {
+                    case COMMIT_TASK:
+                        alterTaskStatus(todoTask, TodoTask.Status.pending);
+                        break;
+                    case CANCEL_DOING:
+                        alterTaskStatus(todoTask, TodoTask.Status.assigned);
                         break;
                 }
             }
@@ -195,10 +225,15 @@ public class TodolistFragment extends BaseFragment implements TodoListPresenter.
             public void onClick(DialogInterface dialogInterface, int position) {
                 switch (position) {
                     case CANCEL_COMMIT:
-                        presenterImp.cancelCommit(todoTask);
+                        alterTaskStatus(todoTask, TodoTask.Status.assigned);
                         break;
                 }
             }
         };
+    }
+
+    private void alterTaskStatus(TodoTask todoTask, TodoTask.Status status){
+        getBaseView().showProgressBar();
+        presenterImp.alterTaskStatus(todoTask, status);
     }
 }

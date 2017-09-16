@@ -7,7 +7,7 @@ import android.util.Log;
 import com.ood.clean.waterball.teampathy.Domain.Repository.WbsRepository;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Base.DefaultObserver;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.ChartWebViewPresenter;
-import com.ood.clean.waterball.teampathy.Threading.ThreadingObserverFactory;
+import com.ood.clean.waterball.teampathy.Threading.ThreadingObservableFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,14 +32,14 @@ import io.reactivex.disposables.Disposable;
 // chart presenter cannot have a scope, because Gantt and WBS will use this together.
 public class ChartWebViewPresenterImp implements ChartWebViewPresenter {
     private WbsRepository wbsRepository;
-    private ThreadingObserverFactory observerFactory;
+    private ThreadingObservableFactory observerFactory;
     private ChartWebView chartWebView;
     private Context context;
     private Disposable disposable;
 
     @Inject
     public ChartWebViewPresenterImp(
-            WbsRepository wbsRepository, ThreadingObserverFactory observerFactory, Context context) {
+            WbsRepository wbsRepository, ThreadingObservableFactory observerFactory, Context context) {
         //todo redesign this, should only the use case can access the repository layer
         this.wbsRepository = wbsRepository;
         this.observerFactory = observerFactory;

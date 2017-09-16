@@ -103,4 +103,9 @@ public class ProjectRepositoryStub implements ProjectRepository {
             throw new ProjectPasswordInvalidException();
         user.joinProject(params.getProject());
     }
+
+    @Override
+    public List<Member> getMemberList() throws Exception {
+        return null;
+    }
 }

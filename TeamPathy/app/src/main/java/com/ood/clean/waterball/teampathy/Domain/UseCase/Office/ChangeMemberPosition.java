@@ -4,7 +4,7 @@ import com.ood.clean.waterball.teampathy.Domain.Model.Member.Position;
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
 import com.ood.clean.waterball.teampathy.Domain.Repository.OfficeRepository;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Base.UseCase;
-import com.ood.clean.waterball.teampathy.Threading.ThreadingObserverFactory;
+import com.ood.clean.waterball.teampathy.Threading.ThreadingObservableFactory;
 
 import java.lang.reflect.Member;
 
@@ -25,8 +25,8 @@ public class ChangeMemberPosition extends UseCase<Void, ChangeMemberPosition.Par
     private Member member;
 
     @Inject
-    public ChangeMemberPosition(ThreadingObserverFactory threadingObserverFactory, OfficeRepository officeRepository) {
-        super(threadingObserverFactory);
+    public ChangeMemberPosition(ThreadingObservableFactory threadingObservableFactory, OfficeRepository officeRepository) {
+        super(threadingObservableFactory);
         this.officeRepository = officeRepository;
     }
 

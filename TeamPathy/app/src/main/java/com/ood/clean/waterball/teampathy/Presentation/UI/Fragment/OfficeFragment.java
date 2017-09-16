@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.ood.clean.waterball.teampathy.Domain.Model.Member.MemberIdCard;
 import com.ood.clean.waterball.teampathy.MyApp;
+import com.ood.clean.waterball.teampathy.MyUtils.TeamPathyDialogFactory;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.OfficePresenter;
 import com.ood.clean.waterball.teampathy.Presentation.Presenter.OfficePresenterImp;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Adapter.BindingViewHolder;
@@ -40,6 +41,7 @@ public class OfficeFragment extends BaseFragment implements OfficePresenter.Offi
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
         return inflater.inflate( R.layout.fragment_office_page, container, false);
     }
 
@@ -76,6 +78,11 @@ public class OfficeFragment extends BaseFragment implements OfficePresenter.Offi
     public void onLoadFinish() {
         getBaseView().hideProgressBar();
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onOperationTimeout(Throwable err) {
+        TeamPathyDialogFactory.networkErrorDialogBuilder(getActivity()).setMessage(err.getMessage()).show();
     }
 
     @Override

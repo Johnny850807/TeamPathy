@@ -30,6 +30,8 @@ public class MyApp extends Application {
     private IssueComponent issueComponent;
     private WbsComponent wbsComponent;
 
+
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -92,4 +94,6 @@ public class MyApp extends Application {
     public static WbsComponent getWbsComponent(Activity activity){
         return ((MyApp)activity.getApplication()).wbsComponent;
     }
+
+
 }

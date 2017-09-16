@@ -46,8 +46,7 @@ public class IssueRetrofitRepository implements IssueRepository {
         ResponseModel<Void> response = issueApi.deleteIssueCategory(project.getId(), category, user.getId())
                 .execute().body();
 
-        if (!exceptionConverter.isSuccessful(response))
-            throw exceptionConverter.convert(response);
+        exceptionConverter.validate(response);
 
         project.getIssueCategoryList().remove(category);
     }
@@ -57,8 +56,7 @@ public class IssueRetrofitRepository implements IssueRepository {
         ResponseModel<Void> response = issueApi.addIssueCategory(project.getId(), category, user.getId())
                 .execute().body();
 
-        if (!exceptionConverter.isSuccessful(response))
-            throw exceptionConverter.convert(response);
+        exceptionConverter.validate(response);
 
         project.getIssueCategoryList().add(category);
     }
@@ -68,8 +66,7 @@ public class IssueRetrofitRepository implements IssueRepository {
         ResponseModel<Issue> response = issueApi.createIssue(project.getId(),
                 user.getId(), entity.toFieldMap()).execute().body();
 
-        if (!exceptionConverter.isSuccessful(response))
-            throw exceptionConverter.convert(response);
+        exceptionConverter.validate(response);
 
         return response.getData();
     }
@@ -88,8 +85,7 @@ public class IssueRetrofitRepository implements IssueRepository {
     public List<Issue> readList(int page) throws Exception {
         ResponseModel<List<Issue>> response = issueApi.getList(project.getId(), page).execute().body();
 
-        if (!exceptionConverter.isSuccessful(response))
-            throw exceptionConverter.convert(response);
+        exceptionConverter.validate(response);
 
         return response.getData();
     }
@@ -99,8 +95,7 @@ public class IssueRetrofitRepository implements IssueRepository {
         ResponseModel<Issue> response = issueApi.getDetails(project.getId(),
                 id).execute().body();
 
-        if (!exceptionConverter.isSuccessful(response))
-            throw exceptionConverter.convert(response);
+        exceptionConverter.validate(response);
 
         return response.getData();
     }

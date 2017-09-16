@@ -3,7 +3,7 @@ package com.ood.clean.waterball.teampathy.Domain.UseCase.Project;
 import com.ood.clean.waterball.teampathy.Domain.Model.Project;
 import com.ood.clean.waterball.teampathy.Domain.Repository.ProjectRepository;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Base.UseCase;
-import com.ood.clean.waterball.teampathy.Threading.ThreadingObserverFactory;
+import com.ood.clean.waterball.teampathy.Threading.ThreadingObservableFactory;
 
 import javax.inject.Inject;
 
@@ -21,8 +21,8 @@ public class JoinProject extends UseCase<Project, JoinProject.Params> {
     }
 
     @Inject
-    public JoinProject(ThreadingObserverFactory threadingObserverFactory, ProjectRepository projectRepository) {
-        super(threadingObserverFactory);
+    public JoinProject(ThreadingObservableFactory threadingObservableFactory, ProjectRepository projectRepository) {
+        super(threadingObservableFactory);
         this.projectRepository = projectRepository;
     }
 

@@ -16,33 +16,31 @@ import javax.inject.Singleton;
 public class ExceptionConverterImp implements ExceptionConverter {
 
     @Override
-    public boolean isSuccessful(ResponseModel responseModel) {
-        return responseModel.getStatus() == 200;
-    }
-
-    @Override
-    public RuntimeException convert(ResponseModel responseModel) {
+    public void validate(ResponseModel responseModel) {
         String message = responseModel.getMessage();
         message = message.toLowerCase();
+
+        if (responseModel.getStatus() == 200)
+            return;  //success
+
         if (message.contains("project"))
         {
             if (message.contains("not valid"))
-                return new ProjectPasswordInvalidException();
+                throw new ProjectPasswordInvalidException();
         }
         if (message.contains("cannot"))
         {
             if (message.contains("find"))
-                return new ResourceNotFoundException();
+                throw new ResourceNotFoundException();
         }
         if (message.contains("user"))
         {
             if (message.contains("not found"))
-                return new UserNotFoundException();
+                throw new UserNotFoundException();
         }
         if (message.contains("account is duplicated"))
-            return new AccountDuplicatedException();
+            throw new AccountDuplicatedException();
 
         throw new RuntimeException("Converter Exception : message => " + message + ", cannot be detected.");
     }
-
 }

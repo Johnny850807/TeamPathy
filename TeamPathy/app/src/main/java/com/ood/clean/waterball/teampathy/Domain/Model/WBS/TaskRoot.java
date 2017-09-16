@@ -24,7 +24,7 @@ public class TaskRoot extends TaskGroup {
 	}
 
 	@Override
-	public String getOfGroupName() {
+	public String getParent() {
 		return "--";
 	}
 

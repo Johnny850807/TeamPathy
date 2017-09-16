@@ -1,6 +1,8 @@
 package com.ood.clean.waterball.teampathy.Domain.Model.WBS;
 
 
+import android.support.annotation.NonNull;
+
 import com.ood.clean.waterball.teampathy.MyUtils.EnglishAbbrDateConverter;
 
 import org.w3c.dom.Document;
@@ -13,9 +15,9 @@ import java.util.List;
 
 import static com.ood.clean.waterball.teampathy.MyUtils.EnglishAbbrDateConverter.dateToTime;
 
-public class TodoTask extends TaskEntity implements TaskItem {
+public class TodoTask extends TaskEntity implements TaskItem, Cloneable, Comparable<TodoTask>{
     public static int UNASSIGNED_ID = -1;
-    private int assignedUserId;
+    private int assignedId;
     private String description;
     private Date startDate;
     private Date endDate;
@@ -32,13 +34,13 @@ public class TodoTask extends TaskEntity implements TaskItem {
                     Date endDate,
                     String dependency,
                     Status status,
-                    int assignedUserId) {
+                    int assignedId) {
         super(name, ofGroupName);
         this.description = description;
         this.status = status;
         this.contribution = contribution;
         this.dependency = dependency;
-        this.assignedUserId = assignedUserId;
+        this.assignedId = assignedId;
         this.startDate = startDate;
         this.endDate = endDate;
     }
@@ -50,8 +52,8 @@ public class TodoTask extends TaskEntity implements TaskItem {
                     int contribution,
                     String dependency,
                     Status status,
-                    int assignedUserId) {
-        this(name, ofGroupName, description, contribution, new Date(), new Date(), dependency, status, assignedUserId);
+                    int assignedId) {
+        this(name, ofGroupName, description, contribution, new Date(), new Date(), dependency, status, assignedId);
     }
 
 
@@ -82,7 +84,7 @@ public class TodoTask extends TaskEntity implements TaskItem {
         element.setAttribute(TaskXmlTranslatorImp.ENDDATE_ATT,dateToTime(endDate,false));
         element.setAttribute(TaskXmlTranslatorImp.CONTRIBUTION_ATT, String.valueOf(contribution));
         element.setAttribute(TaskXmlTranslatorImp.STATUS_ATT,status.attr);
-        element.setAttribute(TaskXmlTranslatorImp.ASSIGNED_ID_ATT, String.valueOf(assignedUserId));
+        element.setAttribute(TaskXmlTranslatorImp.ASSIGNED_ID_ATT, String.valueOf(assignedId));
         return element;
     }
 
@@ -125,8 +127,8 @@ public class TodoTask extends TaskEntity implements TaskItem {
     }
 
     @Override
-    public String getOfGroupName() {
-        return ofGroupName;
+    public String getParent() {
+        return parent;
     }
 
     @Override
@@ -149,14 +151,12 @@ public class TodoTask extends TaskEntity implements TaskItem {
         this.contribution = contribution;
     }
 
-    @Override
-    public int getAssignedUserId() {
-        return assignedUserId;
+    public int getAssignedId() {
+        return assignedId;
     }
 
-    @Override
-    public void setAssignedUserId(int assignedUserId) {
-        this.assignedUserId = assignedUserId;
+    public void setAssignedId(int assignedId) {
+        this.assignedId = assignedId;
     }
 
     @Override
@@ -185,23 +185,27 @@ public class TodoTask extends TaskEntity implements TaskItem {
     }
 
     @Override
-    public void acceptOnEditVisitor(TaskOnEditVisitor visitor) {
-        visitor.taskOnEdit(this);
+    public void acceptEventVisitor(TaskEventVisitor visitor) {
+        visitor.eventOnTask(this);
+    }
+
+    public TodoTask clone() throws CloneNotSupportedException {
+        return (TodoTask)super.clone();
     }
 
     @Override
-    public void acceptOnClickVisitor(TaskOnClickVisitor visitor) {
-        visitor.taskViewOnClick(this);
-    }
+    public int compareTo(@NonNull TodoTask todoTask) {
+        // doing => assigned => pending => pass
+        // compare the end date if both have a same status
+        if ( (todoTask.getStatus() == Status.pass || todoTask.getStatus() == Status.pending || this.status == Status.doing)
+                && this.getStatus() != todoTask.getStatus())
+            return -1;
 
-    @Override
-    public void acceptOnLongClickVisitor(TaskOnClickVisitor visitor) {
-        visitor.taskViewOnLongClick(this);
+        return this.endDate.compareTo(todoTask.getEndDate());
     }
-
 
     public enum Status{
-        NONE("none"), ASSIGNED("assigned"), PENDING("pending"), PASS("pass");
+        none("none"), assigned("assigned"), doing("doing"), pending("pending"), pass("pass");
         private String attr;
         private Status(String attr) {
             this.attr = attr;

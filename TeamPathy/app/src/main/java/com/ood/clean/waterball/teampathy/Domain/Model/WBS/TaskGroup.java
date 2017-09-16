@@ -53,13 +53,11 @@ public class TaskGroup extends TaskEntity implements TaskItem {
 	}
 
 
-	@Override
-	public void setAssignedUserId(int assignedUserId) {
-		throw new RuntimeException("Task group does not support setAssignedUserId()");
+	public void setAssignedId(int assignedId) {
+		throw new RuntimeException("Task group does not support setAssignedId()");
 	}
 
-	@Override
-	public int getAssignedUserId() {
+	public int getAssignedId() {
 		return NO_USER_ID;
 	}
 
@@ -114,9 +112,9 @@ public class TaskGroup extends TaskEntity implements TaskItem {
 	@Override
 	public TodoTask.Status getStatus() {
 		for (TaskItem task : taskList)
-			if (task.getStatus() != TodoTask.Status.PASS)
-				return TodoTask.Status.NONE;
-		return TodoTask.Status.PASS;
+			if (task.getStatus() != TodoTask.Status.pass)
+				return TodoTask.Status.none;
+		return TodoTask.Status.pass;
 	}
 
 	@Override
@@ -134,7 +132,7 @@ public class TaskGroup extends TaskEntity implements TaskItem {
 
 	@Override
 	public String getDependency() {
-		throw new RuntimeException("Task group does not support getDependency()");
+		return "";
 	}
 
 	@Override
@@ -146,17 +144,10 @@ public class TaskGroup extends TaskEntity implements TaskItem {
 		return true;
 	}
 
-    @Override
-    public void acceptOnEditVisitor(TaskOnEditVisitor visitor) {
-        visitor.taskOnEdit(this);
-    }
-
-    public void acceptOnClickVisitor(TaskOnClickVisitor visitor) {
-		visitor.taskViewOnClick(this);
+	@Override
+	public void acceptEventVisitor(TaskEventVisitor visitor) {
+		visitor.eventOnTask(this);
 	}
 
-	public void acceptOnLongClickVisitor(TaskOnClickVisitor visitor) {
-		visitor.taskViewOnLongClick(this);
-	}
 
 }

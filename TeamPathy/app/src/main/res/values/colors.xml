@@ -19,4 +19,8 @@
 
     <color name="task_startdate_color">#fc8b2f</color>
     <color name="task_enddate_color">#fa4343</color>
+
+    <color name="todotask_doing_color">#fdffd5</color>
+    <color name="todotask_pending_color">#d5f3ff</color>
+    <color name="todotask_pass_color">#b4ffc0</color>
 </resources>

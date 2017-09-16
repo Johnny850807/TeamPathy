@@ -94,7 +94,7 @@ public class TaskXmlTranslatorImp implements TaskXmlTranslator {
 
     private TodoTask parseElementToTodoTask(String name, String ofGroup, Element element) throws ParseException {
         String description = element.getAttribute(DESCRIPTION_ATT);
-        TodoTask.Status status = TodoTask.Status.valueOf(element.getAttribute(STATUS_ATT).toUpperCase());
+        TodoTask.Status status = TodoTask.Status.valueOf(element.getAttribute(STATUS_ATT));
         int contribution = Integer.parseInt(element.getAttribute(CONTRIBUTION_ATT));
         String dependency = element.getAttribute(DEPENDENCY_ATT);
         int assignedId = Integer.parseInt(element.getAttribute(ASSIGNED_ID_ATT));

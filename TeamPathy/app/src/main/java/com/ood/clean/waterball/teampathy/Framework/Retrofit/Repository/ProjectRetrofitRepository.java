@@ -30,7 +30,7 @@ public class ProjectRetrofitRepository implements ProjectRepository {
     private User user;
 
     @Inject
-    public ProjectRetrofitRepository(Retrofit retrofit,
+    public ProjectRetrofitRepository( Retrofit retrofit,
                                      ExceptionConverter exceptionConverter, User user) {
         this.exceptionConverter = exceptionConverter;
         this.user = user;
@@ -42,8 +42,8 @@ public class ProjectRetrofitRepository implements ProjectRepository {
     public Project create(Project entity) throws Exception {
         ResponseModel<Project> response = projectApi.createProject(user.getId(),
                 entity.toFieldMap()).execute().body();
-        if (!exceptionConverter.isSuccessful(response))
-            throw exceptionConverter.convert(response);
+
+        exceptionConverter.validate(response);
 
         return response.getData();
     }
@@ -71,9 +71,7 @@ public class ProjectRetrofitRepository implements ProjectRepository {
         ResponseModel<Project> response =
                 projectApi.getProjectDetails(id).execute().body();
 
-        if (!exceptionConverter.isSuccessful(response))
-            throw exceptionConverter.convert(response);
-
+        exceptionConverter.validate(response);
         return response.getData();
     }
 
@@ -82,8 +80,7 @@ public class ProjectRetrofitRepository implements ProjectRepository {
         ResponseModel<Member> response = projectApi.getMemberDetails(params.getProjectId(), params.getUserId())
                 .execute().body();
 
-        if (!exceptionConverter.isSuccessful(response))
-            throw exceptionConverter.convert(response);
+        exceptionConverter.validate(response);
         return response.getData();
     }
 
@@ -92,9 +89,7 @@ public class ProjectRetrofitRepository implements ProjectRepository {
         ResponseModel<List<Project>> response = projectApi.searchProjectByName(user.getId(), projectName, 0)
                 .execute().body();
 
-        if (!exceptionConverter.isSuccessful(response))
-            throw exceptionConverter.convert(response);
-
+        exceptionConverter.validate(response);
         return response.getData();
     }
 
@@ -104,8 +99,12 @@ public class ProjectRetrofitRepository implements ProjectRepository {
                 projectApi.joinProject(params.getProject().getId(), user.getId() , params.getPassword())
                 .execute().body();
 
-        if (!exceptionConverter.isSuccessful(response))
-            throw exceptionConverter.convert(response);
+        exceptionConverter.validate(response);
+    }
+
+    @Override
+    public List<Member> getMemberList() throws Exception {
+        return null;
     }
 
 

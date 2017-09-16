@@ -1,10 +1,10 @@
 package com.ood.clean.waterball.teampathy.Presentation.Presenter;
 
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ProjectScope;
+import com.ood.clean.waterball.teampathy.Domain.Model.Member.MemberIdCard;
+import com.ood.clean.waterball.teampathy.Domain.Model.Project;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Base.DefaultObserver;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Office.GetMemberCardList;
-import com.ood.clean.waterball.teampathy.Domain.Model.Member.Member;
-import com.ood.clean.waterball.teampathy.Domain.Model.Member.MemberIdCard;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.OfficePresenter;
 
 import javax.inject.Inject;
@@ -17,12 +17,12 @@ import io.reactivex.annotations.NonNull;
 public class OfficePresenterImp implements OfficePresenter {
     private OfficeView officeView;
     private GetMemberCardList getMemberCardList;
-    private Member member;
+    private Project project;
 
     @Inject
-    public OfficePresenterImp(GetMemberCardList getMemberCardList, Member member) {
+    public OfficePresenterImp(GetMemberCardList getMemberCardList, Project project) {
         this.getMemberCardList = getMemberCardList;
-        this.member = member;
+        this.project = project;
     }
 
     public void setOfficeView(OfficeView officeView) {
@@ -41,7 +41,12 @@ public class OfficePresenterImp implements OfficePresenter {
             public void onComplete() {
                 officeView.onLoadFinish();
             }
-        }, member);
+
+            @Override
+            public void onError(Throwable exception) {
+                officeView.onOperationTimeout(exception);
+            }
+        }, project);
     }
 
     @Override

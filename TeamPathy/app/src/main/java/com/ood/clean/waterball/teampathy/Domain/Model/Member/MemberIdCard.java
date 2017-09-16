@@ -6,13 +6,13 @@ import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask;
 
 public class MemberIdCard {
     private Member member;
-    private TodoTask todoTask;
+    private TodoTask dointTask;
 
     public MemberIdCard(){}
 
-    public MemberIdCard(Member member, TodoTask todoTask){
+    public MemberIdCard(Member member, TodoTask dointTask){
         this.member = member;
-        this.todoTask = todoTask;
+        this.dointTask = dointTask;
     }
 
     public Member getMember() {
@@ -23,12 +23,12 @@ public class MemberIdCard {
         this.member = member;
     }
 
-    public TodoTask getTodoTask() {
-        return todoTask;
+    public TodoTask getDointTask() {
+        return dointTask;
     }
 
-    public void setTodoTask(TodoTask todoTask) {
-        this.todoTask = todoTask;
+    public void setDointTask(TodoTask dointTask) {
+        this.dointTask = dointTask;
     }
 
     public Position getPosition(){

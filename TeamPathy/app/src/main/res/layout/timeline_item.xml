@@ -46,12 +46,12 @@
                 android:text="@{obj.poster.name}"
                 android:textColor="@color/app_black_word_color"
                 android:textSize="15sp"
-                android:id="@+id/nameTxt"/>
+                android:id="@+id/nameEd"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/nameTxt"
+                android:layout_alignBottom="@+id/nameEd"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:textColor="@color/app_black_word_color"

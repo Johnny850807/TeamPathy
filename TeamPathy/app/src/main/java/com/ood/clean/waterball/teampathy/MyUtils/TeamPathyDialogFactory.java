@@ -20,5 +20,12 @@ public class TeamPathyDialogFactory {
                 .setIcon(R.drawable.logo_icon);
     }
 
+    public static AlertDialog.Builder networkErrorDialogBuilder(Context context){
+        return templateBuilder(context)
+                .setTitle(R.string.error)
+                .setMessage(R.string.please_reconnect_network)
+                .setPositiveButton(R.string.confirm, null);
+    }
+
 
 }

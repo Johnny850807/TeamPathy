@@ -1,7 +1,7 @@
 package com.ood.clean.waterball.teampathy.Domain.UseCase.Base;
 
 import com.ood.clean.waterball.teampathy.MyUtils.Preconditions;
-import com.ood.clean.waterball.teampathy.Threading.ThreadingObserverFactory;
+import com.ood.clean.waterball.teampathy.Threading.ThreadingObservableFactory;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
@@ -12,11 +12,11 @@ import io.reactivex.observers.DisposableObserver;
 * The base use case which provides an observable to run each request asynchronously.
  */
 public abstract class UseCase<T, Params> {
-    private final ThreadingObserverFactory threadingObserverFactory;
+    private final ThreadingObservableFactory threadingObservableFactory;
     private final CompositeDisposable disposables;
 
-    public UseCase(ThreadingObserverFactory threadingObserverFactory) {
-        this.threadingObserverFactory = threadingObserverFactory;
+    public UseCase(ThreadingObservableFactory threadingObservableFactory) {
+        this.threadingObservableFactory = threadingObservableFactory;
         this.disposables = new CompositeDisposable();
     }
 
@@ -34,7 +34,7 @@ public abstract class UseCase<T, Params> {
          */
     public void execute(DisposableObserver<T> observer, Params params){
         Preconditions.checkNotNull(observer);
-        final Observable<T> observable = threadingObserverFactory.create(this.buildUseCaseObservable(params));
+        final Observable<T> observable = threadingObservableFactory.create(this.buildUseCaseObservable(params));
         addDisposable(observable.subscribeWith(observer));
     }
 

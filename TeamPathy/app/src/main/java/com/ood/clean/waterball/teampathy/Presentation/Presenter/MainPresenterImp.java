@@ -1,5 +1,8 @@
 package com.ood.clean.waterball.teampathy.Presentation.Presenter;
 
+import android.util.Log;
+
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ActivityScope;
 import com.ood.clean.waterball.teampathy.Domain.Exception.UserNotFoundException;
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
@@ -21,19 +24,30 @@ public class MainPresenterImp implements MainPresenter {
 
     @Override
     public void signIn(String account, String password) {
-        SignIn.Params params = new SignIn.Params(account,password);
-        signIn.execute(new DefaultObserver<User>() {
-            @Override
-            public void onNext(User user) {
-                mainView.signInSuccessfully(user);
-            }
+        FirebaseInstanceId instnaceId = FirebaseInstanceId.getInstance();
+        if (instnaceId != null && instnaceId.getToken() != null)
+        {
+            String pushNotificationToken = instnaceId.getToken();
+            SignIn.Params params = new SignIn.Params(account,password, pushNotificationToken);
+            Log.d("Push" , pushNotificationToken);
+            signIn.execute(new DefaultObserver<User>() {
+                @Override
+                public void onNext(User user) {
+                    mainView.signInSuccessfully(user);
+                }
 
-            @Override
-            public void onError(Throwable exception) {
-                if (exception instanceof UserNotFoundException)
-                    mainView.onUserNotFound();
-            }
-        }, params);
+                @Override
+                public void onError(Throwable exception) {
+                    if (exception instanceof UserNotFoundException)
+                        mainView.onUserNotFound();
+                    else
+                        mainView.onOperationTimeOut(exception);
+                }
+            }, params);
+        }
+        else
+            mainView.onPushNotificationNotPrepared();
+
     }
 
     public void setMainView(MainView mainView) {

@@ -11,6 +11,7 @@ import com.ood.clean.waterball.teampathy.Framework.Retrofit.Repository.UserRetro
 
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -24,11 +25,31 @@ public class RetrofitApplicationModule {
 
     @Provides
     @Singleton
-    public Retrofit provideRetrofit(){
+    @Named("DateFormatRetrofit")
+    public Retrofit provideRetrofit(Retrofit.Builder builder){
         Gson gson = new GsonBuilder()  //to correctly parse the date from json
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
                 .create();
 
+        return builder.addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+    }
+
+    @Provides
+    @Singleton
+    @Named("WbsRetrofit")
+    public Retrofit provideWbsRetrofit(Retrofit.Builder builder){
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy dd MMM.")
+                .create();
+
+        return builder.addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+    }
+
+    @Provides
+    @Singleton
+    public Retrofit.Builder provideRetrofitBuilder(){
         final OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .readTimeout(60, TimeUnit.SECONDS)
                 .connectTimeout(60, TimeUnit.SECONDS)
@@ -36,14 +57,13 @@ public class RetrofitApplicationModule {
 
         return new Retrofit.Builder()
                 .client(okHttpClient)
-                .baseUrl(ServerConstant.BASE_SERVER_API_URL)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
+                .baseUrl(ServerConstant.BASE_SERVER_API_URL);
     }
 
     @Provides
     @Singleton
-    public UserRepository provideUserRepository(Retrofit retrofit, ExceptionConverter exceptionConverter){
+    public UserRepository provideUserRepository(@Named("DateFormatRetrofit") Retrofit retrofit,
+                                                ExceptionConverter exceptionConverter){
         return new UserRetrofitRespository(retrofit, exceptionConverter);
     }
 

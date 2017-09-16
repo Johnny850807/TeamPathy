@@ -2,8 +2,11 @@ package com.ood.clean.waterball.teampathy.Presentation.Presenter;
 
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ProjectScope;
 import com.ood.clean.waterball.teampathy.Domain.Model.Member.Member;
+import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskItem;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask;
+import com.ood.clean.waterball.teampathy.Domain.Model.WBS.WbsCommand;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Base.DefaultObserver;
+import com.ood.clean.waterball.teampathy.Domain.UseCase.Wbs.ExecuteWbsCommand;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Wbs.GetMemberTodoList;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.TodoListPresenter;
 
@@ -15,11 +18,15 @@ import io.reactivex.annotations.NonNull;
 public class TodolistPresenterImp implements TodoListPresenter {
     private TodoListPresenter.TodoListView todoListView;
     private GetMemberTodoList getMemberTodoList;
+    private ExecuteWbsCommand executeWbsCommand;
     private Member member;
 
     @Inject
-    public TodolistPresenterImp(GetMemberTodoList getMemberTodoList, Member member) {
+    public TodolistPresenterImp(GetMemberTodoList getMemberTodoList,
+                                ExecuteWbsCommand executeWbsCommand,
+                                Member member) {
         this.getMemberTodoList = getMemberTodoList;
+        this.executeWbsCommand = executeWbsCommand;
         this.member = member;
     }
 
@@ -44,18 +51,21 @@ public class TodolistPresenterImp implements TodoListPresenter {
     }
 
     @Override
-    public void commitTask(TodoTask todoTask) {
-
-    }
-
-    @Override
-    public void setAsDoingTask(TodoTask todoTask) {
-
-    }
-
-    @Override
-    public void cancelCommit(TodoTask todoTask) {
-
+    public void alterTaskStatus(final TodoTask todoTask, final TodoTask.Status status) {
+        try {
+            final TodoTask clone = todoTask.clone();  // making a data of updated todotask without changing to the real task before done
+            clone.setStatus(status);
+            WbsCommand wbsCommand = WbsCommand.updateTaskItem(todoTask.getName(), clone);
+            executeWbsCommand.execute(new DefaultObserver<TaskItem>() {
+                @Override
+                public void onNext(@NonNull TaskItem taskRoot) {
+                    todoTask.setStatus(status);
+                    todoListView.onAlterFinishNotify(todoTask, status);
+                }
+            },wbsCommand);
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -64,6 +74,7 @@ public class TodolistPresenterImp implements TodoListPresenter {
     @Override
     public void onDestroy() {
         getMemberTodoList.dispose();
+        executeWbsCommand.dispose();
     }
 
 }

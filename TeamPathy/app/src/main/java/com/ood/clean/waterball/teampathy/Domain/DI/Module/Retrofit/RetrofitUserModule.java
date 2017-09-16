@@ -6,6 +6,8 @@ import com.ood.clean.waterball.teampathy.Domain.Model.User;
 import com.ood.clean.waterball.teampathy.Domain.Repository.ProjectRepository;
 import com.ood.clean.waterball.teampathy.Framework.Retrofit.Repository.ProjectRetrofitRepository;
 
+import javax.inject.Named;
+
 import dagger.Module;
 import dagger.Provides;
 import retrofit2.Retrofit;
@@ -26,7 +28,7 @@ public class RetrofitUserModule {
     }
 
     @Provides @UserScope
-    public ProjectRepository provideProjectRepository(Retrofit retrofit, ExceptionConverter exceptionConverter){
+    public ProjectRepository provideProjectRepository(@Named("DateFormatRetrofit") Retrofit retrofit, ExceptionConverter exceptionConverter){
         return new ProjectRetrofitRepository(retrofit, exceptionConverter, user);
     }
 

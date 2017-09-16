@@ -2,11 +2,11 @@ package com.ood.clean.waterball.teampathy.Domain.UseCase.Office;
 
 
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ProjectScope;
-import com.ood.clean.waterball.teampathy.Domain.Model.Member.Member;
 import com.ood.clean.waterball.teampathy.Domain.Model.Member.MemberIdCard;
+import com.ood.clean.waterball.teampathy.Domain.Model.Project;
 import com.ood.clean.waterball.teampathy.Domain.Repository.OfficeRepository;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Base.UseCase;
-import com.ood.clean.waterball.teampathy.Threading.ThreadingObserverFactory;
+import com.ood.clean.waterball.teampathy.Threading.ThreadingObservableFactory;
 
 import java.util.List;
 
@@ -18,18 +18,18 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.annotations.NonNull;
 
 @ProjectScope
-public class GetMemberCardList extends UseCase<MemberIdCard, Member> {
+public class GetMemberCardList extends UseCase<MemberIdCard, Project> {
 
     private OfficeRepository officeRepository;
 
     @Inject
-    public GetMemberCardList(ThreadingObserverFactory threadingObserverFactory, OfficeRepository officeRepository) {
-        super(threadingObserverFactory);
+    public GetMemberCardList(ThreadingObservableFactory threadingObservableFactory, OfficeRepository officeRepository) {
+        super(threadingObservableFactory);
         this.officeRepository = officeRepository;
     }
 
     @Override
-    protected Observable<MemberIdCard> buildUseCaseObservable(final Member member) {
+    protected Observable<MemberIdCard> buildUseCaseObservable(final Project project) {
         return Observable.create(new ObservableOnSubscribe<MemberIdCard>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<MemberIdCard> e) throws Exception {

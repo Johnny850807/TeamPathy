@@ -11,6 +11,7 @@ public interface OfficePresenter extends LifetimePresenter {
     public interface OfficeView{
         void loadMemberCard(MemberIdCard memberIdCard);
         void onLoadFinish();
+        void onOperationTimeout(Throwable err);
         //todo office functionalities
     }
 

@@ -9,7 +9,7 @@ import android.view.View;
 
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ProjectScope;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskItem;
-import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskOnClickVisitor;
+import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskEventVisitor;
 import com.ood.clean.waterball.teampathy.R;
 import com.ood.clean.waterball.teampathy.databinding.TaskAnalyticsItemBinding;
 
@@ -20,17 +20,21 @@ import javax.inject.Inject;
 @ProjectScope
 public class TaskItemViewFactory {
     private Context context;
-    private TaskOnClickVisitor visitor;
+    private TaskEventVisitor onClickEventVisitor;
+    private TaskEventVisitor onLongClickEventVisitor;
     private FlowLayout flowLayout;
 
     @Inject
     public TaskItemViewFactory(Context context) {
         this.context = context;
-        this.flowLayout = flowLayout;
     }
 
-    public void setViewVisitor(TaskOnClickVisitor visitor) {
-        this.visitor = visitor;
+    public void setOnClickEventVisitor(TaskEventVisitor OnClickEventVisitor) {
+        this.onClickEventVisitor = OnClickEventVisitor;
+    }
+
+    public void setOnLongClickEventVisitor(TaskEventVisitor OnLongClickEventVisitor) {
+        this.onLongClickEventVisitor = OnLongClickEventVisitor;
     }
 
     public void setFlowLayout(FlowLayout flowLayout) {
@@ -54,7 +58,7 @@ public class TaskItemViewFactory {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                taskItem.acceptOnClickVisitor(TaskItemViewFactory.this.visitor);
+                taskItem.acceptEventVisitor(onClickEventVisitor);
             }
         });
     }
@@ -63,7 +67,7 @@ public class TaskItemViewFactory {
         view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                taskItem.acceptOnLongClickVisitor(TaskItemViewFactory.this.visitor);
+                taskItem.acceptEventVisitor(onLongClickEventVisitor);
                 return false;
             }
         });

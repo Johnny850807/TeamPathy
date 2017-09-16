@@ -272,21 +272,10 @@ public class TimelinesFragment extends BaseFragment implements CrudPresenter.Cru
         public void onReceive(Context context, Intent intent) {
             try{
                 String eventType = intent.getAction();
-                int timelineId = Integer.parseInt(intent.getStringExtra("id"));
-                String category = intent.getStringExtra("category");
-                String content = intent.getStringExtra("content");
-                String postDate = intent.getStringExtra("postDate");
-                String posterImageUrl = intent.getStringExtra("posterImageUrl");
-                int posterId = Integer.parseInt(intent.getStringExtra("posterId"));
                 int projectId = Integer.parseInt(intent.getStringExtra("projectId"));
-                String posterName = intent.getStringExtra("posterName");
-                User poster = new User(posterName, posterImageUrl);
-                poster.setId(posterId);
-                Timeline timeline = new Timeline(poster, content);
-                timeline.setPostDate(NormalDateConverter.stringToDate(postDate));
-                timeline.setCategory(Timeline.Category.valueOf(category));
-                timeline.setId(timelineId);
-                if (projectId == project.getId() && !poster.equals(user))
+                Timeline timeline = intentToTimeline(intent);
+
+                if (projectId == project.getId() && !timeline.getPoster().equals(user))
                 {
                     if (eventType.contains("post"))
                         timelines.add(timeline);
@@ -301,8 +290,24 @@ public class TimelinesFragment extends BaseFragment implements CrudPresenter.Cru
                 onOperationTimeout(err);
                 err.printStackTrace();
             }
+        }
 
+        private Timeline intentToTimeline(Intent intent) throws ParseException {
+            int timelineId = Integer.parseInt(intent.getStringExtra("id"));
+            String category = intent.getStringExtra("category");
+            String content = intent.getStringExtra("content");
+            String postDate = intent.getStringExtra("postDate");
+            String posterImageUrl = intent.getStringExtra("posterImageUrl");
+            int posterId = Integer.parseInt(intent.getStringExtra("posterId"));
+            String posterName = intent.getStringExtra("posterName");
+            User poster = new User(posterName, posterImageUrl);
+            poster.setId(posterId);
+            Timeline timeline = new Timeline(poster, content);
+            timeline.setPostDate(NormalDateConverter.stringToDate(postDate));
+            timeline.setCategory(Timeline.Category.valueOf(category));
+            timeline.setId(timelineId);
 
+            return timeline;
         }
     }
 }

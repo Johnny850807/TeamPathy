@@ -49,9 +49,7 @@ public class IssueCommentRetrofitRepository implements IssueCommentRepository {
         ResponseModel<IssueComment> response = issueCommentApi.create(project.getId(),
                 issue.getId(), user.getId(), entity.toFieldMap()).execute().body();
 
-        if (!exceptionConverter.isSuccessful(response))
-            throw exceptionConverter.convert(response);
-
+        exceptionConverter.validate(response);
         return response.getData();
     }
 
@@ -70,9 +68,7 @@ public class IssueCommentRetrofitRepository implements IssueCommentRepository {
         ResponseModel<List<IssueComment>> response = issueCommentApi.getList(project.getId(),
                 issue.getId(), page).execute().body();
 
-        if (!exceptionConverter.isSuccessful(response))
-            throw exceptionConverter.convert(response);
-
+        exceptionConverter.validate(response);
         return response.getData();
     }
 

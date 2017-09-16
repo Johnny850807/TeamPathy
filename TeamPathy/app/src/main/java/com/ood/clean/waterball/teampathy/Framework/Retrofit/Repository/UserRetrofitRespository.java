@@ -1,6 +1,5 @@
 package com.ood.clean.waterball.teampathy.Framework.Retrofit.Repository;
 
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionConverter;
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
 import com.ood.clean.waterball.teampathy.Domain.Repository.UserRepository;
@@ -22,35 +21,30 @@ public class UserRetrofitRespository implements UserRepository{
     private UserAPI userAPI;
 
     @Inject
-    public UserRetrofitRespository(Retrofit retrofit, ExceptionConverter exceptionConverter) {
+    public UserRetrofitRespository(Retrofit retrofit,
+                                   ExceptionConverter exceptionConverter) {
         userAPI = retrofit.create(UserAPI.class);
         this.exceptionConverter = exceptionConverter;
     }
 
     @Override
     public User signIn(SignIn.Params params) throws Exception {
-        String firebaseToken = FirebaseInstanceId.getInstance().getToken();
-        ResponseModel<User> response =  userAPI.signIn(params.getAccount(), params.getPassword(), firebaseToken)
+        ResponseModel<User> response =  userAPI.signIn(params.getAccount(), params.getPassword(), params.getPushNotificationToken())
                 .execute().body();
 
-        if (!exceptionConverter.isSuccessful(response))
-            throw exceptionConverter.convert(response);
-
+        exceptionConverter.validate(response);
         return response.getData();
     }
 
     @Override
     public User signUp(SignUp.Params params) throws Exception {
-        String firebaseToken = FirebaseInstanceId.getInstance().getToken();
         ResponseModel<User> response =  userAPI.signUp(params.getName(),
                 params.getAccount(),
                 params.getPassword(),
                 params.getImageUrl(),
-                firebaseToken).execute().body();
+                params.getPushNotificationToken()).execute().body();
 
-        if (!exceptionConverter.isSuccessful(response))
-            throw exceptionConverter.convert(response);
-
+        exceptionConverter.validate(response);
         return response.getData();
     }
 
@@ -63,7 +57,7 @@ public class UserRetrofitRespository implements UserRepository{
         String RESOURCE = "users";
 
         @FormUrlEncoded
-        @POST(RESOURCE + "/SignUp")
+        @POST(RESOURCE + "/signup")
         public Call<ResponseModel<User>> signUp(@Field("name") String name,
                                  @Field("account") String account,
                                  @Field("password") String password,
@@ -71,7 +65,7 @@ public class UserRetrofitRespository implements UserRepository{
                                  @Field("firebaseToken") String token);
 
         @FormUrlEncoded
-        @POST(RESOURCE + "/SignIn")
+        @POST(RESOURCE + "/signin")
         public Call<ResponseModel<User>> signIn(@Field("account") String account,
                            @Field("password") String password,
                            @Field("firebaseToken") String token);

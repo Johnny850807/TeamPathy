@@ -136,14 +136,29 @@
         <item>指派工作 (管理者及團長)</item>
     </string-array>
 
-    <string-array name="member_uncommitted_todolist_actions">
-        <item>提交工作</item>
-        <item>設為執行中</item>
+    <string-array name="wbs_console_taskgroup_actions">
+        <item>編輯工作群組</item>
+        <item>刪除工作群組</item>
     </string-array>
 
-    <string-array name="member_committed_todolist_actions">
-        <item>取消提交</item>
+    <string-array name="member_todo_todolist_actions">
+        <item>@string/commit_todo</item>
+        <item>@string/set_as_doing</item>
     </string-array>
+
+    <string-array name="member_undoing_todolist_actions">
+        <item>@string/commit_todo</item>
+        <item>@string/cancel_doing</item>
+    </string-array>
+
+    <string-array name="member_uncommitted_todolist_actions">
+        <item>@string/cancel_commit_todo</item>
+    </string-array>
+
+    <string name="commit_todo">提交工作</string>
+    <string name="cancel_commit_todo">取消提交</string>
+    <string name="set_as_doing">設為執行中</string>
+    <string name="cancel_doing">取消執行中</string>
 
     <string name="announce">通知</string>
     <string name="task">工作</string>
@@ -159,5 +174,28 @@
     <string name="timeline">動態</string>
     <string name="issue">文章</string>
     <string name="issueComment">留言</string>
+    <string name="create_task_group">創建工作群組</string>
+    <string name="create_todotask">創建工作項目</string>
+    <string name="name_cannot_be_empty">名稱不能為空</string>
+    <string name="error">錯誤</string>
+    <string name="please_reconnect_network">錯誤，請確認網路是否連接，並重啟APP。</string>
+    <string name="please_select_end_date">請選擇結束日期</string>
+    <string name="please_select_start_date">請選擇起始日期</string>
+    <string name="description_cannot_be_empty">描述不可為空</string>
+    <string name="assign_task">指派工作</string>
+    <string name="are_u_sure_to_change_assigned_member">此工作已被指派，請問是否要更換指派成員?</string>
+
+
+    <string-array name="create_task_type_list">
+        <item>創建工作群組</item>
+        <item>創建工作項目</item>
+    </string-array>
+
+    <string name="todotask_pending">審核中</string>
+    <string name="todotask_pass">完成</string>
+    <string name="todotask_doing">執行中</string>
+    <string name="todotask_todo">待辦</string>
+    <string name="alter_complete">變更完成</string>
+
 
 </resources>

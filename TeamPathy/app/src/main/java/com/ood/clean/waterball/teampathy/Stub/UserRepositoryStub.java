@@ -25,7 +25,7 @@ public class UserRepositoryStub implements UserRepository {
 
     @Inject
     public UserRepositoryStub() {
-        SignIn.Params params = new SignIn.Params("","");
+        SignIn.Params params = new SignIn.Params("","", "");
         User userStub = new User();
         userStub.setName("林宗億");
         userStub.setImageUrl("http://i.imgur.com/4wXEKrP.png");
@@ -45,7 +45,7 @@ public class UserRepositoryStub implements UserRepository {
         for ( SignIn.Params info : userMap.keySet() )
             if (info.getAccount().equals(params.getAccount()))
                 throw new AccountDuplicatedException();
-        SignIn.Params newParam = new SignIn.Params(params.getAccount(),params.getPassword());
+        SignIn.Params newParam = new SignIn.Params(params.getAccount(),params.getPassword(), "");
         User newUser = new User();
         newUser.setName(params.getName());
         newUser.setImageUrl(params.getImageUrl());

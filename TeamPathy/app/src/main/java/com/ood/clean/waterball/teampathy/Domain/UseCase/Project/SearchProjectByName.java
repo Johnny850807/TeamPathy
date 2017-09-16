@@ -4,7 +4,7 @@ import com.ood.clean.waterball.teampathy.Domain.DI.Scope.UserScope;
 import com.ood.clean.waterball.teampathy.Domain.Model.Project;
 import com.ood.clean.waterball.teampathy.Domain.Repository.ProjectRepository;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Base.UseCase;
-import com.ood.clean.waterball.teampathy.Threading.ThreadingObserverFactory;
+import com.ood.clean.waterball.teampathy.Threading.ThreadingObservableFactory;
 
 import java.util.List;
 
@@ -21,8 +21,8 @@ public class SearchProjectByName extends UseCase<Project, String> {
     private ProjectRepository projectRepository;
 
     @Inject
-    public SearchProjectByName(ThreadingObserverFactory threadingObserverFactory, ProjectRepository projectRepository) {
-        super(threadingObserverFactory);
+    public SearchProjectByName(ThreadingObservableFactory threadingObservableFactory, ProjectRepository projectRepository) {
+        super(threadingObservableFactory);
         this.projectRepository = projectRepository;
     }
 

@@ -15,5 +15,5 @@ public interface ProjectRepository extends Repository<Project> {
 
      void joinProject(JoinProject.Params params) throws Exception;
 
-
+     List<Member> getMemberList() throws Exception;
 }

@@ -2,11 +2,12 @@ package com.ood.clean.waterball.teampathy.Domain.UseCase.Wbs;
 
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ProjectScope;
 import com.ood.clean.waterball.teampathy.Domain.Model.Member.Member;
-import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskItem;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask;
 import com.ood.clean.waterball.teampathy.Domain.Repository.WbsRepository;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Base.UseCase;
-import com.ood.clean.waterball.teampathy.Threading.ThreadingObserverFactory;
+import com.ood.clean.waterball.teampathy.Threading.ThreadingObservableFactory;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -20,9 +21,9 @@ public class GetMemberTodoList extends UseCase<TodoTask,Member> {
     private WbsRepository wbsRepository;
 
     @Inject
-    public GetMemberTodoList(ThreadingObserverFactory threadingObserverFactory,
+    public GetMemberTodoList(ThreadingObservableFactory threadingObservableFactory,
                              WbsRepository wbsRepository) {
-        super(threadingObserverFactory);
+        super(threadingObservableFactory);
         this.wbsRepository = wbsRepository;
     }
 
@@ -31,11 +32,9 @@ public class GetMemberTodoList extends UseCase<TodoTask,Member> {
         return Observable.create(new ObservableOnSubscribe<TodoTask>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<TodoTask> e) throws Exception {
-                TaskItem taskRoot = wbsRepository.getTaskTree();
-                for (TaskItem taskItem : taskRoot)
-                    if ( taskItem instanceof TodoTask)
-                        if (taskItem.getAssignedUserId() == member.getUser().getId())
-                        e.onNext((TodoTask)taskItem);
+                List<TodoTask> todoTaskList = wbsRepository.getTodolist(member.getUser().getId());
+                for (TodoTask todoTask : todoTaskList)
+                    e.onNext(todoTask);
                 e.onComplete();
             }
         });

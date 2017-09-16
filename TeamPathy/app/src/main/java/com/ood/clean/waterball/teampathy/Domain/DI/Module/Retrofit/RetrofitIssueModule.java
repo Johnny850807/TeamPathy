@@ -8,6 +8,8 @@ import com.ood.clean.waterball.teampathy.Domain.Model.User;
 import com.ood.clean.waterball.teampathy.Domain.Repository.IssueCommentRepository;
 import com.ood.clean.waterball.teampathy.Framework.Retrofit.Repository.IssueCommentRetrofitRepository;
 
+import javax.inject.Named;
+
 import dagger.Module;
 import dagger.Provides;
 import retrofit2.Retrofit;
@@ -30,7 +32,7 @@ public class RetrofitIssueModule {
     public IssueCommentRepository provideIssueCommentRepository(ExceptionConverter exceptionConverter,
                                                                 User user,
                                                                 Project project,
-                                                                Retrofit retrofit){
+                                                                @Named("DateFormatRetrofit") Retrofit retrofit){
         return new IssueCommentRetrofitRepository(exceptionConverter, user, project, issue, retrofit);
     }
 }

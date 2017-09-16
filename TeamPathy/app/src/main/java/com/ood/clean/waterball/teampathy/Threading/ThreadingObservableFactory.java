@@ -12,12 +12,12 @@ import io.reactivex.schedulers.Schedulers;
 *  different threads.
  */
 @Singleton
-public class ThreadingObserverFactory {
+public class ThreadingObservableFactory {
     private ThreadExecutor threadExecutor;
     private PostExecutionThread postExecutionThread;
 
     @Inject
-    public ThreadingObserverFactory(ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
+    public ThreadingObservableFactory(ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
         this.threadExecutor = threadExecutor;
         this.postExecutionThread = postExecutionThread;
     }

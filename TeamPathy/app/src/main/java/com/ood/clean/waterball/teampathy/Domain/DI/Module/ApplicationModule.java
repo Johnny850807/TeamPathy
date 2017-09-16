@@ -8,7 +8,7 @@ import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskXmlTranslatorImp;
 import com.ood.clean.waterball.teampathy.Threading.JobThread;
 import com.ood.clean.waterball.teampathy.Threading.PostExecutionThread;
 import com.ood.clean.waterball.teampathy.Threading.ThreadExecutor;
-import com.ood.clean.waterball.teampathy.Threading.ThreadingObserverFactory;
+import com.ood.clean.waterball.teampathy.Threading.ThreadingObservableFactory;
 import com.ood.clean.waterball.teampathy.Threading.UIThread;
 
 import javax.inject.Singleton;
@@ -35,8 +35,8 @@ public class ApplicationModule {
     }
 
     @Provides @Singleton
-    public ThreadingObserverFactory provideThreadingObserverFactory(ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread){
-        return new ThreadingObserverFactory(threadExecutor,postExecutionThread);
+    public ThreadingObservableFactory provideThreadingObserverFactory(ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread){
+        return new ThreadingObservableFactory(threadExecutor,postExecutionThread);
     }
 
     @Provides @Singleton

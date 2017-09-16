@@ -4,7 +4,7 @@ import com.ood.clean.waterball.teampathy.Domain.DI.Scope.UserScope;
 import com.ood.clean.waterball.teampathy.Domain.Model.Project;
 import com.ood.clean.waterball.teampathy.Domain.Repository.ProjectRepository;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Base.UseCase;
-import com.ood.clean.waterball.teampathy.Threading.ThreadingObserverFactory;
+import com.ood.clean.waterball.teampathy.Threading.ThreadingObservableFactory;
 
 import javax.inject.Inject;
 
@@ -18,8 +18,8 @@ public class CreateProject extends UseCase<Project,Project> {
     private ProjectRepository projectRepository;
 
     @Inject
-    public CreateProject(ThreadingObserverFactory threadingObserverFactory, ProjectRepository projectRepository) {
-        super(threadingObserverFactory);
+    public CreateProject(ThreadingObservableFactory threadingObservableFactory, ProjectRepository projectRepository) {
+        super(threadingObservableFactory);
         this.projectRepository = projectRepository;
     }
 

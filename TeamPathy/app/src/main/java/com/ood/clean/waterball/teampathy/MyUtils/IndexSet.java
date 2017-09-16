@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 
+// The set which has an index on each element
 public class IndexSet<E> implements Set<E> {
     private Set<E> elementData;
 
@@ -92,7 +93,8 @@ public class IndexSet<E> implements Set<E> {
     }
 
     public void update(E e){
-        elementData.remove(e);
+        if (elementData.contains(e))
+            elementData.remove(e);
         elementData.add(e);
     }
 }

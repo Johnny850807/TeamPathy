@@ -8,12 +8,12 @@ public abstract class TaskEntity implements TaskItem{
     protected int degree = 0;  //todo correct degree algorithm
     protected TaskItem root;
     protected String name;
-    protected String ofGroupName;
+    protected String parent;
 
 
-    public TaskEntity(String name, String ofGroupName) {
+    public TaskEntity(String name, String parent) {
         this.name = name;
-        this.ofGroupName = ofGroupName;
+        this.parent = parent;
     }
 
     @Override
@@ -26,22 +26,18 @@ public abstract class TaskEntity implements TaskItem{
         this.name = name;
     }
 
-    @Override
-    public String getOfGroupName() {
-        return ofGroupName;
+    public String getParent() {
+        return parent;
     }
 
-    @Override
-    public void setOfGroupName(String ofGroupName) {
-        this.ofGroupName = ofGroupName;
+    public void setParent(String parent) {
+        this.parent = parent;
     }
 
     @Override
     public int getDegree() {
         return degree;
     }
-
-
 
     @Override
     public Iterator<TaskItem> iterator() {

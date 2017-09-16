@@ -3,7 +3,7 @@ package com.ood.clean.waterball.teampathy.Domain.UseCase.Office;
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
 import com.ood.clean.waterball.teampathy.Domain.Repository.OfficeRepository;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Base.UseCase;
-import com.ood.clean.waterball.teampathy.Threading.ThreadingObserverFactory;
+import com.ood.clean.waterball.teampathy.Threading.ThreadingObservableFactory;
 
 import javax.inject.Inject;
 
@@ -21,8 +21,8 @@ public class EvictMember extends UseCase<Void, User> {
     private OfficeRepository officeRepository;
 
     @Inject
-    public EvictMember(ThreadingObserverFactory threadingObserverFactory, OfficeRepository officeRepository) {
-        super(threadingObserverFactory);
+    public EvictMember(ThreadingObservableFactory threadingObservableFactory, OfficeRepository officeRepository) {
+        super(threadingObservableFactory);
         this.officeRepository = officeRepository;
     }
 

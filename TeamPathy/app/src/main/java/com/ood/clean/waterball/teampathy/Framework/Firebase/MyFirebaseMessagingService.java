@@ -53,6 +53,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 intent.setAction(data.get(EVENTTYPE));
             else  // other data is about the properties UI needs
                 intent.putExtra(key, data.get(key));
+            Log.i(TAG, "Message: " + key);
         }
 
         return intent;
@@ -76,7 +77,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        notificationManager.notify(0 , notificationBuilder.build());
     }
 
 

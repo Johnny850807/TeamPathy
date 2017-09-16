@@ -1,11 +1,12 @@
 package com.ood.clean.waterball.teampathy.Domain.UseCase.Wbs;
 
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.WbsScope;
+import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskXmlTranslator;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Base.UseCase;
 import com.ood.clean.waterball.teampathy.Domain.Model.Project;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskItem;
 import com.ood.clean.waterball.teampathy.Domain.Repository.WbsRepository;
-import com.ood.clean.waterball.teampathy.Threading.ThreadingObserverFactory;
+import com.ood.clean.waterball.teampathy.Threading.ThreadingObservableFactory;
 
 import javax.inject.Inject;
 
@@ -15,14 +16,16 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.annotations.NonNull;
 
 @WbsScope
-public class GetTaskTree extends UseCase<TaskItem,Project> {
+public class GetWbs extends UseCase<TaskItem,Project> {
     private WbsRepository wbsRepository;
+    private TaskXmlTranslator translator;
 
     @Inject
-    public GetTaskTree(ThreadingObserverFactory threadingObserverFactory,
-                       WbsRepository wbsRepository) {
-        super(threadingObserverFactory);
+    public GetWbs(ThreadingObservableFactory threadingObservableFactory,
+                  WbsRepository wbsRepository, TaskXmlTranslator translator) {
+        super(threadingObservableFactory);
         this.wbsRepository = wbsRepository;
+        this.translator = translator;
     }
 
     @Override
@@ -30,8 +33,13 @@ public class GetTaskTree extends UseCase<TaskItem,Project> {
         return Observable.create(new ObservableOnSubscribe<TaskItem>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<TaskItem> e) throws Exception {
-                e.onNext(wbsRepository.getTaskTree());
-                e.onComplete();
+                try{
+                    String wbs = wbsRepository.getWbs();
+                    e.onNext(translator.xmlToTasks(wbs));
+                    e.onComplete();
+                }catch (Exception err){
+                    err.printStackTrace();
+                }
             }
         });
     }
