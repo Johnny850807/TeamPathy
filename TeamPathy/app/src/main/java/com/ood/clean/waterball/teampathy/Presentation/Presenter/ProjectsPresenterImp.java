@@ -4,12 +4,16 @@ import com.ood.clean.waterball.teampathy.Domain.DI.Scope.UserScope;
 import com.ood.clean.waterball.teampathy.Domain.Model.Member.Member;
 import com.ood.clean.waterball.teampathy.Domain.Model.Project;
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
-import com.ood.clean.waterball.teampathy.Domain.UseCase.Project.CreateProject;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Base.DefaultObserver;
+import com.ood.clean.waterball.teampathy.Domain.UseCase.Project.CreateProject;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Project.GetMemberInfo;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Project.GetUserProjectList;
+import com.ood.clean.waterball.teampathy.Domain.UseCase.Utils.UploadImage;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.CrudPresenter;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.ProjectsPresenter;
+import com.ood.clean.waterball.teampathy.Presentation.Interfaces.TakePhotoView;
+
+import java.io.File;
 
 import javax.inject.Inject;
 
@@ -18,23 +22,32 @@ import io.reactivex.annotations.NonNull;
 @UserScope
 public class ProjectsPresenterImp implements CrudPresenter<Project> {
     private ProjectsPresenter.ProjectView projectsView;
+    private TakePhotoView takePhotoView;
     private GetUserProjectList getUserProjectList;
     private CreateProject createProject;
     private GetMemberInfo getMemberInfo;
+    private UploadImage uploadImage;
     private User user;
 
     @Inject
     public ProjectsPresenterImp(GetUserProjectList getUserProjectList,
                                 CreateProject createProject,
-                                GetMemberInfo getMemberInfo, User user) {
+                                GetMemberInfo getMemberInfo,
+                                UploadImage uploadImage,
+                                User user) {
         this.getUserProjectList = getUserProjectList;
         this.createProject = createProject;
         this.getMemberInfo = getMemberInfo;
+        this.uploadImage = uploadImage;
         this.user = user;
     }
 
     public void setProjectsView(ProjectsPresenter.ProjectView projectsView) {
         this.projectsView = projectsView;
+    }
+
+    public void setTakePhotoView(TakePhotoView takePhotoView) {
+        this.takePhotoView = takePhotoView;
     }
 
     public ProjectsPresenter.ProjectView getProjectsView() {
@@ -63,6 +76,16 @@ public class ProjectsPresenterImp implements CrudPresenter<Project> {
                 projectsView.onCreateFinishNotify(project);
             }
         },project);
+    }
+
+    public void uploadPhoto(String imagePath){
+        uploadImage.execute(new DefaultObserver<String>() {
+            @Override
+            public void onNext(@NonNull String imageUrl) {
+                takePhotoView.onPhotoUploaded(imageUrl);
+            }
+
+        }, new File(imagePath));
     }
 
 
@@ -95,6 +118,7 @@ public class ProjectsPresenterImp implements CrudPresenter<Project> {
     public void onDestroy() {
         createProject.dispose();
         getUserProjectList.dispose();
+        uploadImage.dispose();
     }
 
 }

@@ -18,8 +18,6 @@ public interface BasePresenter {
 
         PageController getPageController();
 
-        void launchCamera();
-
-        void pickPhotoFromGallery();
+        void createAndShowDialogForOptionsOfTakePicture();
     }
 }

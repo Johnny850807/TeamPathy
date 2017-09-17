@@ -108,7 +108,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpPresenter
     }
 
     public void photoImgOnClick(View view){
-        CameraCropperUtils.takeCamera(this);
+        CameraCropperUtils.createAndShowDialogForTakePhotoOptions(this);
     }
 
     @Override

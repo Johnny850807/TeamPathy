@@ -199,5 +199,9 @@
     <string name="photo_uploaded_complete">照片上傳完畢</string>
     <string name="photo_has_not_been_uploaded">照片尚未上傳完畢 ...</string>
 
+    <string-array name="take_picture_options">
+        <item>拍攝照片</item>
+        <item>從相簿挑選照片</item>
+    </string-array>
 
 </resources>

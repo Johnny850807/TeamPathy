@@ -2,12 +2,14 @@ package com.ood.clean.waterball.teampathy.Presentation.UI.Activity;
 
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,21 +19,30 @@ import android.transition.TransitionInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.UserScope;
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
 import com.ood.clean.waterball.teampathy.MyApp;
+import com.ood.clean.waterball.teampathy.MyUtils.CameraCropperUtils;
 import com.ood.clean.waterball.teampathy.MyUtils.PageController;
 import com.ood.clean.waterball.teampathy.MyUtils.TeamPathyDialogFactory;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.BasePresenter;
+import com.ood.clean.waterball.teampathy.Presentation.Interfaces.TakePhotoView;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Fragment.ProjectsFragment;
 import com.ood.clean.waterball.teampathy.R;
 import com.ood.clean.waterball.teampathy.databinding.NavHeaderBinding;
+import com.theartofdev.edmodo.cropper.CropImage;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.ood.clean.waterball.teampathy.MyUtils.CameraCropperUtils.PICK_FROM_CAMERA;
+import static com.ood.clean.waterball.teampathy.MyUtils.CameraCropperUtils.PICK_FROM_GALLERY;
 
 @UserScope
 public class BaseActivity extends AppCompatActivity implements BasePresenter.BaseView{
@@ -150,13 +161,8 @@ public class BaseActivity extends AppCompatActivity implements BasePresenter.Bas
     }
 
     @Override
-    public void launchCamera() {
-
-    }
-
-    @Override
-    public void pickPhotoFromGallery() {
-
+    public void createAndShowDialogForOptionsOfTakePicture() {
+        CameraCropperUtils.createAndShowDialogForTakePhotoOptions(this);
     }
 
 
@@ -181,4 +187,50 @@ public class BaseActivity extends AppCompatActivity implements BasePresenter.Bas
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_FROM_CAMERA || requestCode == PICK_FROM_GALLERY)
+        {
+            if (resultCode == RESULT_OK)
+                sendPhotoUriToAllPhotoViews(new PhotoViewAction() {
+                    @Override
+                    public void invoke(TakePhotoView takePhotoView) {
+                        takePhotoView.onTakePhotoResult(data.getData());
+                    }
+                });
+        }
+        else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+
+            final CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK)
+                sendPhotoUriToAllPhotoViews(new PhotoViewAction() {
+                    @Override
+                    public void invoke(TakePhotoView takePhotoView) {
+                        takePhotoView.onCropPhotoResult(result.getUri());
+                    }
+                });
+
+            else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE)
+            {
+                Exception error = result.getError();
+                Toast.makeText(getApplicationContext(), error.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void sendPhotoUriToAllPhotoViews(PhotoViewAction action){
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+
+        for (Fragment fragment : fragments)
+            if (fragment instanceof TakePhotoView)
+            {
+                TakePhotoView photoView = (TakePhotoView) fragment;
+                action.invoke(photoView);
+            }
+    }
+
+    interface PhotoViewAction{
+        void invoke(TakePhotoView takePhotoView);
+    }
 }
