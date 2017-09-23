@@ -1,7 +1,7 @@
 package com.ood.clean.waterball.teampathy.Framework.Retrofit.Repository;
 
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.IssueScope;
-import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionConverter;
+import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionValidator;
 import com.ood.clean.waterball.teampathy.Domain.Model.Issue;
 import com.ood.clean.waterball.teampathy.Domain.Model.IssueComment;
 import com.ood.clean.waterball.teampathy.Domain.Model.Project;
@@ -24,19 +24,19 @@ import retrofit2.http.Query;
 
 @IssueScope
 public class IssueCommentRetrofitRepository implements IssueCommentRepository {
-    private ExceptionConverter exceptionConverter;
+    private ExceptionValidator exceptionValidator;
     private User user;
     private Project project;
     private Issue issue;
     private IssueCommentApi issueCommentApi;
 
     @Inject
-    public IssueCommentRetrofitRepository(ExceptionConverter exceptionConverter,
+    public IssueCommentRetrofitRepository(ExceptionValidator exceptionValidator,
                                           User user,
                                           Project project,
                                           Issue issue,
                                           Retrofit retrofit) {
-        this.exceptionConverter = exceptionConverter;
+        this.exceptionValidator = exceptionValidator;
         this.user = user;
         this.project = project;
         this.issue = issue;
@@ -49,7 +49,7 @@ public class IssueCommentRetrofitRepository implements IssueCommentRepository {
         ResponseModel<IssueComment> response = issueCommentApi.create(project.getId(),
                 issue.getId(), user.getId(), entity.toFieldMap()).execute().body();
 
-        exceptionConverter.validate(response);
+        exceptionValidator.validate(response);
         return response.getData();
     }
 
@@ -68,7 +68,7 @@ public class IssueCommentRetrofitRepository implements IssueCommentRepository {
         ResponseModel<List<IssueComment>> response = issueCommentApi.getList(project.getId(),
                 issue.getId(), page).execute().body();
 
-        exceptionConverter.validate(response);
+        exceptionValidator.validate(response);
         return response.getData();
     }
 

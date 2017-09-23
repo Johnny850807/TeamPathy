@@ -1,7 +1,7 @@
 package com.ood.clean.waterball.teampathy.Domain.DI.Module.Retrofit;
 
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.UserScope;
-import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionConverter;
+import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionValidator;
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
 import com.ood.clean.waterball.teampathy.Domain.Repository.ProjectRepository;
 import com.ood.clean.waterball.teampathy.Framework.Retrofit.Repository.ProjectRetrofitRepository;
@@ -28,8 +28,8 @@ public class RetrofitUserModule {
     }
 
     @Provides @UserScope
-    public ProjectRepository provideProjectRepository(@Named("DateFormatRetrofit") Retrofit retrofit, ExceptionConverter exceptionConverter){
-        return new ProjectRetrofitRepository(retrofit, exceptionConverter, user);
+    public ProjectRepository provideProjectRepository(@Named("DateFormatRetrofit") Retrofit retrofit, ExceptionValidator exceptionValidator){
+        return new ProjectRetrofitRepository(retrofit, exceptionValidator, user);
     }
 
 }

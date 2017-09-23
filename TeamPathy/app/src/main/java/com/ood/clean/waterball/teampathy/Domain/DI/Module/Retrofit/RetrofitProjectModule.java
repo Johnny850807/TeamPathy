@@ -1,7 +1,7 @@
 package com.ood.clean.waterball.teampathy.Domain.DI.Module.Retrofit;
 
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ProjectScope;
-import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionConverter;
+import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionValidator;
 import com.ood.clean.waterball.teampathy.Domain.Model.Member.Member;
 import com.ood.clean.waterball.teampathy.Domain.Model.Project;
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
@@ -42,30 +42,30 @@ public class RetrofitProjectModule {
     }
 
     @Provides @ProjectScope
-    public IssueRepository provideIssueRepository(User user, @Named("DateFormatRetrofit")Retrofit retrofit, ExceptionConverter exceptionConverter){
-        return new IssueRetrofitRepository(project, retrofit, exceptionConverter, user);
+    public IssueRepository provideIssueRepository(User user, @Named("DateFormatRetrofit")Retrofit retrofit, ExceptionValidator exceptionValidator){
+        return new IssueRetrofitRepository(project, retrofit, exceptionValidator, user);
     }
 
     @Provides @ProjectScope
-    public TimeLineRepository provideTimelineRepository(ExceptionConverter exceptionConverter,
+    public TimeLineRepository provideTimelineRepository(ExceptionValidator exceptionValidator,
                                                         User user,
                                                         Project project,
                                                         @Named("DateFormatRetrofit")Retrofit retrofit){
-        return new TimelineRetrofitRepository(exceptionConverter, project, user, retrofit);
+        return new TimelineRetrofitRepository(exceptionValidator, project, user, retrofit);
     }
 
     @Provides @ProjectScope
-    public OfficeRepository provideOfficeRepository(ExceptionConverter exceptionConverter,
+    public OfficeRepository provideOfficeRepository(ExceptionValidator exceptionValidator,
                                                     @Named("WbsRetrofit") Retrofit retrofit,
                                                     Project project){
-        return new OfficeRetrofitRepository(exceptionConverter, retrofit, project);
+        return new OfficeRetrofitRepository(exceptionValidator, retrofit, project);
     }
 
     @Provides @ProjectScope
-    public WbsRepository provideWbsRepository(ExceptionConverter exceptionConverter,
+    public WbsRepository provideWbsRepository(ExceptionValidator exceptionValidator,
                                               @Named("WbsRetrofit")Retrofit retrofit,
                                               Project project){
-        return new WbsRetrofitRepository(exceptionConverter, retrofit, project);
+        return new WbsRetrofitRepository(exceptionValidator, retrofit, project);
     }
 
 }

@@ -4,8 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ood.clean.waterball.teampathy.Domain.DI.Module.Retrofit.RetrofitHelper;
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ProjectScope;
-import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionConverter;
+import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionValidator;
 import com.ood.clean.waterball.teampathy.Domain.Model.Project;
+import com.ood.clean.waterball.teampathy.Domain.Model.ReviewTaskCard;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.WbsCommand;
 import com.ood.clean.waterball.teampathy.Domain.Repository.WbsRepository;
@@ -27,14 +28,14 @@ import retrofit2.http.Path;
 @ProjectScope
 public class WbsRetrofitRepository implements WbsRepository {
     private Project project;
-    private ExceptionConverter exceptionConverter;
+    private ExceptionValidator exceptionValidator;
     private WbsApi wbsApi;
 
     @Inject
-    public WbsRetrofitRepository(ExceptionConverter exceptionConverter,
+    public WbsRetrofitRepository(ExceptionValidator exceptionValidator,
                                  Retrofit retrofit,
                                  Project project) {
-        this.exceptionConverter = exceptionConverter;
+        this.exceptionValidator = exceptionValidator;
 
         this.wbsApi = RetrofitHelper.provideWbsRetrofit().create(WbsApi.class);
         this.project = project;
@@ -44,7 +45,7 @@ public class WbsRetrofitRepository implements WbsRepository {
     public String getWbs() throws Exception {
         ResponseModel<String> response = wbsApi.getWbs(project.getId()).execute().body();
 
-        exceptionConverter.validate(response);
+        exceptionValidator.validate(response);
         return response.getData();
     }
 
@@ -56,7 +57,7 @@ public class WbsRetrofitRepository implements WbsRepository {
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), gson.toJson(command));
         ResponseModel<String> response = wbsApi.executeWbsCommand(project.getId(), body).execute().body();
 
-        exceptionConverter.validate(response);
+        exceptionValidator.validate(response);
         return response.getData();
     }
 
@@ -64,13 +65,21 @@ public class WbsRetrofitRepository implements WbsRepository {
     public List<TodoTask> getTodolist(int userId) throws Exception {
         ResponseModel<List<TodoTask>> response = wbsApi.getTodolist(project.getId(), userId).execute().body();
 
-        exceptionConverter.validate(response);
+        exceptionValidator.validate(response);
         return response.getData();
     }
 
     @Override
     public List<TodoTask> filterTasksByStatus(TodoTask.Status status) throws Exception {
         return null;
+    }
+
+    @Override
+    public List<ReviewTaskCard> getReviewTaskCards() throws Exception {
+        ResponseModel<List<ReviewTaskCard>> response = wbsApi.getReviewTaskCards(project.getId()).execute().body();
+
+        exceptionValidator.validate(response);
+        return response.getData();
     }
 
     private interface WbsApi{
@@ -82,6 +91,9 @@ public class WbsRetrofitRepository implements WbsRepository {
         @GET(RESOURCE + "/todolist/{userId}")
         public Call<ResponseModel<List<TodoTask>>> getTodolist(@Path("projectId") int projectId,
                                                                @Path("userId") int userId);
+
+        @GET(RESOURCE + "/reviewCards")
+        public Call<ResponseModel<List<ReviewTaskCard>>> getReviewTaskCards(@Path("projectId") int projectId);
 
         @Headers("Content-Type: application/json")
         @POST(RESOURCE)

@@ -2,7 +2,7 @@ package com.ood.clean.waterball.teampathy.Domain.DI.Module.Retrofit;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionConverter;
+import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionValidator;
 import com.ood.clean.waterball.teampathy.Domain.ServerConstant;
 import com.ood.clean.waterball.teampathy.Domain.Repository.ImageUploadRepository;
 import com.ood.clean.waterball.teampathy.Domain.Repository.UserRepository;
@@ -63,8 +63,8 @@ public class RetrofitApplicationModule {
     @Provides
     @Singleton
     public UserRepository provideUserRepository(@Named("DateFormatRetrofit") Retrofit retrofit,
-                                                ExceptionConverter exceptionConverter){
-        return new UserRetrofitRespository(retrofit, exceptionConverter);
+                                                ExceptionValidator exceptionValidator){
+        return new UserRetrofitRespository(retrofit, exceptionValidator);
     }
 
     @Provides @Singleton

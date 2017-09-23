@@ -1,7 +1,7 @@
 package com.ood.clean.waterball.teampathy.Framework.Retrofit.Repository;
 
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ProjectScope;
-import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionConverter;
+import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionValidator;
 import com.ood.clean.waterball.teampathy.Domain.Model.Issue;
 import com.ood.clean.waterball.teampathy.Domain.Model.Project;
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
@@ -24,7 +24,7 @@ import retrofit2.http.Query;
 
 @ProjectScope
 public class IssueRetrofitRepository implements IssueRepository {
-    private ExceptionConverter exceptionConverter;
+    private ExceptionValidator exceptionValidator;
     private Project project;
     private User user;
     private IssueApi issueApi;
@@ -32,10 +32,10 @@ public class IssueRetrofitRepository implements IssueRepository {
     @Inject
     public IssueRetrofitRepository(Project project,
                                    Retrofit retrofit,
-                                   ExceptionConverter exceptionConverter,
+                                   ExceptionValidator exceptionValidator,
                                    User user) {
         this.project = project;
-        this.exceptionConverter = exceptionConverter;
+        this.exceptionValidator = exceptionValidator;
         this.user = user;
 
         issueApi = retrofit.create(IssueApi.class);
@@ -46,7 +46,7 @@ public class IssueRetrofitRepository implements IssueRepository {
         ResponseModel<Void> response = issueApi.deleteIssueCategory(project.getId(), category, user.getId())
                 .execute().body();
 
-        exceptionConverter.validate(response);
+        exceptionValidator.validate(response);
 
         project.getIssueCategoryList().remove(category);
     }
@@ -56,7 +56,7 @@ public class IssueRetrofitRepository implements IssueRepository {
         ResponseModel<Void> response = issueApi.addIssueCategory(project.getId(), category, user.getId())
                 .execute().body();
 
-        exceptionConverter.validate(response);
+        exceptionValidator.validate(response);
 
         project.getIssueCategoryList().add(category);
     }
@@ -66,7 +66,7 @@ public class IssueRetrofitRepository implements IssueRepository {
         ResponseModel<Issue> response = issueApi.createIssue(project.getId(),
                 user.getId(), entity.toFieldMap()).execute().body();
 
-        exceptionConverter.validate(response);
+        exceptionValidator.validate(response);
 
         return response.getData();
     }
@@ -85,7 +85,7 @@ public class IssueRetrofitRepository implements IssueRepository {
     public List<Issue> readList(int page) throws Exception {
         ResponseModel<List<Issue>> response = issueApi.getList(project.getId(), page).execute().body();
 
-        exceptionConverter.validate(response);
+        exceptionValidator.validate(response);
 
         return response.getData();
     }
@@ -95,7 +95,7 @@ public class IssueRetrofitRepository implements IssueRepository {
         ResponseModel<Issue> response = issueApi.getDetails(project.getId(),
                 id).execute().body();
 
-        exceptionConverter.validate(response);
+        exceptionValidator.validate(response);
 
         return response.getData();
     }

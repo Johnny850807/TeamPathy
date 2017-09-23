@@ -1,7 +1,7 @@
 package com.ood.clean.waterball.teampathy.Framework.Retrofit.Repository;
 
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.UserScope;
-import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionConverter;
+import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionValidator;
 import com.ood.clean.waterball.teampathy.Domain.Model.Member.Member;
 import com.ood.clean.waterball.teampathy.Domain.Model.Project;
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
@@ -25,14 +25,14 @@ import retrofit2.http.Query;
 
 @UserScope
 public class ProjectRetrofitRepository implements ProjectRepository {
-    private ExceptionConverter exceptionConverter;
+    private ExceptionValidator exceptionValidator;
     private ProjectApi projectApi;
     private User user;
 
     @Inject
-    public ProjectRetrofitRepository( Retrofit retrofit,
-                                     ExceptionConverter exceptionConverter, User user) {
-        this.exceptionConverter = exceptionConverter;
+    public ProjectRetrofitRepository(Retrofit retrofit,
+                                     ExceptionValidator exceptionValidator, User user) {
+        this.exceptionValidator = exceptionValidator;
         this.user = user;
 
         projectApi = retrofit.create(ProjectApi.class);
@@ -43,7 +43,7 @@ public class ProjectRetrofitRepository implements ProjectRepository {
         ResponseModel<Project> response = projectApi.createProject(user.getId(),
                 entity.toFieldMap()).execute().body();
 
-        exceptionConverter.validate(response);
+        exceptionValidator.validate(response);
 
         return response.getData();
     }
@@ -71,7 +71,7 @@ public class ProjectRetrofitRepository implements ProjectRepository {
         ResponseModel<Project> response =
                 projectApi.getProjectDetails(id).execute().body();
 
-        exceptionConverter.validate(response);
+        exceptionValidator.validate(response);
         return response.getData();
     }
 
@@ -80,7 +80,7 @@ public class ProjectRetrofitRepository implements ProjectRepository {
         ResponseModel<Member> response = projectApi.getMemberDetails(params.getProjectId(), params.getUserId())
                 .execute().body();
 
-        exceptionConverter.validate(response);
+        exceptionValidator.validate(response);
         return response.getData();
     }
 
@@ -89,7 +89,7 @@ public class ProjectRetrofitRepository implements ProjectRepository {
         ResponseModel<List<Project>> response = projectApi.searchProjectByName(user.getId(), projectName, 0)
                 .execute().body();
 
-        exceptionConverter.validate(response);
+        exceptionValidator.validate(response);
         return response.getData();
     }
 
@@ -99,7 +99,7 @@ public class ProjectRetrofitRepository implements ProjectRepository {
                 projectApi.joinProject(params.getProject().getId(), user.getId() , params.getPassword())
                 .execute().body();
 
-        exceptionConverter.validate(response);
+        exceptionValidator.validate(response);
     }
 
     @Override

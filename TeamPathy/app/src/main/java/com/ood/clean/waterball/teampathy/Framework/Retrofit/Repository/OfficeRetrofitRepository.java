@@ -3,7 +3,7 @@ package com.ood.clean.waterball.teampathy.Framework.Retrofit.Repository;
 
 import com.ood.clean.waterball.teampathy.Domain.DI.Module.Retrofit.RetrofitHelper;
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ProjectScope;
-import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionConverter;
+import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionValidator;
 import com.ood.clean.waterball.teampathy.Domain.Model.Member.MemberDetails;
 import com.ood.clean.waterball.teampathy.Domain.Model.Member.MemberIdCard;
 import com.ood.clean.waterball.teampathy.Domain.Model.Member.Position;
@@ -22,15 +22,15 @@ import retrofit2.http.Path;
 @ProjectScope
 public class OfficeRetrofitRepository implements OfficeRepository{
     private Project project;
-    private ExceptionConverter exceptionConverter;
+    private ExceptionValidator exceptionValidator;
     private OfficeApi officeApi;
 
     @Inject
-    public OfficeRetrofitRepository(ExceptionConverter exceptionConverter,
+    public OfficeRetrofitRepository(ExceptionValidator exceptionValidator,
                                     Retrofit retrofit,
                                     Project project) {
 
-        this.exceptionConverter = exceptionConverter;
+        this.exceptionValidator = exceptionValidator;
         this.officeApi = RetrofitHelper.provideWbsRetrofit().create(OfficeApi.class);
         this.project = project;
     }
@@ -39,7 +39,7 @@ public class OfficeRetrofitRepository implements OfficeRepository{
     public List<MemberIdCard> getMemberIdCardList() throws Exception {
         ResponseModel<List<MemberIdCard>> response = officeApi.getMemberCards(project.getId()).execute().body();
         // API 回傳的 task 沒有  parent
-        exceptionConverter.validate(response);
+        exceptionValidator.validate(response);
         return response.getData();
     }
 

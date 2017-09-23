@@ -1,6 +1,6 @@
 package com.ood.clean.waterball.teampathy.Framework.Retrofit.Repository;
 
-import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionConverter;
+import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionValidator;
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
 import com.ood.clean.waterball.teampathy.Domain.Repository.UserRepository;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.User.SignIn;
@@ -17,14 +17,14 @@ import retrofit2.http.POST;
 
 @Singleton
 public class UserRetrofitRespository implements UserRepository{
-    private ExceptionConverter exceptionConverter;
+    private ExceptionValidator exceptionValidator;
     private UserAPI userAPI;
 
     @Inject
     public UserRetrofitRespository(Retrofit retrofit,
-                                   ExceptionConverter exceptionConverter) {
+                                   ExceptionValidator exceptionValidator) {
         userAPI = retrofit.create(UserAPI.class);
-        this.exceptionConverter = exceptionConverter;
+        this.exceptionValidator = exceptionValidator;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class UserRetrofitRespository implements UserRepository{
         ResponseModel<User> response =  userAPI.signIn(params.getAccount(), params.getPassword(), params.getPushNotificationToken())
                 .execute().body();
 
-        exceptionConverter.validate(response);
+        exceptionValidator.validate(response);
         return response.getData();
     }
 
@@ -44,7 +44,7 @@ public class UserRetrofitRespository implements UserRepository{
                 params.getImageUrl(),
                 params.getPushNotificationToken()).execute().body();
 
-        exceptionConverter.validate(response);
+        exceptionValidator.validate(response);
         return response.getData();
     }
 

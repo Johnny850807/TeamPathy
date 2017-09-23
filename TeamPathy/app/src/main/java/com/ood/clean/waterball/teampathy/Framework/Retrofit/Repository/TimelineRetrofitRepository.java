@@ -1,7 +1,7 @@
 package com.ood.clean.waterball.teampathy.Framework.Retrofit.Repository;
 
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ProjectScope;
-import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionConverter;
+import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionValidator;
 import com.ood.clean.waterball.teampathy.Domain.Model.Project;
 import com.ood.clean.waterball.teampathy.Domain.Model.Timeline;
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
@@ -25,17 +25,17 @@ import retrofit2.http.Query;
 
 @ProjectScope
 public class TimelineRetrofitRepository implements TimeLineRepository {
-    private ExceptionConverter exceptionConverter;
+    private ExceptionValidator exceptionValidator;
     private Project project;
     private User user;
     private TimelineApi timelineApi;
 
     @Inject
-    public TimelineRetrofitRepository(ExceptionConverter exceptionConverter,
+    public TimelineRetrofitRepository(ExceptionValidator exceptionValidator,
                                       Project project,
                                       User user,
                                       Retrofit retrofit) {
-        this.exceptionConverter = exceptionConverter;
+        this.exceptionValidator = exceptionValidator;
         this.user = user;
         this.project = project;
 
@@ -47,7 +47,7 @@ public class TimelineRetrofitRepository implements TimeLineRepository {
         ResponseModel<Timeline> response = timelineApi.create(project.getId(), user.getId(), entity.toFieldMap())
                 .execute().body();
 
-        exceptionConverter.validate(response);
+        exceptionValidator.validate(response);
         return response.getData();
     }
 
@@ -61,7 +61,7 @@ public class TimelineRetrofitRepository implements TimeLineRepository {
         ResponseModel<Void> response = timelineApi.delete(project.getId(), entity.getId())
                 .execute().body();
 
-        exceptionConverter.validate(response);
+        exceptionValidator.validate(response);
         return entity;
     }
 
@@ -70,7 +70,7 @@ public class TimelineRetrofitRepository implements TimeLineRepository {
         ResponseModel<List<Timeline>> response = timelineApi.getList(project.getId(), page)
                 .execute().body();
 
-        exceptionConverter.validate(response);
+        exceptionValidator.validate(response);
         return response.getData();
     }
 

@@ -13,7 +13,7 @@ import javax.inject.Singleton;
  * if isSuccessful() return true, then convert() method should not be invoked.
  * **/
 @Singleton
-public class ExceptionConverterImp implements ExceptionConverter {
+public class ExceptionValidatorImp implements ExceptionValidator {
 
     @Override
     public void validate(ResponseModel responseModel) {

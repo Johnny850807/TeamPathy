@@ -1,8 +1,8 @@
 package com.ood.clean.waterball.teampathy.Domain.DI.Module;
 
 
-import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionConverter;
-import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionConverterImp;
+import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionValidator;
+import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionValidatorImp;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskXmlTranslator;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskXmlTranslatorImp;
 import com.ood.clean.waterball.teampathy.Threading.JobThread;
@@ -40,7 +40,7 @@ public class ApplicationModule {
     }
 
     @Provides @Singleton
-    public ExceptionConverter provideExceptionConverter(){
-        return new ExceptionConverterImp();
+    public ExceptionValidator provideExceptionConverter(){
+        return new ExceptionValidatorImp();
     }
 }

@@ -1,7 +1,7 @@
 package com.ood.clean.waterball.teampathy.Domain.DI.Module.Retrofit;
 
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.IssueScope;
-import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionConverter;
+import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionValidator;
 import com.ood.clean.waterball.teampathy.Domain.Model.Issue;
 import com.ood.clean.waterball.teampathy.Domain.Model.Project;
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
@@ -29,10 +29,10 @@ public class RetrofitIssueModule {
     }
 
     @Provides @IssueScope
-    public IssueCommentRepository provideIssueCommentRepository(ExceptionConverter exceptionConverter,
+    public IssueCommentRepository provideIssueCommentRepository(ExceptionValidator exceptionValidator,
                                                                 User user,
                                                                 Project project,
                                                                 @Named("DateFormatRetrofit") Retrofit retrofit){
-        return new IssueCommentRetrofitRepository(exceptionConverter, user, project, issue, retrofit);
+        return new IssueCommentRetrofitRepository(exceptionValidator, user, project, issue, retrofit);
     }
 }
