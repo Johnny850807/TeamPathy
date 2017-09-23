@@ -15,6 +15,7 @@ import com.ood.clean.waterball.teampathy.Domain.Model.ReviewTaskCard;
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask;
 import com.ood.clean.waterball.teampathy.MyApp;
+import com.ood.clean.waterball.teampathy.MyUtils.TeamPathyDialogFactory;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.ReviewTaskPresenter;
 import com.ood.clean.waterball.teampathy.Presentation.Presenter.ReviewTaskPresenterImp;
 import com.ood.clean.waterball.teampathy.R;
@@ -71,6 +72,13 @@ public class TaskPendingFragment extends BaseFragment implements ReviewTaskPrese
     @Override
     public void onReviewTasksLoadComplete() {
         initRecyclerView();
+    }
+
+    @Override
+    public void onOperationError(Throwable err) {
+        TeamPathyDialogFactory.networkErrorDialogBuilder(getActivity())
+                .setMessage(err.getMessage())
+                .show();
     }
 
     private void initRecyclerView(){

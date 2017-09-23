@@ -6,11 +6,15 @@ import com.ood.clean.waterball.teampathy.Domain.Repository.WbsRepository;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Base.UseCase;
 import com.ood.clean.waterball.teampathy.Threading.ThreadingObservableFactory;
 
+import java.util.List;
+
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.annotations.NonNull;
 
 
-
-public class GetReviewTaskCards extends UseCase<Project,ReviewTaskCard> {
+public class GetReviewTaskCards extends UseCase<ReviewTaskCard,Project> {
     private WbsRepository wbsRepository;
 
     public GetReviewTaskCards(ThreadingObservableFactory threadingObservableFactory, WbsRepository wbsRepository) {
@@ -19,7 +23,19 @@ public class GetReviewTaskCards extends UseCase<Project,ReviewTaskCard> {
     }
 
     @Override
-    protected Observable<Project> buildUseCaseObservable(ReviewTaskCard card) {
-        return null;
+    protected Observable<ReviewTaskCard> buildUseCaseObservable(Project project) {
+        return Observable.create(new ObservableOnSubscribe<ReviewTaskCard>() {
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<ReviewTaskCard> e) throws Exception {
+                try{
+                    List<ReviewTaskCard> cardList = wbsRepository.getReviewTaskCards();
+                    for (ReviewTaskCard card : cardList)
+                        e.onNext(card);
+                    e.onComplete();
+                }catch (Exception err){
+                    e.onError(err);
+                }
+            }
+        });
     }
 }

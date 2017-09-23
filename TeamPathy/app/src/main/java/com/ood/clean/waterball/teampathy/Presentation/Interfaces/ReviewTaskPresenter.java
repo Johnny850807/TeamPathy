@@ -9,5 +9,6 @@ public interface ReviewTaskPresenter {
     public interface ReviewTaskView{
         void onLoadReviewTaskCard(ReviewTaskCard card);
         void onReviewTasksLoadComplete();
+        void onOperationError(Throwable err);
     }
 }
