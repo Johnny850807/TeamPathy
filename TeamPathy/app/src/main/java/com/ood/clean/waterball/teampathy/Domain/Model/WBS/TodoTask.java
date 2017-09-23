@@ -1,6 +1,8 @@
 package com.ood.clean.waterball.teampathy.Domain.Model.WBS;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import com.ood.clean.waterball.teampathy.MyUtils.EnglishAbbrDateConverter;
@@ -15,7 +17,7 @@ import java.util.List;
 
 import static com.ood.clean.waterball.teampathy.MyUtils.EnglishAbbrDateConverter.dateToTime;
 
-public class TodoTask extends TaskEntity implements TaskItem, Cloneable, Comparable<TodoTask>{
+public class TodoTask extends TaskEntity implements TaskItem, Cloneable, Comparable<TodoTask>, Parcelable{
     public static int UNASSIGNED_ID = -1;
     private int assignedId;
     private String description;
@@ -212,4 +214,44 @@ public class TodoTask extends TaskEntity implements TaskItem, Cloneable, Compara
             this.attr = attr;
         }
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(name);
+        parcel.writeSerializable(getParent());
+        parcel.writeString(description);
+        parcel.writeInt(contribution);
+        parcel.writeSerializable(startDate);
+        parcel.writeSerializable(endDate);
+        parcel.writeString(status.toString());
+        parcel.writeInt(assignedId);
+    }
+
+    public static final Parcelable.Creator<TodoTask> CREATOR = new Creator<TodoTask>() {
+        @Override
+        public TodoTask createFromParcel(Parcel parcel) {
+            String name = parcel.readString();
+            String ofGroup = parcel.readString();
+            String description = parcel.readString();
+            int contribution = parcel.readInt();
+            Date startDate = (Date) parcel.readSerializable();
+            Date endDate = (Date) parcel.readSerializable();
+            String dependency = parcel.readString();
+            Status status = Status.valueOf(parcel.readString());
+            int assignedId = parcel.readInt();
+            return new TodoTask(name, ofGroup, description, contribution,
+                    startDate, endDate, dependency, status, assignedId);
+        }
+
+        @Override
+        public TodoTask[] newArray(int i) {
+            return new TodoTask[i];
+        }
+    };
+
 }

@@ -40,8 +40,6 @@ public class CreateProjectDialogFragment extends MakeSureToCancelBaseDialogFragm
     @Inject ProjectsPresenterImp presenterImp;
     String imageUrl;
 
-    //todo imageUrl should be fetched from the picture the user uploads instead of the null parameter.
-
     @Override
     protected Dialog onCustomDialogSetting(AlertDialog alertDialog) {
         alertDialog.setTitle(R.string.create_a_new_project);

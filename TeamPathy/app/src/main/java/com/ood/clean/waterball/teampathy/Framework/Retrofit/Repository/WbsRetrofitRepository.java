@@ -36,7 +36,6 @@ public class WbsRetrofitRepository implements WbsRepository {
                                  Project project) {
         this.exceptionConverter = exceptionConverter;
 
-
         this.wbsApi = RetrofitHelper.provideWbsRetrofit().create(WbsApi.class);
         this.project = project;
     }

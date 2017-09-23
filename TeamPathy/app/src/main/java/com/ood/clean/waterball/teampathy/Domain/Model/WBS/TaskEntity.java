@@ -75,4 +75,7 @@ public abstract class TaskEntity implements TaskItem{
             stringBuilder.append(" -> ").append(taskItem.getName()).append("-").append(taskItem.getDegree());
         return stringBuilder.toString();
     }
+
+
+
 }
