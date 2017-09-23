@@ -10,7 +10,10 @@ import android.view.ViewGroup;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask;
 import com.ood.clean.waterball.teampathy.MyApp;
 import com.ood.clean.waterball.teampathy.R;
+import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
+import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder;
+import com.thoughtbot.expandablerecyclerview.viewholders.GroupViewHolder;
 
 import java.util.List;
 
@@ -43,11 +46,49 @@ public class TaskPendingFragment extends BaseFragment {
         MyApp.getWbsComponent(getActivity()).inject(this);
     }
 
-    private class Group extends ExpandableGroup<TodoTask>{
-
-        public Group(String title, List<TodoTask> items) {
+    private class ItemGroup extends ExpandableGroup<TodoTask>{
+        public ItemGroup(String title, List<TodoTask> items) {
             super(title, items);
         }
     }
 
+    private class ItemGroupViewHolder extends GroupViewHolder {
+        public ItemGroupViewHolder(View itemView) {
+            super(itemView);
+        }
+    }
+
+    private class ItemViewHolder extends ChildViewHolder {
+
+        public ItemViewHolder(View itemView) {
+            super(itemView);
+        }
+    }
+
+    public class ReviewTaskAdapter extends ExpandableRecyclerViewAdapter<ItemGroupViewHolder, ItemViewHolder> {
+
+        public ReviewTaskAdapter(List<? extends ExpandableGroup> groups) {
+            super(groups);
+        }
+
+        @Override
+        public ItemGroupViewHolder onCreateGroupViewHolder(ViewGroup viewGroup, int i) {
+            return null;
+        }
+
+        @Override
+        public ItemViewHolder onCreateChildViewHolder(ViewGroup viewGroup, int i) {
+            return null;
+        }
+
+        @Override
+        public void onBindChildViewHolder(ItemViewHolder itemViewHolder, int i, ExpandableGroup expandableGroup, int i1) {
+
+        }
+
+        @Override
+        public void onBindGroupViewHolder(ItemGroupViewHolder itemGroupViewHolder, int i, ExpandableGroup expandableGroup) {
+
+        }
+    }
 }
