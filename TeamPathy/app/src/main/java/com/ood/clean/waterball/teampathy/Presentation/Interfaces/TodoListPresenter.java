@@ -10,6 +10,7 @@ public interface TodoListPresenter extends LifetimePresenter{
         public void loadTodoTask(TodoTask todoTask);
         public void onLoadFinishNotify();
         public void onAlterFinishNotify(TaskItem todoTask, TodoTask.Status status);
+        public void onOperationError(Throwable err);
     }
 
     void loadTodoList();

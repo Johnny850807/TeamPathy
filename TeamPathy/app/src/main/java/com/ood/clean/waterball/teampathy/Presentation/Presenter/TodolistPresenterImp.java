@@ -47,6 +47,11 @@ public class TodolistPresenterImp implements TodoListPresenter {
                 super.onComplete();
                 todoListView.onLoadFinishNotify();
             }
+
+            @Override
+            public void onError(Throwable exception) {
+                todoListView.onOperationError(exception);
+            }
         },member);
     }
 
@@ -61,6 +66,11 @@ public class TodolistPresenterImp implements TodoListPresenter {
                 public void onNext(@NonNull TaskItem taskRoot) {
                     todoTask.setStatus(status);
                     todoListView.onAlterFinishNotify(todoTask, status);
+                }
+
+                @Override
+                public void onError(Throwable exception) {
+                    todoListView.onOperationError(exception);
                 }
             },wbsCommand);
         } catch (CloneNotSupportedException e) {

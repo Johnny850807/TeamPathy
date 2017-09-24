@@ -20,6 +20,7 @@ import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskItem;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask;
 import com.ood.clean.waterball.teampathy.MyApp;
 import com.ood.clean.waterball.teampathy.MyUtils.IndexSet;
+import com.ood.clean.waterball.teampathy.MyUtils.TeamPathyDialogFactory;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.TodoListPresenter;
 import com.ood.clean.waterball.teampathy.Presentation.Presenter.TodolistPresenterImp;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Adapter.BindingViewHolder;
@@ -106,6 +107,13 @@ public class TodolistFragment extends BaseFragment implements TodoListPresenter.
         adapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onOperationError(Throwable err) {
+        getBaseView().hideProgressBar();
+        TeamPathyDialogFactory.networkErrorDialogBuilder(getActivity())
+                .setMessage(err.getMessage())
+                .show();
+    }
 
     @Override
     public void onRefresh() {
@@ -161,16 +169,19 @@ public class TodolistFragment extends BaseFragment implements TodoListPresenter.
     }
 
     private void showTodoTaskActionList(final TodoTask todoTask) {
-        String[] actions = createActionsUponStatus(todoTask);
-        DialogInterface.OnClickListener listener = createListenerUponStatus(todoTask);
+        if (todoTask.getStatus() != TodoTask.Status.pass)
+        {
+            String[] actions = createActionsUponStatus(todoTask);
+            DialogInterface.OnClickListener listener = createListenerUponStatus(todoTask);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>
-                (getContext(), android.R.layout.simple_list_item_1,
-                actions);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>
+                    (getContext(), android.R.layout.simple_list_item_1,
+                            actions);
 
-        new AlertDialog.Builder(getContext())
-                .setAdapter(adapter, listener)
-                .show();
+            new AlertDialog.Builder(getContext())
+                    .setAdapter(adapter, listener)
+                    .show();
+        }
     }
 
     private String[] createActionsUponStatus(TodoTask todoTask){

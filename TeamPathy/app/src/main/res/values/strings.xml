@@ -204,4 +204,11 @@
         <item>從相簿挑選照片</item>
     </string-array>
 
+    <string name="point">pt</string>
+    <string name="choose_the_review_option">選擇欲進行之審核動作</string>
+
+    <string-array name="review_task_options">
+        <item>通過審核</item>
+        <item>駁回審核</item>
+    </string-array>
 </resources>

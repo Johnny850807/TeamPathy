@@ -1,14 +1,17 @@
 package com.ood.clean.waterball.teampathy.Presentation.UI.Fragment;
 
+import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
 import com.android.databinding.library.baseAdapters.BR;
 import com.ood.clean.waterball.teampathy.Domain.Model.ReviewTaskCard;
@@ -19,6 +22,7 @@ import com.ood.clean.waterball.teampathy.MyUtils.TeamPathyDialogFactory;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.ReviewTaskPresenter;
 import com.ood.clean.waterball.teampathy.Presentation.Presenter.ReviewTaskPresenterImp;
 import com.ood.clean.waterball.teampathy.R;
+import com.ood.clean.waterball.teampathy.databinding.ReviewCardCommiterGroupItemBinding;
 import com.ood.clean.waterball.teampathy.databinding.ReviewCardContentItemBinding;
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
@@ -35,10 +39,14 @@ import butterknife.ButterKnife;
 
 
 public class TaskPendingFragment extends BaseFragment implements ReviewTaskPresenter.ReviewTaskView{
+    public static final int REVIEW_TODO_AS_PASS = 0;
+    public static final int REJECT_REVIEW = 1;
+
     @Inject ReviewTaskPresenterImp presenterImp;
     @BindView(R.id.recyclerview) RecyclerView recyclerView;
     ReviewTaskAdapter adapter;
     List<ReviewTaskCard> reviewTaskCards = new ArrayList<>();
+    String[] reviewOptions;
 
     @Nullable
     @Override
@@ -56,7 +64,7 @@ public class TaskPendingFragment extends BaseFragment implements ReviewTaskPrese
     }
 
     private void init(){
-
+        reviewOptions = getResources().getStringArray(R.array.review_task_options);
     }
 
     private void bind(View view) {
@@ -79,6 +87,12 @@ public class TaskPendingFragment extends BaseFragment implements ReviewTaskPrese
         TeamPathyDialogFactory.networkErrorDialogBuilder(getActivity())
                 .setMessage(err.getMessage())
                 .show();
+    }
+
+    @Override
+    public void onTaskReviewOperationSuccessfully(TodoTask todoTask) {
+        reviewTaskCards.clear(); // reload
+        presenterImp.loadReviewTaskCard();
     }
 
     private void initRecyclerView(){
@@ -122,6 +136,10 @@ public class TaskPendingFragment extends BaseFragment implements ReviewTaskPrese
             binding.setVariable(BR.obj, obj);
             binding.executePendingBindings();
         }
+
+        public View getRootView(){
+            return binding.getRoot();
+        }
     }
 
     public class ReviewTaskAdapter extends ExpandableRecyclerViewAdapter<ItemGroupViewHolder, ItemViewHolder> {
@@ -132,13 +150,13 @@ public class TaskPendingFragment extends BaseFragment implements ReviewTaskPrese
 
         @Override
         public ItemGroupViewHolder onCreateGroupViewHolder(ViewGroup viewGroup, int i) {
-            ReviewCardContentItemBinding binding = DataBindingUtil.inflate(LayoutInflater.from(getActivity()),
+            ReviewCardCommiterGroupItemBinding binding = DataBindingUtil.inflate(LayoutInflater.from(getActivity()),
                     R.layout.review_card_commiter_group_item, viewGroup, false);
             return new ItemGroupViewHolder(binding);
         }
 
         @Override
-        public ItemViewHolder onCreateChildViewHolder(ViewGroup viewGroup, int i) {
+        public ItemViewHolder onCreateChildViewHolder(ViewGroup viewGroup, int position) {
             ReviewCardContentItemBinding binding = DataBindingUtil.inflate(LayoutInflater.from(getActivity()),
                     R.layout.review_card_content_item, viewGroup, false);
             return new ItemViewHolder(binding);
@@ -148,6 +166,7 @@ public class TaskPendingFragment extends BaseFragment implements ReviewTaskPrese
         public void onBindChildViewHolder(ItemViewHolder itemViewHolder, int flatPosition, ExpandableGroup expandableGroup, int childIndex) {
             ItemGroup group = (ItemGroup) expandableGroup;
             TodoTask todoTask = group.getItems().get(childIndex);
+            setPendingTaskItemListener(itemViewHolder.getRootView(), todoTask);
             itemViewHolder.bind(todoTask);
         }
 
@@ -156,5 +175,36 @@ public class TaskPendingFragment extends BaseFragment implements ReviewTaskPrese
             User user = reviewTaskCards.get(flatPosition).getCommiter();
             itemGroupViewHolder.bind(user);
         }
+    }
+
+    private void setPendingTaskItemListener(View view, final TodoTask todoTask){
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createDialogForReviewOptions(todoTask);
+            }
+        });
+    }
+
+    private void createDialogForReviewOptions(final TodoTask todoTask){
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, reviewOptions);
+        TeamPathyDialogFactory.templateBuilder(getActivity())
+                .setTitle(R.string.choose_the_review_option)
+                .setAdapter(adapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int position) {
+                        switch (position)
+                        {
+                            case REVIEW_TODO_AS_PASS:
+                                Log.d("wbs", "review... todo" +  todoTask.getName());
+                                presenterImp.reviewAsPassTodoTask(todoTask);
+                                break;
+                            case REJECT_REVIEW:
+                                Log.d("wbs", "reject... todo " + todoTask.getName());
+                                presenterImp.rejectTodotask(todoTask);
+                                break;
+                        }
+                    }
+                }).show();
     }
 }

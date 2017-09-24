@@ -13,6 +13,6 @@ public interface WbsConsolePresenter extends LifetimePresenter{
     public interface WbsView{
         public void onLoadTasksFinish(TaskItem taskroot);
         public void onUpdateTasksFinish(TaskItem taskRoot);
-        public void onError(Exception err);
+        public void onError(Throwable err);
     }
 }

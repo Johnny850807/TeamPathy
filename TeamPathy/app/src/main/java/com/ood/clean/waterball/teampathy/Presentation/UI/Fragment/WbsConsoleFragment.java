@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.ood.clean.waterball.teampathy.Domain.Model.Member.Member;
@@ -112,8 +111,10 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
     }
 
     @Override
-    public void onError(Exception err) {
-        Toast.makeText(getContext(),err.getMessage(),Toast.LENGTH_LONG).show();  //todo testing
+    public void onError(Throwable err) {
+        TeamPathyDialogFactory.networkErrorDialogBuilder(getActivity())
+                .setMessage(err.getMessage())
+                .show();
     }
 
     @Override

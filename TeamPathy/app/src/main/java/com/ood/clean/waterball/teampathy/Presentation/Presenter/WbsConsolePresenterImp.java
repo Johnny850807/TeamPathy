@@ -38,6 +38,10 @@ public class WbsConsolePresenterImp implements WbsConsolePresenter {
             public void onNext(@NonNull TaskItem taskRoot) {
                 wbsView.onLoadTasksFinish(taskRoot);
             }
+            @Override
+            public void onError(Throwable exception) {
+                wbsView.onError(exception);
+            }
         }, project);
     }
 
@@ -47,6 +51,10 @@ public class WbsConsolePresenterImp implements WbsConsolePresenter {
             @Override
             public void onNext(@NonNull TaskItem taskRoot) {
                 wbsView.onUpdateTasksFinish(taskRoot);
+            }
+            @Override
+            public void onError(Throwable exception) {
+                wbsView.onError(exception);
             }
         }, wbsCommand);
     }

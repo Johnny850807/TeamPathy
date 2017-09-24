@@ -33,9 +33,13 @@ public class ExecuteWbsCommand extends UseCase<TaskItem,WbsCommand> {
         return Observable.create(new ObservableOnSubscribe<TaskItem>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<TaskItem> e) throws Exception {
-                String wbs = wbsRepository.executeWbsCommand(wbsCommand);
-                e.onNext(translator.xmlToTasks(wbs));
-                e.onComplete();
+                try{
+                    String wbs = wbsRepository.executeWbsCommand(wbsCommand);
+                    e.onNext(translator.xmlToTasks(wbs));
+                    e.onComplete();
+                }catch (Exception err){
+                    e.onError(err);
+                }
             }
         });
     }

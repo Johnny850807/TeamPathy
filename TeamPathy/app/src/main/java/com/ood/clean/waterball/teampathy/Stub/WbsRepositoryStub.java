@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ProjectScope;
 import com.ood.clean.waterball.teampathy.Domain.Model.Project;
+import com.ood.clean.waterball.teampathy.Domain.Model.ReviewTaskCard;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.WbsCommand;
 import com.ood.clean.waterball.teampathy.Domain.Repository.WbsRepository;
@@ -47,6 +48,11 @@ public class WbsRepositoryStub implements WbsRepository {
 
     @Override
     public List<TodoTask> filterTasksByStatus(TodoTask.Status status) throws Exception {
+        return null;
+    }
+
+    @Override
+    public List<ReviewTaskCard> getReviewTaskCards() throws Exception {
         return null;
     }
 
