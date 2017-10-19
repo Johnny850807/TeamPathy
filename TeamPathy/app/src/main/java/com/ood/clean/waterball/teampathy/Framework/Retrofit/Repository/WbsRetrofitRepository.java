@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ood.clean.waterball.teampathy.Domain.DI.Module.Retrofit.RetrofitHelper;
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ProjectScope;
-import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionValidator;
+import com.ood.clean.waterball.teampathy.Domain.Exception.validator.ExceptionValidator;
 import com.ood.clean.waterball.teampathy.Domain.Model.Project;
 import com.ood.clean.waterball.teampathy.Domain.Model.ReviewTaskCard;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask;

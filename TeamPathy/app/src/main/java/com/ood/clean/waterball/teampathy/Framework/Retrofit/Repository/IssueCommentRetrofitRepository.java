@@ -1,7 +1,7 @@
 package com.ood.clean.waterball.teampathy.Framework.Retrofit.Repository;
 
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.IssueScope;
-import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionValidator;
+import com.ood.clean.waterball.teampathy.Domain.Exception.validator.ExceptionValidator;
 import com.ood.clean.waterball.teampathy.Domain.Model.Issue;
 import com.ood.clean.waterball.teampathy.Domain.Model.IssueComment;
 import com.ood.clean.waterball.teampathy.Domain.Model.Project;

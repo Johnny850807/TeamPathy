@@ -1,7 +1,7 @@
 package com.ood.clean.waterball.teampathy.Domain.DI.Module.Retrofit;
 
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.UserScope;
-import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionValidator;
+import com.ood.clean.waterball.teampathy.Domain.Exception.validator.ExceptionValidator;
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
 import com.ood.clean.waterball.teampathy.Domain.Repository.ProjectRepository;
 import com.ood.clean.waterball.teampathy.Framework.Retrofit.Repository.ProjectRetrofitRepository;

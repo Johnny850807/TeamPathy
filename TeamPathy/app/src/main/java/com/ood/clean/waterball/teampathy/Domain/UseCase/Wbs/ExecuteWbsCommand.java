@@ -1,6 +1,5 @@
 package com.ood.clean.waterball.teampathy.Domain.UseCase.Wbs;
 
-import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ProjectScope;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskItem;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskXmlTranslator;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.WbsCommand;
@@ -15,7 +14,7 @@ import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.annotations.NonNull;
 
-@ProjectScope
+
 public class ExecuteWbsCommand extends UseCase<TaskItem,WbsCommand> {
     private WbsRepository wbsRepository;
     private TaskXmlTranslator translator;

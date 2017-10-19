@@ -251,10 +251,7 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
                         getBaseView().showProgressDialog();
                         presenterImp.executeCommand(command);
                     }
-                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {}
-        }).show();
+                }).setNegativeButton(R.string.cancel, null).show();
     }
 
     private void showDialogForAssigningTaskItem(TaskItem taskItem) {

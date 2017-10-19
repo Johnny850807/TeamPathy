@@ -1,4 +1,4 @@
-package com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory;
+package com.ood.clean.waterball.teampathy.Domain.Exception.validator;
 
 
 import com.ood.clean.waterball.teampathy.Framework.Retrofit.Repository.ResponseModel;

@@ -1,8 +1,8 @@
 package com.ood.clean.waterball.teampathy.Domain.DI.Module;
 
 
-import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionValidator;
-import com.ood.clean.waterball.teampathy.Domain.Exception.ConverterFactory.ExceptionValidatorImp;
+import com.ood.clean.waterball.teampathy.Domain.Exception.validator.ExceptionValidator;
+import com.ood.clean.waterball.teampathy.Domain.Exception.validator.ExceptionValidatorImp;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskXmlTranslator;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskXmlTranslatorImp;
 import com.ood.clean.waterball.teampathy.Threading.JobThread;
