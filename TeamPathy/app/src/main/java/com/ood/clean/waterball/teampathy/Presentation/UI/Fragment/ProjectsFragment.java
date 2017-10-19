@@ -58,6 +58,13 @@ public class ProjectsFragment extends BaseFragment implements ProjectsPresenter.
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         inject();
+        init();
+    }
+
+    private void init() {
+        presenter.setProjectsView(this);
+        projectActions = new String[]{getString(R.string.create_a_new_project), getString(R.string.participate_to_exists_project)};
+        progressDialog = TeamPathyDialogFactory.createProgressDialog(getContext());
     }
 
     private void inject() {
@@ -73,15 +80,8 @@ public class ProjectsFragment extends BaseFragment implements ProjectsPresenter.
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        init();
         ButterKnife.bind(this, view);
         setupRecyclerView();
-    }
-
-    private void init() {
-        presenter.setProjectsView(this);
-        projectActions = new String[]{getString(R.string.create_a_new_project), getString(R.string.participate_to_exists_project)};
-        progressDialog = TeamPathyDialogFactory.createProgressDialog(getContext());
     }
 
     private void setupRecyclerView() {

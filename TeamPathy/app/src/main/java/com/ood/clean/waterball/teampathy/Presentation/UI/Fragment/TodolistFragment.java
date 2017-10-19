@@ -51,6 +51,18 @@ public class TodolistFragment extends BaseFragment implements TodoListPresenter.
     String[] todoActions;
     IndexSet<TodoTask> todoList = new IndexSet<>(new TreeSet<TodoTask>());
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        init();
+    }
+
+    private void init() {
+        uncommittedTodoTaskActions = getResources().getStringArray(R.array.member_uncommitted_todolist_actions);
+        undoingTodoTaskActions = getResources().getStringArray(R.array.member_undoing_todolist_actions);
+        todoActions = getResources().getStringArray(R.array.member_todo_todolist_actions);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -61,17 +73,11 @@ public class TodolistFragment extends BaseFragment implements TodoListPresenter.
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         getBaseView().showProgressBar();
-        init();
+        todoList.clear();
         binding(view);
         presenterImp.setTodoListView(this);
         setupRecyclerview();
         presenterImp.loadTodoList();
-    }
-
-    private void init() {
-        uncommittedTodoTaskActions = getResources().getStringArray(R.array.member_uncommitted_todolist_actions);
-        undoingTodoTaskActions = getResources().getStringArray(R.array.member_undoing_todolist_actions);
-        todoActions = getResources().getStringArray(R.array.member_todo_todolist_actions);
     }
 
     private void binding(View view){

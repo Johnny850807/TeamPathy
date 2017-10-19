@@ -56,6 +56,21 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
     private TaskEventVisitor onClickEventVisitor;
     private TaskEventVisitor onLongClickEventVisitor;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        init();
+    }
+
+    private void init() {
+        onClickEventVisitor = new OnClickEventVisitor();
+        onEditEventVisitor = new OnEditEventVisitor();
+        onLongClickEventVisitor = new OnLongClickEventVisitor();
+        todotaskActions = getResources().getStringArray(R.array.wbs_console_todotask_actions);
+        taskGroupActions = getResources().getStringArray(R.array.wbs_console_taskgroup_actions);
+        createTaskTypeActions = getResources().getStringArray(R.array.create_task_type_list);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -66,20 +81,10 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         getBaseView().showProgressDialog();
-        init();
         ButterKnife.bind(this,view);
         MyApp.getWbsComponent(getActivity()).inject(this);
         presenterImp.setWbsView(this);
         setupConsoleView();
-    }
-
-    private void init() {
-        onClickEventVisitor = new OnClickEventVisitor();
-        onEditEventVisitor = new OnEditEventVisitor();
-        onLongClickEventVisitor = new OnLongClickEventVisitor();
-        todotaskActions = getResources().getStringArray(R.array.wbs_console_todotask_actions);
-        taskGroupActions = getResources().getStringArray(R.array.wbs_console_taskgroup_actions);
-        createTaskTypeActions = getResources().getStringArray(R.array.create_task_type_list);
     }
 
     private void setupConsoleView() {
