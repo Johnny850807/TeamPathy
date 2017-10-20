@@ -1,17 +1,27 @@
 package com.ood.clean.waterball.teampathy.Presentation.UI.Fragment;
 
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
+import android.widget.TextView;
 
+import com.ood.clean.waterball.teampathy.Domain.Model.Member.Member;
 import com.ood.clean.waterball.teampathy.Domain.Model.Member.MemberIdCard;
+import com.ood.clean.waterball.teampathy.Domain.Model.Member.Position;
 import com.ood.clean.waterball.teampathy.MyApp;
 import com.ood.clean.waterball.teampathy.MyUtils.TeamPathyDialogFactory;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.OfficePresenter;
@@ -21,21 +31,45 @@ import com.ood.clean.waterball.teampathy.R;
 import com.ood.clean.waterball.teampathy.databinding.MemberIdCardItemBinding;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.ood.clean.waterball.teampathy.MyUtils.MyLog.Log;
+public class OfficeFragment extends BaseFragment implements OfficePresenter.OfficeView, SwipeRefreshLayout.OnRefreshListener, ExpandableListView.OnChildClickListener, ExpandableListView.OnGroupClickListener {
+    private static final int WATCH_TODOLIST = 0;
+    private static final int CHANGE_POSITION = 1;
+    private static final int BOOT_MEMBER = 2;
+    private static final int PROMOTE_AS_MANAGER = 0;
+    private static final int DEMOTE_AS_MEMBER = 1;
+    private static final int HANOVER_LEADER = 2;
 
-public class OfficeFragment extends BaseFragment implements OfficePresenter.OfficeView, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.recyclerview) RecyclerView recyclerView;
     @BindView(R.id.swiperefreshlayout) SwipeRefreshLayout swipeRefreshLayout;
     OfficeAdapter adapter;
+    @Inject Member member;
     @Inject OfficePresenterImp presenterImp;
     List<MemberIdCard> memberCardList = new ArrayList<>();
+    String[] officeOptions;
+    String[] changePositionOptions;
+    AlertDialog officeFunctionDialog;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        init();
+    }
+
+    private void init() {
+        officeOptions = getResources().getStringArray(R.array.office_options);
+        changePositionOptions = getResources().getStringArray(R.array.change_position_options);
+    }
 
     @Nullable
     @Override
@@ -50,6 +84,7 @@ public class OfficeFragment extends BaseFragment implements OfficePresenter.Offi
         getBaseView().showProgressBar();
         binding(view);
         setupRecyclerview();
+        setupOfficeFunctionDialog();
         presenterImp.setOfficeView(this);
         presenterImp.loadAllMemberCards();
     }
@@ -66,6 +101,29 @@ public class OfficeFragment extends BaseFragment implements OfficePresenter.Offi
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
+    }
+
+    private void setupOfficeFunctionDialog() {
+        officeFunctionDialog = TeamPathyDialogFactory.templateBuilder(getActivity())
+                                .setTitle(R.string.select_actions_for_member)
+                                .setView(createExpandableListView())
+                                .create();
+    }
+
+    private ExpandableListView createExpandableListView(){
+        final List<String> headers = Arrays.asList(officeOptions);
+        final Map<String, List<String>> dataset = new HashMap<>();
+
+        dataset.put(headers.get(WATCH_TODOLIST), Collections.<String>emptyList());
+        dataset.put(headers.get(CHANGE_POSITION),  Arrays.asList(changePositionOptions));
+        dataset.put(headers.get(BOOT_MEMBER), Collections.<String>emptyList());
+
+        ExpandableListView epListview = new ExpandableListView(getActivity());
+        epListview.setAdapter(new ExpandableAdapter(getActivity(), headers, dataset));
+        epListview.setOnGroupClickListener(this);
+        epListview.setOnChildClickListener(this);
+        epListview.expandGroup(CHANGE_POSITION);
+        return epListview;
     }
 
     @Override
@@ -105,6 +163,45 @@ public class OfficeFragment extends BaseFragment implements OfficePresenter.Offi
         presenterImp.onDestroy();
     }
 
+    @Override
+    public boolean onGroupClick(ExpandableListView expandableListView, View view, int position, long l) {
+        switch (position)
+        {
+            case WATCH_TODOLIST:
+                Log.d("office", "go watch todolist.");
+                break;
+            case BOOT_MEMBER:
+                Log.d("office", "booting member.");
+                break;
+        }
+        officeFunctionDialog.dismiss();
+        return true;
+    }
+
+    @Override
+    public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long l) {
+        if (groupPosition != CHANGE_POSITION)
+            throw new IllegalStateException("The only group having the child options is at the position of " + CHANGE_POSITION + ", getting " + groupPosition);
+
+        switch (childPosition)
+        {
+            case PROMOTE_AS_MANAGER:
+                Log.d("office", "promoting the member as a manager");
+                break;
+            case DEMOTE_AS_MEMBER:
+                Log.d("office", "demote the member as a normal member");
+                break;
+            case HANOVER_LEADER:
+                Log.d("office", "the handover beginning of the position of the leader");
+                break;
+            default:
+                return false;
+        }
+        officeFunctionDialog.dismiss();
+        return true;
+    }
+
+
     public class OfficeAdapter extends RecyclerView.Adapter<BindingViewHolder>{
 
         @Override
@@ -127,8 +224,8 @@ public class OfficeFragment extends BaseFragment implements OfficePresenter.Offi
                 @Override
                 public void onClick(View view) {
                     MemberIdCard memberIdCard = memberCardList.get(position);
-                    Log("Card on click " + memberIdCard.getMember().getUser().getName());
-                    //todo when card on click, scale to show the details of member
+                    Log.d("office", "Card on click " + memberIdCard.getMember().getUser().getName());
+                    officeFunctionDialog.show();
                 }
             });
         }
@@ -137,6 +234,92 @@ public class OfficeFragment extends BaseFragment implements OfficePresenter.Offi
         public int getItemCount() {
             return memberCardList.size();
         }
+    }
+
+
+    /**
+     * This expandable adapter used for creating the expandablelistview within the alertdialog that
+     * showing all the functionalities member can do to the specified member.
+     */
+    private class ExpandableAdapter extends BaseExpandableListAdapter {
+        private Context context;
+        private List<String> parent;
+        private Map<String, List<String>> bindDataset;
+
+        public ExpandableAdapter(Context context, List<String> listDataHeader,
+                                   Map<String, List<String>> bindDataset) {
+            this.context = context;
+            this.parent = listDataHeader;
+            this.bindDataset = bindDataset;
+        }
+
+        @Override
+        public int getGroupCount() {
+            // if the user is not the leader of the project, the changing position group option should not exist.
+            return member.getMemberDetails().getPosition() == Position.leader ? officeOptions.length : 1;
+        }
+
+        @Override
+        public int getChildrenCount(int groupPosition) {
+            return this.bindDataset.get(this.parent.get(groupPosition))
+                    .size();
+        }
+
+        @Override
+        public Object getGroup(int groupPosition) {
+            return this.parent.get(groupPosition);
+        }
+
+        @Override
+        public Object getChild(int groupPosition, int childPosition) {
+            return this.bindDataset.get(this.parent.get(groupPosition))
+                    .get(childPosition);
+        }
+
+        @Override
+        public long getGroupId(int groupPosition) {
+            return groupPosition;
+        }
+
+        @Override
+        public long getChildId(int groupPosition, int childPosition) {
+            return childPosition;
+        }
+
+        @Override
+        public boolean hasStableIds() {
+            return false;
+        }
+
+        @Override
+        public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+            TextView textView = new TextView(context);
+            textView.setGravity(Gravity.CENTER_HORIZONTAL);
+            textView.setTextSize(25);
+            textView.setPadding(12, 35, 12 ,35);
+            String text = (String) getGroup(groupPosition);
+            textView.setText(text);
+            return textView;
+        }
+
+        @Override
+        public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+            TextView textView = new TextView(context);
+            textView.setGravity(Gravity.CENTER_HORIZONTAL);
+            textView.setTextSize(20);
+            textView.setPadding(1, 5, 1 ,5);
+            textView.setBackgroundColor(Color.parseColor("#FFDBF8FA"));
+            textView.setTextColor(getResources().getColor(R.color.app_black_word_color));
+            String text = (String) getChild(groupPosition, childPosition);
+            textView.setText(text);
+            return textView;
+        }
+
+        @Override
+        public boolean isChildSelectable(int groupPosition, int childPosition) {
+            return true;
+        }
+
     }
 
 }

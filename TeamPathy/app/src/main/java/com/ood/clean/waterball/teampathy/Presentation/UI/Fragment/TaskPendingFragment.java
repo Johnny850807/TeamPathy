@@ -48,6 +48,16 @@ public class TaskPendingFragment extends BaseFragment implements ReviewTaskPrese
     List<ReviewTaskCard> reviewTaskCards = new ArrayList<>();
     String[] reviewOptions;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        init();
+    }
+
+    private void init(){
+        reviewOptions = getResources().getStringArray(R.array.review_task_options);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -57,14 +67,9 @@ public class TaskPendingFragment extends BaseFragment implements ReviewTaskPrese
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        init();
         bind(view);
         presenterImp.setReviewTaskView(this);
         presenterImp.loadReviewTaskCard();
-    }
-
-    private void init(){
-        reviewOptions = getResources().getStringArray(R.array.review_task_options);
     }
 
     private void bind(View view) {

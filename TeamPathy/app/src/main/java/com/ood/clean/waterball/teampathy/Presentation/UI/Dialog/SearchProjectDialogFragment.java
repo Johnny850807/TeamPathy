@@ -9,6 +9,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -170,6 +171,7 @@ public class SearchProjectDialogFragment extends DialogFragment  implements Sear
 
             private void createDialogForInputingPassword(final Project project) {
                 final EditText passwordEd = new EditText(getContext());
+                passwordEd.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 passwordEd.setLayoutParams(new RelativeLayout.LayoutParams(
                         RelativeLayout.LayoutParams.MATCH_PARENT,
                         RelativeLayout.LayoutParams.WRAP_CONTENT
