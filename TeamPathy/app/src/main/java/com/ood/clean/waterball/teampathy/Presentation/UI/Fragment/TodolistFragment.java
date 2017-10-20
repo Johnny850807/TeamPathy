@@ -19,7 +19,6 @@ import com.ood.clean.waterball.teampathy.Domain.Model.User;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskItem;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask;
 import com.ood.clean.waterball.teampathy.MyApp;
-import com.ood.clean.waterball.teampathy.MyUtils.IndexSet;
 import com.ood.clean.waterball.teampathy.MyUtils.TeamPathyDialogFactory;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.TodoListPresenter;
 import com.ood.clean.waterball.teampathy.Presentation.Presenter.TodolistPresenterImp;
@@ -27,7 +26,9 @@ import com.ood.clean.waterball.teampathy.Presentation.UI.Adapter.BindingViewHold
 import com.ood.clean.waterball.teampathy.R;
 import com.ood.clean.waterball.teampathy.databinding.TodotaskItemBinding;
 
-import java.util.TreeSet;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -49,7 +50,7 @@ public class TodolistFragment extends BaseFragment implements TodoListPresenter.
     String[] uncommittedTodoTaskActions;
     String[] undoingTodoTaskActions;
     String[] todoActions;
-    IndexSet<TodoTask> todoList = new IndexSet<>(new TreeSet<TodoTask>());
+    List<TodoTask> todoList = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -97,6 +98,7 @@ public class TodolistFragment extends BaseFragment implements TodoListPresenter.
     @Override
     public void loadTodoTask(TodoTask todoTask) {
         todoList.add(todoTask);
+        Collections.sort(todoList);
         adapter.notifyDataSetChanged();
     }
 

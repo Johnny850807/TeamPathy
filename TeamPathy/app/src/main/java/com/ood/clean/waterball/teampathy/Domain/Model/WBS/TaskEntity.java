@@ -55,16 +55,30 @@ public abstract class TaskEntity implements TaskItem{
     }
 
     @Override
-    public boolean equals(Object obj) {
-        //todo should also compare to the root to check if they are in the same tree
-        TaskItem task = (TaskItem) obj;
-        return getName().equals(task.getName())
-                && (hasChild() == task.hasChild());
-    }
-
-    @Override
     public int hashCode() {
-        return (getRoot().getName() + getName() + hasChild()).hashCode();
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
+        result = prime * result + (hasChild() ? 1231 : 1237);
+        return result;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        TaskEntity other = (TaskEntity) obj;
+        if (getName() == null) {
+            if (other.getName() != null)
+                return false;
+        } else if (!getName().equals(other.getName()))
+            return false;
+        if (hasChild() != other.hasChild())
+            return false;
+        return true;
     }
 
     @Override

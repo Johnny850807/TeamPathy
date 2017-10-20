@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 
 import com.google.gson.Gson;
 import com.ood.clean.waterball.teampathy.Domain.Model.Member.MemberIdCard;
-import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskItem;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.WbsCommand;
 import com.ood.clean.waterball.teampathy.MyApp;
@@ -43,10 +42,10 @@ public class AssignTaskDialogFragment extends DialogFragment implements AssignTa
     private MyAdpater adpater;
     private List<MemberIdCard> memberCardList = new ArrayList<>();
     private WbsConsolePresenterImp wbsPresenter;
-    private TaskItem todoTask;
+    private TodoTask todoTask;
     @Inject AssignTaskPresenterImp assignTaskPresenter;
 
-    public static AssignTaskDialogFragment getInstance(TaskItem todoTask){
+    public static AssignTaskDialogFragment getInstance(TodoTask todoTask){
         AssignTaskDialogFragment fragment = new AssignTaskDialogFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(TODOTASK, todoTask);
@@ -65,7 +64,7 @@ public class AssignTaskDialogFragment extends DialogFragment implements AssignTa
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        todoTask = (TaskItem) getArguments().getSerializable(TODOTASK);
+        todoTask = (TodoTask) getArguments().getSerializable(TODOTASK);
     }
 
     @Override
@@ -156,12 +155,17 @@ public class AssignTaskDialogFragment extends DialogFragment implements AssignTa
 
     private void assignTaskAndDismiss(MemberIdCard card){
         int memberId = card.getMember().getUser().getId();
-        todoTask.setAssignedId(memberId);
-        todoTask.setStatus(TodoTask.Status.assigned);
-        WbsCommand command = WbsCommand.updateTaskItem(todoTask.getName(), todoTask);
-        Log.d("wbs", new Gson().toJson(command));
-        baseView.showProgressDialog();
-        wbsPresenter.executeCommand(command);
-        dismiss();
+        try {
+            TodoTask copy = todoTask.clone();  // cannot update the original todotask before the operation succeed, so we need the copied one.
+            copy.setAssignedId(memberId);
+            copy.setStatus(TodoTask.Status.assigned);
+            WbsCommand command = WbsCommand.updateTaskItem(copy.getName(), copy);
+            Log.d("wbs", new Gson().toJson(command));
+            baseView.showProgressDialog();
+            wbsPresenter.executeCommand(command);
+            dismiss();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
     }
 }

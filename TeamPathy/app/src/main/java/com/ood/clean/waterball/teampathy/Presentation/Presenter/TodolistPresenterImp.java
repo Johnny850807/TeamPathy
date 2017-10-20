@@ -41,10 +41,8 @@ public class TodolistPresenterImp implements TodoListPresenter {
             public void onNext(@NonNull TodoTask todoTask) {
                 todoListView.loadTodoTask(todoTask);
             }
-
             @Override
             public void onComplete() {
-                super.onComplete();
                 todoListView.onLoadFinishNotify();
             }
 

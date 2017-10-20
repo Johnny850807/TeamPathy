@@ -195,20 +195,18 @@ public class TodoTask extends TaskEntity implements TaskItem, Cloneable, Compara
         return (TodoTask)super.clone();
     }
 
+
     @Override
     public int compareTo(@NonNull TodoTask todoTask) {
-        //todo correct the compare algorithm
-        // doing => assigned => pending => pass
-        // compare the end date if both have a same status
-        if ( (todoTask.getStatus() == Status.pass || todoTask.getStatus() == Status.pending || this.status == Status.doing)
-                && this.getStatus() != todoTask.getStatus())
-            return -1;
+        // doing => none => assigned => pending => pass should be the order in the list
+        if (this.getStatus().ordinal() != todoTask.getStatus().ordinal())
+            return this.getStatus().ordinal() - todoTask.getStatus().ordinal();
 
-        return this.endDate.compareTo(todoTask.getEndDate());
+        return this.endDate.compareTo(todoTask.getEndDate()); // sort by the end date, one have the nearer end date should be te front.
     }
 
     public enum Status{
-        none("none"), assigned("assigned"), doing("doing"), pending("pending"), pass("pass");
+        doing("doing"), none("none"), assigned("assigned"),  pending("pending"), pass("pass");
         private String attr;
         private Status(String attr) {
             this.attr = attr;

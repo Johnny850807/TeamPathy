@@ -1,5 +1,7 @@
 package com.ood.clean.waterball.teampathy.Domain.UseCase.Wbs;
 
+import android.util.Log;
+
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ProjectScope;
 import com.ood.clean.waterball.teampathy.Domain.Model.Member.Member;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask;
@@ -34,7 +36,11 @@ public class GetMemberTodoList extends UseCase<TodoTask,Member> {
             public void subscribe(@NonNull ObservableEmitter<TodoTask> e) throws Exception {
                 List<TodoTask> todoTaskList = wbsRepository.getTodolist(member.getUser().getId());
                 for (TodoTask todoTask : todoTaskList)
+                {
                     e.onNext(todoTask);
+                    Log.d("wbs", "Todotask " + todoTask.getName() + ", hashcode : " + todoTask.hashCode());
+                }
+
                 e.onComplete();
             }
         });

@@ -260,7 +260,7 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
     }
 
     private void showDialogForAssigningTaskItem(TaskItem taskItem) {
-        AssignTaskDialogFragment fragment = AssignTaskDialogFragment.getInstance(taskItem);
+        AssignTaskDialogFragment fragment = AssignTaskDialogFragment.getInstance((TodoTask) taskItem);
         fragment.setWbsPresenter(presenterImp);
         fragment.setBaseView(getBaseView());
         showAlertDialogFragment(fragment);
