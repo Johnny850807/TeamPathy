@@ -239,8 +239,12 @@ public class OfficeFragment extends BaseFragment implements OfficePresenter.Offi
                 @Override
                 public void onClick(View view) {
                     MemberIdCard memberIdCard = memberCardList.get(position);
+                    // don't click own self
+                    if (memberIdCard.getMember().getUser().getId() != member.getUser().getId())
+                        officeFunctionDialog.show();
+
                     Log.d("office", "Card on click " + memberIdCard.getMember().getUser().getName());
-                    officeFunctionDialog.show();
+
                 }
             });
         }
