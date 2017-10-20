@@ -114,16 +114,29 @@ public class OfficeFragment extends BaseFragment implements OfficePresenter.Offi
         final List<String> headers = Arrays.asList(officeOptions);
         final Map<String, List<String>> dataset = new HashMap<>();
 
+        BaseExpandableListAdapter adapter = new ExpandableAdapter(getActivity(), headers, dataset);
+
         dataset.put(headers.get(WATCH_TODOLIST), Collections.<String>emptyList());
-        dataset.put(headers.get(CHANGE_POSITION),  Arrays.asList(changePositionOptions));
         dataset.put(headers.get(BOOT_MEMBER), Collections.<String>emptyList());
 
         ExpandableListView epListview = new ExpandableListView(getActivity());
-        epListview.setAdapter(new ExpandableAdapter(getActivity(), headers, dataset));
+        epListview.setGroupIndicator(null);
+        epListview.setAdapter(adapter);
+
+        expandAndAddPositionChangingHeaderIfLeader(headers, dataset, epListview);
+
         epListview.setOnGroupClickListener(this);
         epListview.setOnChildClickListener(this);
-        epListview.expandGroup(CHANGE_POSITION);
         return epListview;
+    }
+
+    private void expandAndAddPositionChangingHeaderIfLeader(List<String> headers,  Map<String, List<String>> dataset, ExpandableListView epListview){
+        if (member.getMemberDetails().getPosition() == Position.leader)
+        {
+            dataset.put(headers.get(CHANGE_POSITION),  Arrays.asList(changePositionOptions));
+            adapter.notifyDataSetChanged();
+            epListview.expandGroup(CHANGE_POSITION);
+        }
     }
 
     @Override
@@ -173,6 +186,8 @@ public class OfficeFragment extends BaseFragment implements OfficePresenter.Offi
             case BOOT_MEMBER:
                 Log.d("office", "booting member.");
                 break;
+            case CHANGE_POSITION:
+                return true;
         }
         officeFunctionDialog.dismiss();
         return true;
@@ -255,8 +270,7 @@ public class OfficeFragment extends BaseFragment implements OfficePresenter.Offi
 
         @Override
         public int getGroupCount() {
-            // if the user is not the leader of the project, the changing position group option should not exist.
-            return member.getMemberDetails().getPosition() == Position.leader ? officeOptions.length : 1;
+            return parent.size();
         }
 
         @Override
@@ -299,6 +313,9 @@ public class OfficeFragment extends BaseFragment implements OfficePresenter.Offi
             textView.setPadding(12, 35, 12 ,35);
             String text = (String) getGroup(groupPosition);
             textView.setText(text);
+
+            if (groupPosition == CHANGE_POSITION && member.getMemberDetails().getPosition() != Position.leader) // only leader can select this option
+                textView.setEnabled(false);
             return textView;
         }
 
