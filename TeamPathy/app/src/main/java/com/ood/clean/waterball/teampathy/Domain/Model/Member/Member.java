@@ -19,6 +19,10 @@ public class Member {
         return new Member(user,memberDetails);
     }
 
+    public int getUserId(){
+        return user.getId();
+    }
+
     public User getUser() {
         return user;
     }

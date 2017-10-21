@@ -57,8 +57,9 @@ public class RetrofitProjectModule {
     @Provides @ProjectScope
     public OfficeRepository provideOfficeRepository(ExceptionValidator exceptionValidator,
                                                     @Named("WbsRetrofit") Retrofit retrofit,
+                                                    User user,
                                                     Project project){
-        return new OfficeRetrofitRepository(exceptionValidator, retrofit, project);
+        return new OfficeRetrofitRepository(exceptionValidator, retrofit, user, project);
     }
 
     @Provides @ProjectScope

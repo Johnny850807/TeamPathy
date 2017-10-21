@@ -1,12 +1,10 @@
 package com.ood.clean.waterball.teampathy.Domain.UseCase.Office;
 
+import com.ood.clean.waterball.teampathy.Domain.Model.Member.Member;
 import com.ood.clean.waterball.teampathy.Domain.Model.Member.Position;
-import com.ood.clean.waterball.teampathy.Domain.Model.User;
 import com.ood.clean.waterball.teampathy.Domain.Repository.OfficeRepository;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Base.UseCase;
 import com.ood.clean.waterball.teampathy.Threading.ThreadingObservableFactory;
-
-import java.lang.reflect.Member;
 
 import javax.inject.Inject;
 
@@ -15,14 +13,11 @@ import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.annotations.NonNull;
 
-/**
- * Created by Lin on 2017/7/16.
- */
 
-public class ChangeMemberPosition extends UseCase<Void, ChangeMemberPosition.Params> {
+
+public class ChangeMemberPosition extends UseCase<Member, ChangeMemberPosition.Params> {
 
     private OfficeRepository officeRepository;
-    private Member member;
 
     @Inject
     public ChangeMemberPosition(ThreadingObservableFactory threadingObservableFactory, OfficeRepository officeRepository) {
@@ -31,38 +26,37 @@ public class ChangeMemberPosition extends UseCase<Void, ChangeMemberPosition.Par
     }
 
     @Override
-    protected Observable<Void> buildUseCaseObservable(final ChangeMemberPosition.Params params) {
-        return Observable.create(new ObservableOnSubscribe<Void>() {
+    protected Observable<Member> buildUseCaseObservable(final ChangeMemberPosition.Params params) {
+        return Observable.create(new ObservableOnSubscribe<Member>() {
             @Override
-            public void subscribe(@NonNull ObservableEmitter<Void> e) throws Exception {
-                officeRepository.changeMemberPosition(params.getUser().getId(), params.getPosition());
+            public void subscribe(@NonNull ObservableEmitter<Member> e) throws Exception {
+                Member member = officeRepository.changeMemberPosition(params.getUserId(), params.getPosition());
+                e.onNext(member);
+                e.onComplete();
             }
-        }); //todo
+        });
     }
 
     public static class Params{
-        private User user;
+        private Member member;
         private Position position;
 
-        public Params(User user, Position position) {
-            this.user = user;
+        public Params(Member member, Position position) {
+            this.member = member;
             this.position = position;
         }
 
-        public User getUser() {
-            return user;
+        public Member getMember() {
+            return member;
         }
 
-        public void setUser(User user) {
-            this.user = user;
-        }
 
         public Position getPosition() {
             return position;
         }
 
-        public void setPosition(Position position) {
-            this.position = position;
+        public int getUserId(){
+            return member.getUserId();
         }
     }
 }

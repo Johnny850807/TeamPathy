@@ -53,12 +53,13 @@ public class OfficeFragment extends BaseFragment implements OfficePresenter.Offi
     @BindView(R.id.recyclerview) RecyclerView recyclerView;
     @BindView(R.id.swiperefreshlayout) SwipeRefreshLayout swipeRefreshLayout;
     OfficeAdapter adapter;
-    @Inject Member member;
+    @Inject Member currentUser;
     @Inject OfficePresenterImp presenterImp;
     List<MemberIdCard> memberCardList = new ArrayList<>();
     String[] officeOptions;
     String[] changePositionOptions;
     AlertDialog officeFunctionDialog;
+    Member selectedMember;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -131,7 +132,7 @@ public class OfficeFragment extends BaseFragment implements OfficePresenter.Offi
     }
 
     private void expandAndAddPositionChangingHeaderIfLeader(List<String> headers,  Map<String, List<String>> dataset, ExpandableListView epListview){
-        if (member.getMemberDetails().getPosition() == Position.leader)
+        if (currentUser.getMemberDetails().getPosition() == Position.leader)
         {
             dataset.put(headers.get(CHANGE_POSITION),  Arrays.asList(changePositionOptions));
             adapter.notifyDataSetChanged();
@@ -146,6 +147,18 @@ public class OfficeFragment extends BaseFragment implements OfficePresenter.Offi
     }
 
     @Override
+    public void onMemberInfoUpdated(Member member) {
+        for (MemberIdCard card : memberCardList)
+            if (card.getUserId() == member.getUserId())
+            {
+                card.setMember(member);
+                break;
+            }
+
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
     public void onLoadFinish() {
         getBaseView().hideProgressBar();
         swipeRefreshLayout.setRefreshing(false);
@@ -154,6 +167,18 @@ public class OfficeFragment extends BaseFragment implements OfficePresenter.Offi
     @Override
     public void onOperationTimeout(Throwable err) {
         TeamPathyDialogFactory.networkErrorDialogBuilder(getActivity()).setMessage(err.getMessage()).show();
+    }
+
+    @Override
+    public void onMemberBootedCompleted(Member member) {
+        for (int i = 0 ; i < memberCardList.size() ; i ++)
+            if (memberCardList.get(i).getUserId() == member.getUserId())
+            {
+                memberCardList.remove(i);
+                break;
+            }
+
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -184,9 +209,10 @@ public class OfficeFragment extends BaseFragment implements OfficePresenter.Offi
                 Log.d("office", "go watch todolist.");
                 break;
             case BOOT_MEMBER:
-                Log.d("office", "booting member.");
+                Log.d("office", "booting currentUser.");
+                presenterImp.bootMember(selectedMember);
                 break;
-            case CHANGE_POSITION:
+            case CHANGE_POSITION: // no action on clicking the header of change position
                 return true;
         }
         officeFunctionDialog.dismiss();
@@ -201,13 +227,16 @@ public class OfficeFragment extends BaseFragment implements OfficePresenter.Offi
         switch (childPosition)
         {
             case PROMOTE_AS_MANAGER:
-                Log.d("office", "promoting the member as a manager");
+                Log.d("office", "promoting the currentUser as a manager");
+                presenterImp.changeMemberPosition(selectedMember, Position.manager);
                 break;
             case DEMOTE_AS_MEMBER:
-                Log.d("office", "demote the member as a normal member");
+                Log.d("office", "demote the currentUser as a normal currentUser");
+                presenterImp.changeMemberPosition(selectedMember, Position.member);
                 break;
             case HANOVER_LEADER:
                 Log.d("office", "the handover beginning of the position of the leader");
+                presenterImp.leaderHandover(selectedMember);
                 break;
             default:
                 return false;
@@ -239,8 +268,10 @@ public class OfficeFragment extends BaseFragment implements OfficePresenter.Offi
                 @Override
                 public void onClick(View view) {
                     MemberIdCard memberIdCard = memberCardList.get(position);
+                    selectedMember = memberIdCard.getMember();
+
                     // don't click own self
-                    if (memberIdCard.getMember().getUser().getId() != member.getUser().getId())
+                    if (selectedMember.getUserId() != currentUser.getUserId())
                         officeFunctionDialog.show();
 
                     Log.d("office", "Card on click " + memberIdCard.getMember().getUser().getName());
@@ -258,7 +289,7 @@ public class OfficeFragment extends BaseFragment implements OfficePresenter.Offi
 
     /**
      * This expandable adapter used for creating the expandablelistview within the alertdialog that
-     * showing all the functionalities member can do to the specified member.
+     * showing all the functionalities currentUser can do to the specified currentUser.
      */
     private class ExpandableAdapter extends BaseExpandableListAdapter {
         private Context context;
@@ -318,7 +349,7 @@ public class OfficeFragment extends BaseFragment implements OfficePresenter.Offi
             String text = (String) getGroup(groupPosition);
             textView.setText(text);
 
-            if (groupPosition == CHANGE_POSITION && member.getMemberDetails().getPosition() != Position.leader) // only leader can select this option
+            if (groupPosition == CHANGE_POSITION && currentUser.getMemberDetails().getPosition() != Position.leader) // only leader can select this option
                 textView.setEnabled(false);
             return textView;
         }

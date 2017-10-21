@@ -8,14 +8,12 @@ import com.ood.clean.waterball.teampathy.Threading.ThreadingObservableFactory;
 import java.io.File;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.annotations.NonNull;
 
-@Singleton
 public class UploadImage extends UseCase<String,File> {
     private ImageUploadRepository imageUploadRepository;
 

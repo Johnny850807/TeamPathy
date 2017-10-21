@@ -1,6 +1,6 @@
 package com.ood.clean.waterball.teampathy.Domain.Repository;
 
-import com.ood.clean.waterball.teampathy.Domain.Model.Member.MemberDetails;
+import com.ood.clean.waterball.teampathy.Domain.Model.Member.Member;
 import com.ood.clean.waterball.teampathy.Domain.Model.Member.MemberIdCard;
 import com.ood.clean.waterball.teampathy.Domain.Model.Member.Position;
 
@@ -12,11 +12,11 @@ public interface OfficeRepository{
 
     List<MemberIdCard> getMemberIdCardList() throws Exception;
 
-    MemberDetails getMemberDetails(int userId) throws Exception;
+    Member changeMemberPosition(int userId, Position position) throws Exception;
 
-    MemberDetails changeMemberPosition(int userId, Position position) throws Exception;
+    Member leaderHandover(int memberId) throws Exception;
 
-    void evictMember(int userId) throws Exception;
+    void bootMember(int userId) throws Exception;
 
     void notifyAllMembers(String content) throws Exception;
 

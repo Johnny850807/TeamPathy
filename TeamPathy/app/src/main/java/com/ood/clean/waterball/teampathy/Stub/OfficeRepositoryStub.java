@@ -51,18 +51,19 @@ public class OfficeRepositoryStub implements OfficeRepository {
         return memberIdCardModelList;
     }
 
+
     @Override
-    public MemberDetails getMemberDetails(int userId) throws Exception {
-        return new MemberDetails(Position.member,700);
+    public Member changeMemberPosition(int userId, Position position) throws Exception {
+        throw new RuntimeException("Not supported.");
     }
 
     @Override
-    public MemberDetails changeMemberPosition(int userId, Position position) throws Exception {
-        return new MemberDetails(position,700);
+    public Member leaderHandover(int memberId) throws Exception {
+        return null;
     }
 
     @Override
-    public void evictMember(int userId) throws Exception {
+    public void bootMember(int userId) throws Exception {
         //todo
     }
 

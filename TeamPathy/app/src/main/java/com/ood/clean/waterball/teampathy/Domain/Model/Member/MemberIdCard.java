@@ -34,4 +34,8 @@ public class MemberIdCard {
     public Position getPosition(){
         return member.getMemberDetails().getPosition();
     }
+
+    public int getUserId(){
+        return member.getUserId();
+    }
 }

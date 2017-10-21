@@ -145,7 +145,7 @@ public class ProjectsFragment extends BaseFragment implements ProjectsPresenter.
         if (searchProjectDialogFragment != null)
             searchProjectDialogFragment.dismiss();
 
-        // join to the project should be a member at first
+        // join to the project should be a currentUser at first
         Member member = Member.create(user, Position.member);
         MyApp.createProjectComponent(getActivity(),project,member);
         getBaseView().getPageController().changePage(new TabLayoutFragment());

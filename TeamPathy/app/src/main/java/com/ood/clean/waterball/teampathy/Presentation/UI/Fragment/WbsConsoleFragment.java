@@ -203,7 +203,7 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
 
     private void showDialogListForTaskItemOnLongClickActions(final String[] actions, final TaskItem taskItem) {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, actions);
-        if (member.isManager()) // if the member is not a management level position, he can't do anything
+        if (member.isManager()) // if the currentUser is not a management level position, he can't do anything
             TeamPathyDialogFactory.templateBuilder(getActivity())
                     .setAdapter(adapter, new DialogInterface.OnClickListener() {
                         @Override
