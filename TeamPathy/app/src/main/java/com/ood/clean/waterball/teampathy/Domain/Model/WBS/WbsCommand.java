@@ -19,8 +19,8 @@ public class WbsCommand {
     }
 
     private Data parseData(TaskItem data){
-        return new Data(data.getName(), data.getAssignedId(), data.getDescription(),
-                data.getStartDate(), data.getEndDate(), data.getContribution(), data.getDependency(), data.getStatus());
+        return new Data(data.getName(), data.getAssignedId(), data.getAssignedUserImageUrl(), data.getDescription(),
+                data.getStartDate(), data.getEndDate(), data.getContribution(), data.getDependency(),  data.getStatus());
     }
 
     public static WbsCommand createTaskChild(String parentName, TaskItem data){
@@ -58,9 +58,10 @@ public class WbsCommand {
         private Date endDate;
         private int contribution;
         private String dependency;
+        private String assignedUserImageUrl;
         private TodoTask.Status status;
 
-        public Data(String name, int assignedId, String description, Date startDate, Date endDate, int contribution, String dependency, TodoTask.Status status) {
+        public Data(String name, int assignedId,  String assignedUserImageUrl, String description, Date startDate, Date endDate, int contribution, String dependency, TodoTask.Status status) {
             this.name = name;
             this.assignedId = assignedId;
             this.description = description;
@@ -68,7 +69,24 @@ public class WbsCommand {
             this.endDate = endDate;
             this.contribution = contribution;
             this.dependency = dependency;
+            this.assignedUserImageUrl = assignedUserImageUrl;
             this.status = status;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public void setAssignedUserImageUrl(String assignedUserImageUrl) {
+            this.assignedUserImageUrl = assignedUserImageUrl;
+        }
+
+        public String getAssignedUserImageUrl() {
+            return assignedUserImageUrl;
         }
 
         public int getAssignedId() {

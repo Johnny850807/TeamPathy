@@ -158,6 +158,7 @@ public class AssignTaskDialogFragment extends DialogFragment implements AssignTa
         try {
             TodoTask copy = todoTask.clone();  // cannot update the original todotask before the operation succeed, so we need the copied one.
             copy.setAssignedId(memberId);
+            copy.setAssignedUserImageUrl(card.getMember().getUser().getImageUrl());
             copy.setStatus(TodoTask.Status.assigned);
             WbsCommand command = WbsCommand.updateTaskItem(copy.getName(), copy);
             Log.d("wbs", new Gson().toJson(command));

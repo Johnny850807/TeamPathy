@@ -78,8 +78,7 @@
             android:id="@+id/dependencySpin"
             android:layout_width="230dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-             />
+            android:layout_gravity="center_horizontal" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="230dp"

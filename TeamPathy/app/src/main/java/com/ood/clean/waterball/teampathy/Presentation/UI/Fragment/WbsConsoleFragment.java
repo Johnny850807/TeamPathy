@@ -30,6 +30,8 @@ import com.ood.clean.waterball.teampathy.R;
 
 import org.apmem.tools.layouts.FlowLayout;
 
+import java.util.ArrayList;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -171,9 +173,17 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
 
 
     private void showDialogForCreatingTodoTask(TaskItem parent) {
-        CreateTodoTaskDialogFragment fragment = CreateTodoTaskDialogFragment.newInstance(parent.getName());
+        CreateTodoTaskDialogFragment fragment = CreateTodoTaskDialogFragment.newInstance(getAllTodoTasks(), parent.getName());
         fragment.setBaseView(getBaseView());
         showAlertDialogFragment(fragment);
+    }
+
+    private ArrayList<TodoTask> getAllTodoTasks(){
+        ArrayList<TodoTask> allTodoTasks = new ArrayList<>();
+        for (TaskItem taskItem : taskRoot)
+            if (!taskItem.hasChild()) // no child means a todotask
+                allTodoTasks.add((TodoTask) taskItem);
+        return allTodoTasks;
     }
 
     private void showDialogForCreateTaskChild(TaskItem parent) {

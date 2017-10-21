@@ -38,10 +38,10 @@ public class OfficeRepositoryStub implements OfficeRepository {
         Member memberZheng = new Member(zheng,new MemberDetails(Position.member,700));
         User chia = new User("花柳齋","http://i.imgur.com/DuhZSwy.png");
         Member memberchia = new Member(chia,new MemberDetails(Position.member,600));
-        TodoTask todoTask1 = new TodoTask("ER圖設計","設計","資料庫設計",330, "",TodoTask.Status.assigned,0);
-        TodoTask todoTask4 = new TodoTask("Android架構","實作","架構實作",1500, "", TodoTask.Status.assigned,0);
-        TodoTask todoTask2 = new TodoTask("API 學習","實作","API文件閱讀實作",170, "", TodoTask.Status.assigned,1);
-        TodoTask todoTask3 = new TodoTask("初審文案整理","文案","展出整理",400, "", TodoTask.Status.assigned,1);
+        TodoTask todoTask1 = new TodoTask("ER圖設計","設計","資料庫設計",330, "",TodoTask.Status.assigned,0, "");
+        TodoTask todoTask4 = new TodoTask("Android架構","實作","架構實作",1500, "", TodoTask.Status.assigned,0, "");
+        TodoTask todoTask2 = new TodoTask("API 學習","實作","API文件閱讀實作",170, "", TodoTask.Status.assigned,1, "");
+        TodoTask todoTask3 = new TodoTask("初審文案整理","文案","展出整理",400, "", TodoTask.Status.assigned,1, "");
 
         List<MemberIdCard> memberIdCardModelList = new ArrayList<>();
         memberIdCardModelList.add(new MemberIdCard(memberZong,todoTask2));

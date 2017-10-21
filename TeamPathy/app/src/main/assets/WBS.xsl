@@ -23,15 +23,10 @@
                         var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));
                         chart.draw(data, { allowHtml: true });
                     }
-                        
+
             </script>
-            <style>
-			body{
-				background-color:'#01190C';
-			}
-			</style>
         </head>
-        <body>
+        <body style="background-color: #01190C;">
             <div id="chart_div"></div>
         </body>
     </xsl:template>
