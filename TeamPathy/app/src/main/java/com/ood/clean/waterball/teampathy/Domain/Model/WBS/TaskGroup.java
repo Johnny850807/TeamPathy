@@ -17,6 +17,16 @@ public class TaskGroup extends TaskEntity implements TaskItem {
 	}
 
 	@Override
+	public String getAssignedUserImageUrl() {
+		throw new RuntimeException("Not supported");
+	}
+
+	@Override
+	public void setAssignedUserImageUrl(String assignedUserImageUrl) {
+		throw new RuntimeException("Not supported");
+	}
+
+	@Override
 	public List<TaskItem> toList() {
 		List<TaskItem> list = new ArrayList<>();
         list.add(this);

@@ -15,6 +15,10 @@ public interface TaskItem extends Iterable<TaskItem>, Serializable{
 
     public void setRoot(TaskItem root);
 
+    public String getAssignedUserImageUrl();
+
+    public void setAssignedUserImageUrl(String assignedUserImageUrl);
+
     public List<TaskItem> toList();
 
     public void addTaskChild(TaskItem taskItem);

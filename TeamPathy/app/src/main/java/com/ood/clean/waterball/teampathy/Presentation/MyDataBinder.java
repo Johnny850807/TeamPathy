@@ -6,6 +6,8 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.ood.clean.waterball.teampathy.MyUtils.GlideHelper;
 
+import us.feras.mdv.MarkdownView;
+
 /*
 * The binder to help Android data binding.
  */
@@ -23,5 +25,10 @@ public final class MyDataBinder {
     @BindingAdapter("circleImageUrl")
     public static void loadCircleImage(ImageView view, String url) {
         GlideHelper.loadToCircularImage(view.getContext(),view,url);
+    }
+
+    @BindingAdapter("markdownContent")
+    public static void loadMarkdownView(MarkdownView view, String content) {
+        view.loadMarkdown(content);
     }
 }

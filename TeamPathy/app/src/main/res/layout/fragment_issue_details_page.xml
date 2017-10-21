@@ -40,16 +40,16 @@
 
                     <android.support.v7.widget.CardView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
                         android:layout_weight=".70"
                         android:clickable="true"
                         android:foreground="?android:attr/selectableItemBackground"
                         android:minHeight="200dp"
                         android:transitionName="@string/card_transitionname"
-                        app:cardBackgroundColor="@color/app_textword_color"
+                        app:cardBackgroundColor="#fff"
                         app:cardCornerRadius="12dp"
                         app:cardElevation="50dp"
-                        app:contentPadding="15dp"
+                        app:contentPadding="8dp"
                         tools:targetApi="lollipop">
 
                         <LinearLayout
@@ -120,20 +120,20 @@
                                             android:gravity="bottom"
                                             android:text="@{issue.category}"
                                             android:textColor="#4b4b4b"
-                                            android:textSize="18sp"
+                                            android:textSize="10sp"
                                             android:transitionName="@string/issue_title_transitionname" />
                                     </RelativeLayout>
                                 </LinearLayout>
                             </LinearLayout>
 
-                            <TextView
+                            <us.feras.mdv.MarkdownView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="9dp"
-                                android:text="@{issue.content}"
+                                app:markdownContent="@{issue.content}"
+                                android:id="@+id/markdownView"
                                 android:textColor="@color/issue_content_color"
-                                android:textSize="18sp"
-                                android:transitionName="@string/issue_content_transitionname" />
+                                android:transitionName="@string/issue_content_transitionname"/>
                         </LinearLayout>
 
                     </android.support.v7.widget.CardView>

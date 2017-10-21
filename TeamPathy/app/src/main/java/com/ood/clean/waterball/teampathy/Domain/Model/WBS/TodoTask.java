@@ -20,6 +20,7 @@ import static com.ood.clean.waterball.teampathy.MyUtils.EnglishAbbrDateConverter
 public class TodoTask extends TaskEntity implements TaskItem, Cloneable, Comparable<TodoTask>, Parcelable{
     public static int UNASSIGNED_ID = -1;
     private int assignedId;
+    private String assignedUserImageUrl;
     private String description;
     private Date startDate;
     private Date endDate;
@@ -36,7 +37,8 @@ public class TodoTask extends TaskEntity implements TaskItem, Cloneable, Compara
                     Date endDate,
                     String dependency,
                     Status status,
-                    int assignedId) {
+                    int assignedId,
+                    String assignedUserImageUrl) {
         super(name, ofGroupName);
         this.description = description;
         this.status = status;
@@ -45,6 +47,7 @@ public class TodoTask extends TaskEntity implements TaskItem, Cloneable, Compara
         this.assignedId = assignedId;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.assignedUserImageUrl = assignedUserImageUrl;
     }
 
     //Default start and end date => today
@@ -54,8 +57,9 @@ public class TodoTask extends TaskEntity implements TaskItem, Cloneable, Compara
                     int contribution,
                     String dependency,
                     Status status,
-                    int assignedId) {
-        this(name, ofGroupName, description, contribution, new Date(), new Date(), dependency, status, assignedId);
+                    int assignedId,
+                    String assignedUserImageUrl) {
+        this(name, ofGroupName, description, contribution, new Date(), new Date(), dependency, status, assignedId, assignedUserImageUrl);
     }
 
 
@@ -187,6 +191,16 @@ public class TodoTask extends TaskEntity implements TaskItem, Cloneable, Compara
     }
 
     @Override
+    public String getAssignedUserImageUrl() {
+        return assignedUserImageUrl;
+    }
+
+    @Override
+    public void setAssignedUserImageUrl(String assignedUserImageUrl) {
+        this.assignedUserImageUrl = assignedUserImageUrl;
+    }
+
+    @Override
     public void acceptEventVisitor(TaskEventVisitor visitor) {
         visitor.eventOnTask(this);
     }
@@ -228,6 +242,7 @@ public class TodoTask extends TaskEntity implements TaskItem, Cloneable, Compara
         parcel.writeSerializable(endDate);
         parcel.writeString(status.toString());
         parcel.writeInt(assignedId);
+        parcel.writeString(assignedUserImageUrl);
     }
 
     public static final Parcelable.Creator<TodoTask> CREATOR = new Creator<TodoTask>() {
@@ -242,8 +257,9 @@ public class TodoTask extends TaskEntity implements TaskItem, Cloneable, Compara
             String dependency = parcel.readString();
             Status status = Status.valueOf(parcel.readString());
             int assignedId = parcel.readInt();
+            String assignedUserImageUrl = parcel.readString();
             return new TodoTask(name, ofGroup, description, contribution,
-                    startDate, endDate, dependency, status, assignedId);
+                    startDate, endDate, dependency, status, assignedId, assignedUserImageUrl);
         }
 
         @Override

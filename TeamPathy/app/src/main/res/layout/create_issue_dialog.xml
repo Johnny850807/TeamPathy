@@ -61,7 +61,7 @@
                 android:maxLines="10"
                 android:hint="@string/issue_content"
                 android:textColorHint="@color/app_hint_color"
-                android:gravity="center_horizontal"
+                android:gravity="start"
                 android:id="@+id/contentEd"/>
         </android.support.design.widget.TextInputLayout>
 
