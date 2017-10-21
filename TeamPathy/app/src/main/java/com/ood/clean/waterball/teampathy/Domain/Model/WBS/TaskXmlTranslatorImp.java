@@ -37,6 +37,7 @@ public class TaskXmlTranslatorImp implements TaskXmlTranslator {
     public static final String DEPENDENCY_ATT = "Dependency";
     public static final String STATUS_ATT = "Status";
     public static final String ASSIGNED_ID_ATT = "AssignedId";
+    public static final String ASSIGNED_USER_IMAGEURL_ATT = "AssignedUserImageUrl";
 
 	public String taskToXml(TaskItem taskRoot) throws Exception {
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -100,8 +101,9 @@ public class TaskXmlTranslatorImp implements TaskXmlTranslator {
         int assignedId = Integer.parseInt(element.getAttribute(ASSIGNED_ID_ATT));
         Date startDate = timeToDate(element.getAttribute(STARTDATE_ATT));
         Date endDate = timeToDate(element.getAttribute(ENDDATE_ATT));
+        String assignedUserImageUrl = element.getAttribute(ASSIGNED_USER_IMAGEURL_ATT);
 
-        return new TodoTask(name, ofGroup, description, contribution, startDate, endDate, dependency, status, assignedId);
+        return new TodoTask(name, ofGroup, description, contribution, startDate, endDate, dependency, status, assignedId, assignedUserImageUrl);
     }
 
 	private Document parseDocument(String xml) throws IOException, SAXException, ParserConfigurationException {
