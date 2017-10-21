@@ -173,24 +173,27 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
 
 
     private void showDialogForCreatingTodoTask(TaskItem parent) {
-        CreateTodoTaskDialogFragment fragment = CreateTodoTaskDialogFragment.newInstance(getAllTodoTasks(), parent.getName());
+        ArrayList<TodoTask> allTodos = filterAllTaskItem(false);
+        CreateTodoTaskDialogFragment fragment = CreateTodoTaskDialogFragment.newInstance(allTodos, parent.getName());
         fragment.setBaseView(getBaseView());
         showAlertDialogFragment(fragment);
     }
 
-    private ArrayList<TodoTask> getAllTodoTasks(){
-        ArrayList<TodoTask> allTodoTasks = new ArrayList<>();
+    private <T extends TaskItem> ArrayList<T> filterAllTaskItem(boolean hasChild){
+        ArrayList<T> allItem = new ArrayList<>();
         for (TaskItem taskItem : taskRoot)
-            if (!taskItem.hasChild()) // no child means a todotask
-                allTodoTasks.add((TodoTask) taskItem);
-        return allTodoTasks;
+            if (taskItem.hasChild() == hasChild) // no child means a todotask
+                allItem.add((T) taskItem);
+        return allItem;
     }
 
     private void showDialogForCreateTaskChild(TaskItem parent) {
-        CreateTaskGroupDialogFragment fragment = CreateTaskGroupDialogFragment.newInstance(parent.getName());
+        ArrayList<TaskGroup> allGroups = filterAllTaskItem(true);
+        CreateTaskGroupDialogFragment fragment = CreateTaskGroupDialogFragment.newInstance(allGroups, parent.getName());
         fragment.setBaseView(getBaseView());
         showAlertDialogFragment(fragment);
     }
+
 
     private void showDialogForDetailsOfTodo(TodoTask todoTask) {
         //todo

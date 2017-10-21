@@ -25,7 +25,7 @@ public abstract class MakeSureToCancelBaseDialogFragment extends DialogFragment 
     private AlertDialog.Builder createBaseBuilder(){
         return TeamPathyDialogFactory.templateBuilder(getActivity())
                 .setView(onViewCreated())
-                .setPositiveButton(R.string.confirm, getOnPositiveButtonClickListener())
+                .setPositiveButton(R.string.confirm, null)
                 .setNegativeButton(R.string.cancel, null);
     }
 
@@ -34,9 +34,11 @@ public abstract class MakeSureToCancelBaseDialogFragment extends DialogFragment 
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
-                Button button = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
-                // setting maually to avoid auto dismiss
-                button.setOnClickListener(new View.OnClickListener() {
+                Button negativeBtn = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+                Button positiveBtn = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+
+                // setting maually to avoid auto dismissing
+                negativeBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         // make sure to cancel dialog showing
@@ -52,6 +54,8 @@ public abstract class MakeSureToCancelBaseDialogFragment extends DialogFragment 
                                 .show();
                     }
                 });
+
+                positiveBtn.setOnClickListener(getOnPositiveButtonClickListener());
             }
         });
         return alertDialog;
@@ -69,6 +73,6 @@ public abstract class MakeSureToCancelBaseDialogFragment extends DialogFragment 
     protected abstract View onViewCreated();
 
     // the phase to decide which to do when the click event to the positive button
-    protected abstract DialogInterface.OnClickListener getOnPositiveButtonClickListener();
+    protected abstract View.OnClickListener getOnPositiveButtonClickListener();
 
 }

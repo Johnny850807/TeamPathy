@@ -1,7 +1,6 @@
 package com.ood.clean.waterball.teampathy.Presentation.UI.Dialog;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -46,6 +45,25 @@ public class CreateIssueDialogFragment extends MakeSureToCancelBaseDialogFragmen
         return view;
     }
 
+    @Override
+    protected View.OnClickListener getOnPositiveButtonClickListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (checkInputFormatAvailable())
+                {
+                    String title = titleTxt.getText().toString();
+                    String content = contentTxt.getText().toString();
+                    String category = categoryIssueSpinner.getSelectedItem().toString();
+                    Issue issue = new Issue(user,title,content,category);
+                    getBaseView().showProgressDialog();
+                    presenterImp.create(issue);
+                    dismiss();
+                }
+            }
+        };
+    }
+
     private void bind(View view){
         ButterKnife.bind(this,view);
         MyApp.getProjectComponent(getActivity()).inject(this);
@@ -57,23 +75,7 @@ public class CreateIssueDialogFragment extends MakeSureToCancelBaseDialogFragmen
         categoryIssueSpinner.setAdapter(adapter);
     }
 
-    @Override
-    protected DialogInterface.OnClickListener getOnPositiveButtonClickListener() {
-        return new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (checkInputFormatAvailable())
-                {
-                    String title = titleTxt.getText().toString();
-                    String content = contentTxt.getText().toString();
-                    String category = categoryIssueSpinner.getSelectedItem().toString();
-                    Issue issue = new Issue(user,title,content,category);
-                    getBaseView().showProgressDialog();
-                    presenterImp.create(issue);
-                }
-            }
-        };
-    }
+
 
     private boolean checkInputFormatAvailable(){
         boolean hasError;

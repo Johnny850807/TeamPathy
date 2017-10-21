@@ -2,7 +2,6 @@ package com.ood.clean.waterball.teampathy.Presentation.UI.Dialog;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -120,10 +119,10 @@ public class CreateTodoTaskDialogFragment extends MakeSureToCancelBaseDialogFrag
     }
 
     @Override
-    protected DialogInterface.OnClickListener getOnPositiveButtonClickListener() {
-        return new DialogInterface.OnClickListener() {
+    protected View.OnClickListener getOnPositiveButtonClickListener() {
+        return new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+            public void onClick(View view) {
                 if (checkValid())
                 {
                     try{
@@ -137,6 +136,7 @@ public class CreateTodoTaskDialogFragment extends MakeSureToCancelBaseDialogFrag
                         baseView.showProgressDialog();
                         wbsConsolePresenterImp.executeCommand(command);
                         Log.d("Wbs",new Gson().toJson(command));
+                        dismiss();
                     }catch (Exception err){
                         err.printStackTrace();
                     }

@@ -1,7 +1,6 @@
 package com.ood.clean.waterball.teampathy.Presentation.UI.Dialog;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
@@ -77,10 +76,10 @@ public class CreateTaskGroupDialogFragment extends MakeSureToCancelBaseDialogFra
     }
 
     @Override
-    protected DialogInterface.OnClickListener getOnPositiveButtonClickListener() {
-        return new DialogInterface.OnClickListener() {
+    protected View.OnClickListener getOnPositiveButtonClickListener() {
+        return new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+            public void onClick(View view) {
                 if (checkValid())
                 {
                     TaskGroup taskGroup = new TaskGroup(nameEd.getText().toString(), parentName);
@@ -88,6 +87,7 @@ public class CreateTaskGroupDialogFragment extends MakeSureToCancelBaseDialogFra
                     Log.d("TaskGroup", taskGroup.toString());
                     baseView.showProgressDialog();
                     wbsConsolePresenterImp.executeCommand(command);
+                    dismiss();
                 }
             }
         };

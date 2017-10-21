@@ -1,7 +1,6 @@
 package com.ood.clean.waterball.teampathy.Presentation.UI.Dialog;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -43,10 +42,10 @@ public class CreateIssueCommentDialogFragment extends MakeSureToCancelBaseDialog
     }
 
     @Override
-    protected DialogInterface.OnClickListener getOnPositiveButtonClickListener() {
-        return new DialogInterface.OnClickListener() {
+    protected View.OnClickListener getOnPositiveButtonClickListener() {
+        return new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(View view) {
                 if (checkInputValid())
                     createComment();
             }
@@ -66,6 +65,7 @@ public class CreateIssueCommentDialogFragment extends MakeSureToCancelBaseDialog
         String content = contentEd.getText().toString();
         getBaseView().showProgressDialog();
         presenterImp.create(new IssueComment(user, content));
+        dismiss();
     }
 
 }
