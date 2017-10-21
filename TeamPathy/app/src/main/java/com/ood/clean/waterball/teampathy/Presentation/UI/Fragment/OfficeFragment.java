@@ -76,7 +76,7 @@ public class OfficeFragment extends BaseFragment implements OfficePresenter.Offi
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
+        memberCardList.clear();
         return inflater.inflate( R.layout.fragment_office_page, container, false);
     }
 
