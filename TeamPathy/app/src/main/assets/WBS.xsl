@@ -55,7 +55,7 @@
                 <p style="color:blue; font-style:bold; font-size:14;">Pending</p>
             </xsl:when>
             <xsl:when test="@Status = 'doing'">
-                <p style="color:yellow; font-style:italic; font-size:14;">Doing</p>
+                <p style="color:#FFC90E; font-style:italic; font-size:14;">Doing</p>
             </xsl:when>
             <xsl:otherwise>
                 <p style="color:gray; font-style:italic; font-size:14;">None</p>

@@ -220,6 +220,7 @@
     <string name="handover_leader">團長交接</string>
     <string name="select_actions_for_member">選擇欲對成員進行動作</string>
     <string name="todo_no_dependency">無依賴</string>
+    <string name="name_cannot_be_duplicated">名稱不能重複</string>
 
     <string-array name="office_options">
         <item>@string/watch_todolist</item>

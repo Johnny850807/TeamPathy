@@ -165,6 +165,11 @@ public class CreateTodoTaskDialogFragment extends MakeSureToCancelBaseDialogFrag
             valid = false;
             nameEd.setError(getString(R.string.name_cannot_be_empty));
         }
+        else if (hasDuplicatedTaskName(nameEd.getText().toString()))
+        {
+            valid = false;
+            nameEd.setError(getString(R.string.name_cannot_be_duplicated));
+        }
 
         if (descriptionEd.length() == 0)
         {
@@ -173,6 +178,13 @@ public class CreateTodoTaskDialogFragment extends MakeSureToCancelBaseDialogFrag
         }
 
         return valid;
+    }
+
+    private boolean hasDuplicatedTaskName(String name){
+        for (String n : allTaskNames)
+            if (n.equals(name))
+                return true;
+        return false;
     }
 
     private void createAndShowErrorMessage(String message){
