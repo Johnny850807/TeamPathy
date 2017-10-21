@@ -17,6 +17,9 @@ import com.ood.clean.waterball.teampathy.Presentation.Interfaces.BasePresenter;
 import com.ood.clean.waterball.teampathy.Presentation.Presenter.WbsConsolePresenterImp;
 import com.ood.clean.waterball.teampathy.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -24,15 +27,18 @@ import butterknife.ButterKnife;
 
 
 public class CreateTaskGroupDialogFragment extends MakeSureToCancelBaseDialogFragment{
+    private static final String ALL_GROUPS = "AllTaskGroups";
     private static final String PARENT = "ParentName";
     private BasePresenter.BaseView baseView;
     private String parentName;
+    private List<String> allGroupNames = new ArrayList<>();
     @Inject WbsConsolePresenterImp wbsConsolePresenterImp;
     @BindView(R.id.nameEd) TextInputEditText nameEd;
 
-    public static CreateTaskGroupDialogFragment newInstance(String parentName){
+    public static CreateTaskGroupDialogFragment newInstance(ArrayList<TaskGroup> taskGroups, String parentName){
         CreateTaskGroupDialogFragment fragment = new CreateTaskGroupDialogFragment();
         Bundle bundle = new Bundle();
+        bundle.putSerializable(ALL_GROUPS, taskGroups);
         bundle.putString(PARENT, parentName);
         fragment.setArguments(bundle);
         return fragment;
@@ -45,7 +51,11 @@ public class CreateTaskGroupDialogFragment extends MakeSureToCancelBaseDialogFra
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        parentName = getArguments().getString(PARENT);
+        Bundle bundle = getArguments();
+        parentName = bundle.getString(PARENT);
+        ArrayList<TaskGroup> taskGroups = (ArrayList<TaskGroup>) bundle.getSerializable(ALL_GROUPS);
+        for (TaskGroup group : taskGroups)
+            allGroupNames.add(group.getName());
     }
 
     @Override
@@ -84,11 +94,24 @@ public class CreateTaskGroupDialogFragment extends MakeSureToCancelBaseDialogFra
     }
 
     private boolean checkValid() {
-        if (nameEd.getText().toString().isEmpty())
+        boolean value = true;
+        if (nameEd.length() == 0)
         {
             nameEd.setError(getString(R.string.name_cannot_be_empty));
-            return false;
+            value = false;
         }
-        return true;
+        else if (hasDuplicatedTaskName(nameEd.getText().toString()))
+        {
+            nameEd.setError(getString(R.string.name_cannot_be_duplicated));
+            value = false;
+        }
+        return value;
+    }
+
+    private boolean hasDuplicatedTaskName(String name){
+        for (String n : allGroupNames)
+            if (n.equals(name))
+                return true;
+        return false;
     }
 }
