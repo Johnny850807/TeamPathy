@@ -209,8 +209,12 @@ public class OfficeFragment extends BaseFragment implements OfficePresenter.Offi
                 Log.d("office", "go watch todolist.");
                 break;
             case BOOT_MEMBER:
-                Log.d("office", "booting currentUser.");
-                presenterImp.bootMember(selectedMember);
+                if (currentUser.getMemberDetails().getPosition() == Position.leader)
+                {
+                    Log.d("office", "booting currentUser.");
+                    presenterImp.bootMember(selectedMember);
+                }
+                Log.d("office", "booting disabled, current user not a leader of the project.");
                 break;
             case CHANGE_POSITION: // no action on clicking the header of change position
                 return true;
@@ -349,7 +353,7 @@ public class OfficeFragment extends BaseFragment implements OfficePresenter.Offi
             String text = (String) getGroup(groupPosition);
             textView.setText(text);
 
-            if (groupPosition == CHANGE_POSITION && currentUser.getMemberDetails().getPosition() != Position.leader) // only leader can select this option
+            if ((groupPosition == CHANGE_POSITION || groupPosition == BOOT_MEMBER) && currentUser.getMemberDetails().getPosition() != Position.leader) // only leader can select this option
                 textView.setEnabled(false);
             return textView;
         }
