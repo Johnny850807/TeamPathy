@@ -11,6 +11,7 @@ import android.webkit.WebView;
 import android.widget.ProgressBar;
 
 import com.ood.clean.waterball.teampathy.Domain.Model.Project;
+import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskItem;
 import com.ood.clean.waterball.teampathy.MyApp;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.ChartWebViewPresenter;
 import com.ood.clean.waterball.teampathy.Presentation.Presenter.ChartWebViewPresenterImp;
@@ -32,6 +33,11 @@ public class ChartWebViewFragment extends BaseFragment implements ChartWebViewPr
     @Inject ChartWebViewPresenterImp presenterImp;
 
     private String xslFilename;
+
+    @Override
+    public void onUpdateTasksFinish(TaskItem taskRoot) {
+        presenterImp.transformXmlToHtml(taskRoot, xslFilename);
+    }
 
     enum XslType {
         WBS,GanttChart;

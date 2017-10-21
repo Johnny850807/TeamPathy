@@ -9,6 +9,9 @@ import com.ood.clean.waterball.teampathy.Domain.UseCase.Wbs.ExecuteWbsCommand;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Wbs.GetWbs;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.WbsConsolePresenter;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.inject.Inject;
 
 import io.reactivex.annotations.NonNull;
@@ -22,6 +25,7 @@ public class WbsConsolePresenterImp implements WbsConsolePresenter {
     @Inject GetWbs getWbs;
     @Inject ExecuteWbsCommand executeWbsCommand;
     private WbsView wbsView;
+    private Map<String, WbsUpdatedListener> wbsUpdatedListeners = new HashMap<>(); // <the listener's name / listener>
 
     @Inject
     public WbsConsolePresenterImp() {}
@@ -30,6 +34,15 @@ public class WbsConsolePresenterImp implements WbsConsolePresenter {
         this.wbsView = wbsView;
     }
 
+    @Override
+    public void putWbsUpdatedListener(String name, WbsUpdatedListener wbsUpdatedListener){
+        wbsUpdatedListeners.put(name, wbsUpdatedListener);
+    }
+
+    private void notifyAllListeners(TaskItem newTaskRoot){
+        for (WbsUpdatedListener listener : wbsUpdatedListeners.values())
+            listener.onUpdateTasksFinish(newTaskRoot);
+    }
 
     @Override
     public void loadTasks() {
@@ -50,7 +63,7 @@ public class WbsConsolePresenterImp implements WbsConsolePresenter {
         executeWbsCommand.execute(new DefaultObserver<TaskItem>() {
             @Override
             public void onNext(@NonNull TaskItem taskRoot) {
-                wbsView.onUpdateTasksFinish(taskRoot);
+                notifyAllListeners(taskRoot);
             }
             @Override
             public void onError(Throwable exception) {

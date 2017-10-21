@@ -91,6 +91,7 @@ public class TodoTask extends TaskEntity implements TaskItem, Cloneable, Compara
         element.setAttribute(TaskXmlTranslatorImp.CONTRIBUTION_ATT, String.valueOf(contribution));
         element.setAttribute(TaskXmlTranslatorImp.STATUS_ATT,status.attr);
         element.setAttribute(TaskXmlTranslatorImp.ASSIGNED_ID_ATT, String.valueOf(assignedId));
+        element.setAttribute(TaskXmlTranslatorImp.ASSIGNED_USER_IMAGEURL_ATT, String.valueOf(assignedUserImageUrl));
         return element;
     }
 

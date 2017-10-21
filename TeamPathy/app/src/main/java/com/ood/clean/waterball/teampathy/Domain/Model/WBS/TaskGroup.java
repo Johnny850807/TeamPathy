@@ -18,7 +18,7 @@ public class TaskGroup extends TaskEntity implements TaskItem {
 
 	@Override
 	public String getAssignedUserImageUrl() {
-		throw new RuntimeException("Not supported");
+		return "";
 	}
 
 	@Override

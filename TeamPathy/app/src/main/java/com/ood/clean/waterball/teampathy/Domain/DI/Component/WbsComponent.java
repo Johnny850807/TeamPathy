@@ -6,6 +6,7 @@ import com.ood.clean.waterball.teampathy.Presentation.UI.Dialog.AssignTaskDialog
 import com.ood.clean.waterball.teampathy.Presentation.UI.Dialog.CreateTaskGroupDialogFragment;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Dialog.CreateTodoTaskDialogFragment;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Fragment.ChartWebViewFragment;
+import com.ood.clean.waterball.teampathy.Presentation.UI.Fragment.TaskAnalyticsFragment;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Fragment.TaskPendingFragment;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Fragment.WbsConsoleFragment;
 
@@ -24,4 +25,5 @@ public interface WbsComponent {
     void inject(CreateTodoTaskDialogFragment createTodoTaskDialogFragment);
     void inject(CreateTaskGroupDialogFragment createTodoTaskDialogFragment);
     void inject(AssignTaskDialogFragment assignTaskDialogFragment);
+    void inject(TaskAnalyticsFragment taskAnalyticsFragment);
 }

@@ -9,10 +9,14 @@ public interface WbsConsolePresenter extends LifetimePresenter{
 
     void loadTasks();
     void executeCommand(WbsCommand wbsCommand);
+    void putWbsUpdatedListener(String name, WbsUpdatedListener wbsUpdatedListener);
 
-    public interface WbsView{
+    public interface WbsView extends WbsUpdatedListener {
         public void onLoadTasksFinish(TaskItem taskroot);
-        public void onUpdateTasksFinish(TaskItem taskRoot);
         public void onError(Throwable err);
+    }
+
+    public interface WbsUpdatedListener {
+        public void onUpdateTasksFinish(TaskItem taskRoot);
     }
 }

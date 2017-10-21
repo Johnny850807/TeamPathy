@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.ood.clean.waterball.teampathy.Domain.Model.Member.Member;
 import com.ood.clean.waterball.teampathy.Domain.Model.Project;
 import com.ood.clean.waterball.teampathy.MyApp;
+import com.ood.clean.waterball.teampathy.Presentation.Presenter.WbsConsolePresenterImp;
 import com.ood.clean.waterball.teampathy.R;
 
 import java.util.Arrays;
@@ -31,6 +32,7 @@ public class TaskAnalyticsFragment extends BaseFragment {
     MyFragmentPageAdapter adapter;
     @Inject Member member;
     @Inject Project project;
+    @Inject WbsConsolePresenterImp wbsConsolePresenterImp;
 
     @Nullable
     @Override
@@ -41,7 +43,7 @@ public class TaskAnalyticsFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this,view);
-        MyApp.getProjectComponent(getActivity()).inject(this);
+        MyApp.getWbsComponent(getActivity()).inject(this);
         initiateViewPager();
     }
 
@@ -69,20 +71,36 @@ public class TaskAnalyticsFragment extends BaseFragment {
 
         @Override
         public Fragment getItem(int position) {
+            /*
+              The Wbs console, wbs chart and the gantt chart fragments should be added as a WbsUpdatedListener
+              into the presenter in order to ensure all the fragments would be updated
+              at the same time whenever the wbs updated.
+             */
             switch (position)
             {
                 case 0:
-                    return new WbsConsoleFragment();
+                    WbsConsoleFragment consolefragment = new WbsConsoleFragment();
+                    wbsConsolePresenterImp.putWbsUpdatedListener("console", consolefragment);
+                    return consolefragment;
                 case 1:
-                    return ChartWebViewFragment.newInstance(
+                    ChartWebViewFragment wbsfragment = ChartWebViewFragment.newInstance(
                             ChartWebViewFragment.XslType.WBS);
+                    wbsConsolePresenterImp.putWbsUpdatedListener("wbs", wbsfragment);
+                    return wbsfragment;
                 case 2:
-                    return ChartWebViewFragment.newInstance(
+                    ChartWebViewFragment ganttfragment = ChartWebViewFragment.newInstance(
                             ChartWebViewFragment.XslType.GanttChart);
+                    wbsConsolePresenterImp.putWbsUpdatedListener("gantt", ganttfragment);
+                    return ganttfragment;
                 default:
                     return new TaskPendingFragment();
             }
         }
+/*
+        private Fragment createFragmentAndPutAsWbsUpdatedListener(){
+
+        }*/
+
         @Override
         public int getCount() {
             if (!member.isNotManager())  // manager and leader has one more workspace to review the tasks
