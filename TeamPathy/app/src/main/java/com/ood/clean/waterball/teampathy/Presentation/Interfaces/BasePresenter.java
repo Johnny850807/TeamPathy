@@ -6,6 +6,8 @@ import com.ood.clean.waterball.teampathy.MyUtils.PageController;
 public interface BasePresenter {
 
     public interface BaseView {
+        void setToolbarTitle(String title);
+
         void showProgressBar();
 
         void hideProgressBar();

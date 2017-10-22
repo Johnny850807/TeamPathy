@@ -2,10 +2,12 @@ package com.ood.clean.waterball.teampathy.Domain.Model.Member;
 
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
 
+import java.io.Serializable;
+
 /**
  * Member presents the info of how the user participates the project.
  */
-public class Member {
+public class Member implements Serializable{
     private User user;
     private MemberDetails memberDetails;
 

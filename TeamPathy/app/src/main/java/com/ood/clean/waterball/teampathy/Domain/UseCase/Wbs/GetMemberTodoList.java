@@ -2,7 +2,6 @@ package com.ood.clean.waterball.teampathy.Domain.UseCase.Wbs;
 
 import android.util.Log;
 
-import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ProjectScope;
 import com.ood.clean.waterball.teampathy.Domain.Model.Member.Member;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask;
 import com.ood.clean.waterball.teampathy.Domain.Repository.WbsRepository;
@@ -18,7 +17,7 @@ import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.annotations.NonNull;
 
-@ProjectScope
+
 public class GetMemberTodoList extends UseCase<TodoTask,Member> {
     private WbsRepository wbsRepository;
 

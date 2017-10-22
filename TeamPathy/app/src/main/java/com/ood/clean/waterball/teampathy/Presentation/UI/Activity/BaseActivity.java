@@ -130,6 +130,11 @@ public class BaseActivity extends AppCompatActivity implements BasePresenter.Bas
     }
 
     @Override
+    public void setToolbarTitle(String title) {
+        setTitle(title);
+    }
+
+    @Override
     public void showProgressBar() {
         taskLoadingForBar ++;
         progressBar.setVisibility(View.VISIBLE);

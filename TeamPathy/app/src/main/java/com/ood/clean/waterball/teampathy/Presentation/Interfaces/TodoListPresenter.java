@@ -1,6 +1,7 @@
 package com.ood.clean.waterball.teampathy.Presentation.Interfaces;
 
 
+import com.ood.clean.waterball.teampathy.Domain.Model.Member.Member;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskItem;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask;
 
@@ -13,6 +14,6 @@ public interface TodoListPresenter extends LifetimePresenter{
         public void onOperationError(Throwable err);
     }
 
-    void loadTodoList();
+    void loadTodoList(Member member);
     void alterTaskStatus(final TodoTask todoTask, final TodoTask.Status status);
 }

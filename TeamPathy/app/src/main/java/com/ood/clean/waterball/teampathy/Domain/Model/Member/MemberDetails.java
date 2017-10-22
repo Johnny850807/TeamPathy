@@ -1,8 +1,9 @@
 package com.ood.clean.waterball.teampathy.Domain.Model.Member;
 
 
+import java.io.Serializable;
 
-public class MemberDetails {
+public class MemberDetails implements Serializable{
     private Position position;
     private int contribution;
 

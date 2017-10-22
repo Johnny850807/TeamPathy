@@ -206,21 +206,31 @@ public class OfficeFragment extends BaseFragment implements OfficePresenter.Offi
         switch (position)
         {
             case WATCH_TODOLIST:
-                Log.d("office", "go watch todolist.");
+                watchMembersTodolist(selectedMember);
                 break;
             case BOOT_MEMBER:
-                if (currentUser.getMemberDetails().getPosition() == Position.leader)
-                {
-                    Log.d("office", "booting currentUser.");
-                    presenterImp.bootMember(selectedMember);
-                }
-                Log.d("office", "booting disabled, current user not a leader of the project.");
+                bootMember(selectedMember);
                 break;
-            case CHANGE_POSITION: // no action on clicking the header of change position
-                return true;
+            case CHANGE_POSITION:
+                return true; // true means no action on clicking the header of change position
         }
         officeFunctionDialog.dismiss();
         return true;
+    }
+
+    private void watchMembersTodolist(Member member){
+        Log.d("office", "go watch todolist.");
+        TodolistFragment todolistFragment = TodolistFragment.newInstance(member, true);
+        getBaseView().getPageController().changePage(todolistFragment);
+    }
+
+    private void bootMember(Member member){
+        if (currentUser.getMemberDetails().getPosition() == Position.leader)
+        {
+            Log.d("office", "booting currentUser.");
+            presenterImp.bootMember(member);
+        }
+        Log.d("office", "booting disabled, current user not a leader of the project.");
     }
 
     @Override

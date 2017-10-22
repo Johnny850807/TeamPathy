@@ -1,6 +1,5 @@
 package com.ood.clean.waterball.teampathy.Presentation.Presenter;
 
-import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ProjectScope;
 import com.ood.clean.waterball.teampathy.Domain.Model.Member.Member;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskItem;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask;
@@ -14,20 +13,17 @@ import javax.inject.Inject;
 
 import io.reactivex.annotations.NonNull;
 
-@ProjectScope
 public class TodolistPresenterImp implements TodoListPresenter {
     private TodoListPresenter.TodoListView todoListView;
     private GetMemberTodoList getMemberTodoList;
     private ExecuteWbsCommand executeWbsCommand;
-    private Member member;
+
 
     @Inject
     public TodolistPresenterImp(GetMemberTodoList getMemberTodoList,
-                                ExecuteWbsCommand executeWbsCommand,
-                                Member member) {
+                                ExecuteWbsCommand executeWbsCommand) {
         this.getMemberTodoList = getMemberTodoList;
         this.executeWbsCommand = executeWbsCommand;
-        this.member = member;
     }
 
     public void setTodoListView(TodoListPresenter.TodoListView todoListView) {
@@ -35,7 +31,7 @@ public class TodolistPresenterImp implements TodoListPresenter {
     }
 
     @Override
-    public void loadTodoList() {
+    public void loadTodoList(Member member) {
         getMemberTodoList.execute(new DefaultObserver<TodoTask>() {
             @Override
             public void onNext(@NonNull TodoTask todoTask) {

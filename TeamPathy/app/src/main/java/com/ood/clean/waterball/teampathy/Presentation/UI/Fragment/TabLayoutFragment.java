@@ -101,7 +101,7 @@ public class TabLayoutFragment extends BaseFragment implements TabLayoutView{
             else if (position == ProjectSection.FORUM.ordinal())
                 return new IssuesFragment();
             else if (position == ProjectSection.TODOLIST.ordinal())
-               return new TodolistFragment();
+               return TodolistFragment.newInstance(member, false);
             else
                 return new OfficeFragment();
         }

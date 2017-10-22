@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-import com.ood.clean.waterball.teampathy.Domain.Model.User;
+import com.ood.clean.waterball.teampathy.Domain.Model.Member.Member;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskItem;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask;
 import com.ood.clean.waterball.teampathy.MyApp;
@@ -36,21 +36,37 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class TodolistFragment extends BaseFragment implements TodoListPresenter.TodoListView, SwipeRefreshLayout.OnRefreshListener {
+    private static final String TARGET_MEMBER = "Member Id";
+    private static final String WATCH_MODE = "Operation Enabled";
     private final int COMMIT_TASK = 0;
     private final int CANCEL_COMMIT = 0;
     private final int SET_AS_DOING_TASK = 1;
     private final int CANCEL_DOING = 1;
 
+    private Member targetMember; // the target member's todolist showing.
+    private boolean watchMode; // if false that the user cannot do any thing with the todolist.
     @BindView(R.id.recyclerview) RecyclerView recyclerView;
     @BindView(R.id.swiperefreshlayout) SwipeRefreshLayout swipeRefreshLayout;
     TodoListAdapter adapter;
-    @Inject User user;
     @Inject TodolistPresenterImp presenterImp;
 
     String[] uncommittedTodoTaskActions;
     String[] undoingTodoTaskActions;
     String[] todoActions;
     List<TodoTask> todoList = new ArrayList<>();
+
+    /**
+     * @param member show who's todolist
+     * @param watchMode if it's watchMode, means the user doesn't own the todolist, cannot operate the todolist neither.
+     */
+    public static TodolistFragment newInstance(Member member, boolean watchMode){
+        TodolistFragment fragment = new TodolistFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(TARGET_MEMBER, member);
+        bundle.putBoolean(WATCH_MODE, watchMode);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,6 +75,8 @@ public class TodolistFragment extends BaseFragment implements TodoListPresenter.
     }
 
     private void init() {
+        targetMember = (Member) getArguments().getSerializable(TARGET_MEMBER);
+        watchMode = getArguments().getBoolean(WATCH_MODE);
         uncommittedTodoTaskActions = getResources().getStringArray(R.array.member_uncommitted_todolist_actions);
         undoingTodoTaskActions = getResources().getStringArray(R.array.member_undoing_todolist_actions);
         todoActions = getResources().getStringArray(R.array.member_todo_todolist_actions);
@@ -74,11 +92,13 @@ public class TodolistFragment extends BaseFragment implements TodoListPresenter.
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         getBaseView().showProgressBar();
+        if (watchMode)
+            getBaseView().setToolbarTitle(getString(R.string.app_name) + " (" + targetMember.getUser().getName() + ")");
         todoList.clear();
         binding(view);
         presenterImp.setTodoListView(this);
         setupRecyclerview();
-        presenterImp.loadTodoList();
+        presenterImp.loadTodoList(targetMember);
     }
 
     private void binding(View view){
@@ -127,7 +147,7 @@ public class TodolistFragment extends BaseFragment implements TodoListPresenter.
     public void onRefresh() {
         todoList.clear();
         getBaseView().showProgressBar();
-        presenterImp.loadTodoList();
+        presenterImp.loadTodoList(targetMember);
     }
 
     @Override
@@ -139,6 +159,7 @@ public class TodolistFragment extends BaseFragment implements TodoListPresenter.
     @Override
     public void onDestroy() {
         super.onDestroy();
+        getBaseView().setToolbarTitle(getString(R.string.app_name));
         presenterImp.onDestroy();
     }
 
@@ -160,14 +181,15 @@ public class TodolistFragment extends BaseFragment implements TodoListPresenter.
         }
 
         private void setOnClickListener(View view, final int position){
-            view.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    TodoTask todoTask = todoList.get(position);
-                    showTodoTaskActionList(todoTask);
-                    return false;
-                }
-            });
+            if (!watchMode) // if it's watchMode, the items should have no reaction to the user.
+                view.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        TodoTask todoTask = todoList.get(position);
+                        showTodoTaskActionList(todoTask);
+                        return false;
+                    }
+                });
         }
 
         @Override
