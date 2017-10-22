@@ -23,4 +23,6 @@
     <color name="todotask_doing_color">#fdffd5</color>
     <color name="todotask_pending_color">#d5f3ff</color>
     <color name="todotask_pass_color">#b4ffc0</color>
+
+    <color name="done_task">#009318</color>
 </resources>

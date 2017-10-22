@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:text="@{task.name}"
                 android:textSize="15sp"
-                android:textColor="@color/app_black_word_color"
+                android:textColor="@{task.status == Status.pass ? @color/done_task : @color/app_black_word_color}"
                 android:layout_gravity="center"/>
             <TextView
                 android:layout_width="wrap_content"

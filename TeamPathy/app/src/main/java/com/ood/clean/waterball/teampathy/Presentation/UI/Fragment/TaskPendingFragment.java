@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import com.android.databinding.library.baseAdapters.BR;
+import com.ood.clean.waterball.teampathy.Domain.Model.Member.Member;
 import com.ood.clean.waterball.teampathy.Domain.Model.ReviewTaskCard;
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask;
@@ -43,6 +44,7 @@ public class TaskPendingFragment extends BaseFragment implements ReviewTaskPrese
     public static final int REJECT_REVIEW = 1;
 
     @Inject ReviewTaskPresenterImp presenterImp;
+    @Inject Member currentMember;
     @BindView(R.id.recyclerview) RecyclerView recyclerView;
     ReviewTaskAdapter adapter;
     List<ReviewTaskCard> reviewTaskCards = new ArrayList<>();
@@ -201,15 +203,40 @@ public class TaskPendingFragment extends BaseFragment implements ReviewTaskPrese
                         switch (position)
                         {
                             case REVIEW_TODO_AS_PASS:
-                                Log.d("wbs", "review... todo" +  todoTask.getName());
-                                presenterImp.reviewAsPassTodoTask(todoTask);
+                                reviewTodotaskAsPass(todoTask);
                                 break;
                             case REJECT_REVIEW:
-                                Log.d("wbs", "reject... todo " + todoTask.getName());
-                                presenterImp.rejectTodotask(todoTask);
+                                rejectTodoTask(todoTask);
                                 break;
                         }
                     }
                 }).show();
+    }
+
+    private void rejectTodoTask(TodoTask todoTask){
+        Log.d("wbs", "reject... todo " + todoTask.getName());
+        presenterImp.rejectTodotask(todoTask);
+
+        if (todoTask.getAssignedId() == currentMember.getUserId())
+            createDialogForAlarmingMessage(getString(R.string.you_just_rejected_your_task));
+    }
+
+    private void reviewTodotaskAsPass(TodoTask todoTask){
+        if (todoTask.getAssignedId() != currentMember.getUserId())
+        {
+            Log.d("wbs", "review... todo" +  todoTask.getName());
+            presenterImp.reviewAsPassTodoTask(todoTask);
+        }
+        else
+            createDialogForAlarmingMessage(getString(R.string.your_task_should_be_reviewed_by_other));
+
+    }
+
+    private void createDialogForAlarmingMessage(String message){
+        TeamPathyDialogFactory.templateBuilder(getActivity())
+                .setTitle(R.string.notice)
+                .setMessage(message)
+                .setPositiveButton(R.string.confirm, null)
+                .show();
     }
 }

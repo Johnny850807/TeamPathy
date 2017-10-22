@@ -222,6 +222,9 @@
     <string name="todo_no_dependency">無依賴</string>
     <string name="name_cannot_be_duplicated">名稱不能重複</string>
     <string name="the_task_has_passed">此工作項目已經通過審核。</string>
+    <string name="your_task_should_be_reviewed_by_other">要借助其他管理者才能審核自己的工作唷！</string>
+    <string name="notice">注意</string>
+    <string name="you_just_rejected_your_task">你剛剛駁回了自己的工作</string>
 
     <string-array name="office_options">
         <item>@string/watch_todolist</item>
