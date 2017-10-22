@@ -1,6 +1,7 @@
 package com.ood.clean.waterball.teampathy.Domain.UseCase.Base;
 
-import com.ood.clean.waterball.teampathy.MyUtils.Preconditions;
+import android.support.annotation.NonNull;
+
 import com.ood.clean.waterball.teampathy.Threading.ThreadingObservableFactory;
 
 import io.reactivex.Observable;
@@ -32,8 +33,7 @@ public abstract class UseCase<T, Params> {
          * by {@link #buildUseCaseObservable(Params)} ()} method.
          * @param params Parameters (Optional) used to build/execute this use case.
          */
-    public void execute(DisposableObserver<T> observer, Params params){
-        Preconditions.checkNotNull(observer);
+    public void execute(@NonNull DisposableObserver<T> observer, Params params){
         final Observable<T> observable = threadingObservableFactory.create(this.buildUseCaseObservable(params));
         addDisposable(observable.subscribeWith(observer));
     }
@@ -51,8 +51,6 @@ public abstract class UseCase<T, Params> {
      * Dispose from current {@link CompositeDisposable}.
      */
     private void addDisposable(Disposable disposable) {
-        Preconditions.checkNotNull(disposable);
-        Preconditions.checkNotNull(disposables);
         disposables.add(disposable);
     }
 }
