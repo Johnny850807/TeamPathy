@@ -1,15 +1,19 @@
 package com.ood.clean.waterball.teampathy.Presentation.UI.Fragment;
 
 
+import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +29,7 @@ import com.ood.clean.waterball.teampathy.Domain.Model.User;
 import com.ood.clean.waterball.teampathy.MyApp;
 import com.ood.clean.waterball.teampathy.MyUtils.IndexSet;
 import com.ood.clean.waterball.teampathy.MyUtils.NormalDateConverter;
+import com.ood.clean.waterball.teampathy.MyUtils.PageController;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.CrudPresenter;
 import com.ood.clean.waterball.teampathy.Presentation.Presenter.IssuePresenterImp;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Adapter.BindingViewHolder;
@@ -187,13 +192,21 @@ public class IssuesFragment extends BaseFragment implements CrudPresenter.CrudVi
 
         private void setOnClickListener(View view, final int position){
             view.setOnClickListener(new View.OnClickListener() {
+                @TargetApi(Build.VERSION_CODES.LOLLIPOP)
                 @Override
                 public void onClick(View view) {
                     Issue issue = issues.get(position);
                     MyApp.createIssueComponent(getActivity(),issue);
-                    getBaseView().getPageController().changePage(new IssueDetailsFragment());
+                    addSharedElementsAndChangeToPage(view, position, getBaseView().getPageController(), new IssueDetailsFragment());
                 }
             });
+        }
+
+        private void addSharedElementsAndChangeToPage(View parent, int position, PageController pageController, Fragment target){
+            String cardName = getString(R.string.card_transitionname); // the name must be unique
+            ViewCompat.setTransitionName(parent, cardName + position);
+            pageController.addSharedElement(new PageController.TransitionBag(parent, cardName));
+            pageController.changePage(target);
         }
 
         @Override

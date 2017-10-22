@@ -109,7 +109,7 @@
                                             android:text="@{issue.dateString}"
                                             android:textColor="@color/app_hint_color"
                                             android:textSize="16sp"
-                                            android:transitionName="@string/issue_title_transitionname" />
+                                            android:transitionName="@string/issue_date_transitionname" />
 
                                         <TextView
                                             style="@style/TeamPathyTextView"
@@ -121,7 +121,7 @@
                                             android:text="@{issue.category}"
                                             android:textColor="#4b4b4b"
                                             android:textSize="10sp"
-                                            android:transitionName="@string/issue_title_transitionname" />
+                                            android:transitionName="@string/issue_category_transitionname" />
                                     </RelativeLayout>
                                 </LinearLayout>
                             </LinearLayout>

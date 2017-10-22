@@ -34,7 +34,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/datetime_text_issue_item"
+                    android:id="@+id/dateTxt"
                     android:text="@{obj.dateString}"
                     android:layout_weight="1"
                     android:textColor="@color/app_hint_color"/>
@@ -57,6 +57,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:id="@+id/titleTxt"
                     android:text="@{obj.name}"
                     android:textColor="@color/app_black_word_color"/>
                 <TextView
@@ -64,6 +65,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="end"
+                    android:id="@+id/categoryTxt"
                     android:text="@{obj.category}"
                     android:textColor="@color/app_hint_color"/>
 

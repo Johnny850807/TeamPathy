@@ -225,6 +225,8 @@
     <string name="your_task_should_be_reviewed_by_other">要借助其他管理者才能審核自己的工作唷！</string>
     <string name="notice">注意</string>
     <string name="you_just_rejected_your_task">你剛剛駁回了自己的工作</string>
+    <string name="issue_date_transitionname">issue_date_transitionname</string>
+    <string name="issue_category_transitionname">issue_category_transitionname</string>
 
     <string-array name="office_options">
         <item>@string/watch_todolist</item>

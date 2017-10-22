@@ -7,12 +7,19 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.transition.Transition;
 import android.util.Log;
+import android.view.View;
+
+import com.ood.clean.waterball.teampathy.Presentation.UI.Animation.SharedTransition;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public abstract class PageController {
     protected Context context;
     protected FragmentManager fragmentManager;
     protected int targetContainerId;
+    private List<TransitionBag> transitionBags = new ArrayList<>();
 
     public PageController(Context context, FragmentManager fragmentManager , int targetContainerId){
         this.fragmentManager = fragmentManager;
@@ -21,7 +28,7 @@ public abstract class PageController {
     }
 
 
-    public void changePage(Fragment fragment,@Nullable Transition enterTransition ,@Nullable Transition exitTransition,
+    public void changePage(Fragment fragment, @Nullable Transition enterTransition , @Nullable Transition exitTransition,
                            boolean addToBackStack){
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         String name = fragment.getClass().getName();
@@ -38,9 +45,37 @@ public abstract class PageController {
         else
             fragment.setExitTransition(getExitTransition());
 
+        if (!transitionBags.isEmpty())
+        {
+            Transition sharedTransition = new SharedTransition();
+            fragment.setSharedElementEnterTransition(sharedTransition);
+            for (TransitionBag bag : transitionBags)
+                fragmentTransaction.addSharedElement(bag.sharedElement, bag.secondSharedViewName);
+            transitionBags.clear();
+        }
+
         if(addToBackStack)
             fragmentTransaction.addToBackStack(name);
         fragmentTransaction.commit();
+
+    }
+
+    /**
+     * @param transitionBag the sharedElement to be added, when the sharedElement commited, it will be null.
+     */
+    public PageController addSharedElement(TransitionBag transitionBag){
+        transitionBags.add(transitionBag);
+        return this;
+    }
+
+    public static class TransitionBag{
+        public View sharedElement;
+        public String secondSharedViewName;
+
+        public TransitionBag(View sharedElement, String secondSharedViewName) {
+            this.sharedElement = sharedElement;
+            this.secondSharedViewName = secondSharedViewName;
+        }
     }
 
     public void changePage(Fragment fragment,@Nullable Transition enterTransition ,@Nullable Transition exitTransition){
