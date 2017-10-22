@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="android.view.View"/>
+        <import type="com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask.Status"/>
         <variable
             name="task"
             type="com.ood.clean.waterball.teampathy.Domain.Model.WBS.TaskItem"/>
@@ -50,12 +51,23 @@
         </LinearLayout>
 
         <ImageView
-            android:layout_width="10dp"
-            android:layout_height="10dp"
-            android:layout_marginRight="13dp"
-            android:background="@drawable/circle"
+            android:layout_width="@dimen/member_head_icon_id_card_size"
+            android:layout_height="@dimen/member_head_icon_id_card_size"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginTop="4dp"
-            android:layout_gravity="top"/>
+            android:layout_gravity="top"
+            android:visibility="@{task.assignedUserImageUrl.empty ? View.GONE : View.VISIBLE}"
+            app:circleImageUrl="@{task.assignedUserImageUrl}"/>
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/done"
+            android:layout_marginRight="13dp"
+            android:layout_marginEnd="13dp"
+            android:layout_gravity="center_vertical"
+            android:visibility="@{task.status == Status.pass? View.VISIBLE : View.GONE }" />
 
     </LinearLayout>
 </layout>

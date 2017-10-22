@@ -8,8 +8,9 @@ import com.ood.clean.waterball.teampathy.MyUtils.GlideHelper;
 
 import us.feras.mdv.MarkdownView;
 
-/*
-* The binder to help Android data binding.
+
+/**
+ * The binder to help Android bind data to the view.
  */
 public final class MyDataBinder {
 

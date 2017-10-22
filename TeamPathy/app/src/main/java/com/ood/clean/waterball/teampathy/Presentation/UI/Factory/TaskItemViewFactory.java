@@ -17,6 +17,9 @@ import org.apmem.tools.layouts.FlowLayout;
 
 import javax.inject.Inject;
 
+/**
+ * The factory creating the item
+ */
 @ProjectScope
 public class TaskItemViewFactory {
     private Context context;
@@ -29,12 +32,12 @@ public class TaskItemViewFactory {
         this.context = context;
     }
 
-    public void setOnClickEventVisitor(TaskEventVisitor OnClickEventVisitor) {
-        this.onClickEventVisitor = OnClickEventVisitor;
+    public void setOnClickEventVisitor(TaskEventVisitor onClickEventVisitor) {
+        this.onClickEventVisitor = onClickEventVisitor;
     }
 
-    public void setOnLongClickEventVisitor(TaskEventVisitor OnLongClickEventVisitor) {
-        this.onLongClickEventVisitor = OnLongClickEventVisitor;
+    public void setOnLongClickEventVisitor(TaskEventVisitor onLongClickEventVisitor) {
+        this.onLongClickEventVisitor = onLongClickEventVisitor;
     }
 
     public void setFlowLayout(FlowLayout flowLayout) {
@@ -48,8 +51,8 @@ public class TaskItemViewFactory {
 
         binding.setTask(taskItem);
         View view = binding.getRoot();
-        setTaskViewOnClick(view,taskItem);
-        setTaskViewOnLongClick(view,taskItem);
+        setTaskViewOnClick(view, taskItem);
+        setTaskViewOnLongClick(view, taskItem);
 
         return binding.getRoot();
     }

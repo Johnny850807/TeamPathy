@@ -116,6 +116,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpPresenter
         progressDialog.dismiss();
         MyApp.createUserComponent(this, user);
         startActivity(new Intent(this, BaseActivity.class));
+        finish();
     }
 
     @Override
@@ -168,8 +169,6 @@ public class SignUpActivity extends AppCompatActivity implements SignUpPresenter
                 Toast.makeText(getApplicationContext(), error.getMessage(),Toast.LENGTH_SHORT).show();
             }
         }
-        else
-            finish();
     }
 
 

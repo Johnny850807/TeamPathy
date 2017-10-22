@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.ood.clean.waterball.teampathy.Domain.Model.Member.Member;
@@ -54,6 +55,10 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
     @Inject Member member;
     private TaskItem taskRoot;
 
+    /**
+     * The visitor is for visiting the composition of the taskRoot,
+     *  and implementing the different actions to each node such like onEdit, onClick, onLongClick to each item.
+     */
     private TaskEventVisitor onEditEventVisitor;
     private TaskEventVisitor onClickEventVisitor;
     private TaskEventVisitor onLongClickEventVisitor;
@@ -86,10 +91,13 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
         ButterKnife.bind(this,view);
         MyApp.getWbsComponent(getActivity()).inject(this);
         presenterImp.setWbsView(this);
-        setupConsoleView();
+        setupWbsConsoleView();
     }
 
-    private void setupConsoleView() {
+    private void setupWbsConsoleView() {
+        /* the factory will setup each item with both onClickListener and onLongClickListener as well as
+            the visitors implement the action according to the event.
+        */
         taskItemViewFactory.setOnClickEventVisitor(onClickEventVisitor);
         taskItemViewFactory.setOnLongClickEventVisitor(onLongClickEventVisitor);
         taskItemViewFactory.setFlowLayout(flowLayout);
@@ -136,8 +144,6 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
         presenterImp.onDestroy();
     }
 
-    /** taskview event visitor's **/
-
     private class OnClickEventVisitor implements TaskEventVisitor{
         @Override
         public void eventOnTask(final TaskGroup taskGroup) {
@@ -160,7 +166,7 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
                             switch (position)
                             {
                                 case CREATE_TASK_GROUP:
-                                    showDialogForCreateTaskChild(taskGroup);
+                                    showDialogForCreatingTaskChild(taskGroup);
                                     break;
                                 case CREATE_TODOTASK:
                                     showDialogForCreatingTodoTask(taskGroup);
@@ -171,15 +177,14 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
                     .show();
     }
 
-
     private void showDialogForCreatingTodoTask(TaskItem parent) {
-        ArrayList<TodoTask> allTodos = filterAllTaskItem(false);
+        ArrayList<TodoTask> allTodos = filterAllTaskItemByIfItHasChild(false);
         CreateTodoTaskDialogFragment fragment = CreateTodoTaskDialogFragment.newInstance(allTodos, parent.getName());
         fragment.setBaseView(getBaseView());
         showAlertDialogFragment(fragment);
     }
 
-    private <T extends TaskItem> ArrayList<T> filterAllTaskItem(boolean hasChild){
+    private <T extends TaskItem> ArrayList<T> filterAllTaskItemByIfItHasChild(boolean hasChild){
         ArrayList<T> allItem = new ArrayList<>();
         for (TaskItem taskItem : taskRoot)
             if (taskItem.hasChild() == hasChild) // no child means a todotask
@@ -187,8 +192,8 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
         return allItem;
     }
 
-    private void showDialogForCreateTaskChild(TaskItem parent) {
-        ArrayList<TaskGroup> allGroups = filterAllTaskItem(true);
+    private void showDialogForCreatingTaskChild(TaskItem parent) {
+        ArrayList<TaskGroup> allGroups = filterAllTaskItemByIfItHasChild(true);
         CreateTaskGroupDialogFragment fragment = CreateTaskGroupDialogFragment.newInstance(allGroups, parent.getName());
         fragment.setBaseView(getBaseView());
         showAlertDialogFragment(fragment);
@@ -251,10 +256,12 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
 
     private void showDialogForEdittingTaskGroup(TaskGroup taskGroup) {
         //todo edit dialog
+        Log.d("wbs", "Editing the taskgroup " + taskGroup.getName());
     }
 
     private void showDialogForEdittingTodoTask(TodoTask todoTask) {
         //todo edit dialog
+        Log.d("wbs", "Editing the todotask " + todoTask.getName());
     }
 
     private void showDialogForDeletingTaskItem(final TaskItem taskItem) {
@@ -265,18 +272,27 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         WbsCommand command = WbsCommand.removeTaskItem(taskItem);
-                        Log.d("wbs",new Gson().toJson(command));
-                        getBaseView().showProgressDialog();
-                        presenterImp.executeCommand(command);
+                        executingCommandAndShowProgressingDialog(command);
                     }
                 }).setNegativeButton(R.string.cancel, null).show();
     }
 
+    private void executingCommandAndShowProgressingDialog(WbsCommand command){
+        Log.d("wbs",new Gson().toJson(command));
+        getBaseView().showProgressDialog();
+        presenterImp.executeCommand(command);
+    }
+
     private void showDialogForAssigningTaskItem(TaskItem taskItem) {
-        AssignTaskDialogFragment fragment = AssignTaskDialogFragment.getInstance((TodoTask) taskItem);
-        fragment.setWbsPresenter(presenterImp);
-        fragment.setBaseView(getBaseView());
-        showAlertDialogFragment(fragment);
+        if (taskItem.getStatus() == TodoTask.Status.pass)
+            Toast.makeText(getActivity(), R.string.the_task_has_passed, Toast.LENGTH_SHORT).show();
+        else
+        {
+            AssignTaskDialogFragment fragment = AssignTaskDialogFragment.getInstance((TodoTask) taskItem);
+            fragment.setWbsPresenter(presenterImp);
+            fragment.setBaseView(getBaseView());
+            showAlertDialogFragment(fragment);
+        }
     }
 
 }
