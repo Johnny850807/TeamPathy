@@ -10,6 +10,7 @@ import android.widget.EditText;
 import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ActivityScope;
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
 import com.ood.clean.waterball.teampathy.MyApp;
+import com.ood.clean.waterball.teampathy.MyUtils.SharedPreferencesHelper;
 import com.ood.clean.waterball.teampathy.MyUtils.TeamPathyDialogFactory;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.MainPresenter;
 import com.ood.clean.waterball.teampathy.Presentation.Presenter.MainPresenterImp;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Mai
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SharedPreferencesHelper.init(this);
         ButterKnife.bind(this);
         progressDialog = TeamPathyDialogFactory.createProgressDialog(this);
         MyApp.createActivityComponent(this).inject(this);

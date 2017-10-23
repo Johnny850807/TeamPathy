@@ -261,6 +261,8 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
 
     private void showDialogForEdittingTodoTask(TodoTask todoTask) {
         //todo edit dialog
+        if (todoTask.getStatus() == TodoTask.Status.pass)
+            Toast.makeText(getActivity(), R.string.the_task_has_passed, Toast.LENGTH_SHORT).show();
         Log.d("wbs", "Editing the todotask " + todoTask.getName());
     }
 

@@ -19,6 +19,7 @@ import com.ood.clean.waterball.teampathy.Domain.Model.ReviewTaskCard;
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask;
 import com.ood.clean.waterball.teampathy.MyApp;
+import com.ood.clean.waterball.teampathy.MyUtils.SharedPreferencesHelper;
 import com.ood.clean.waterball.teampathy.MyUtils.TeamPathyDialogFactory;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.ReviewTaskPresenter;
 import com.ood.clean.waterball.teampathy.Presentation.Presenter.ReviewTaskPresenterImp;
@@ -40,6 +41,7 @@ import butterknife.ButterKnife;
 
 
 public class TaskPendingFragment extends BaseFragment implements ReviewTaskPresenter.ReviewTaskView{
+    private static final String REMIND_REVIEW_PASS = "Remind-Review Pass";
     public static final int REVIEW_TODO_AS_PASS = 0;
     public static final int REJECT_REVIEW = 1;
 
@@ -225,11 +227,27 @@ public class TaskPendingFragment extends BaseFragment implements ReviewTaskPrese
         if (todoTask.getAssignedId() != currentMember.getUserId())
         {
             Log.d("wbs", "review... todo" +  todoTask.getName());
-            presenterImp.reviewAsPassTodoTask(todoTask);
+            createAndShowDialogForMakingSureToReviewAsPass(todoTask);
         }
         else
             createDialogForAlarmingMessage(getString(R.string.your_task_should_be_reviewed_by_other));
+    }
 
+    private void createAndShowDialogForMakingSureToReviewAsPass(final TodoTask todoTask){
+        String[] choice = {getString(R.string.no_more_remind)};
+        boolean remind = SharedPreferencesHelper.getBoolean(REMIND_REVIEW_PASS, true);
+        if (remind)
+            TeamPathyDialogFactory.templateBuilder(getActivity())
+                    .setTitle(R.string.notice)
+                    .setMessage(R.string.cwhenyou_cannot_edit_the_task_after_pass)
+                    .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            presenterImp.reviewAsPassTodoTask(todoTask);
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, null)
+                    .show();
     }
 
     private void createDialogForAlarmingMessage(String message){
