@@ -230,6 +230,10 @@
     <string name="contribution">貢獻度</string>
     <string name="no_more_remind">下次不再提醒</string>
     <string name="cwhenyou_cannot_edit_the_task_after_pass">通過審核之後就不能在編輯此工作項目囉！</string>
+    <string name="caseover_rewards">結案獎勵</string>
+    <string name="position_reward">職位獎勵</string>
+    <string name="partake_reward">參與度獎勵</string>
+    <string name="tasks_contribution_reward">工作貢獻值獎勵</string>
 
     <string-array name="office_options">
         <item>@string/watch_todolist</item>
@@ -242,4 +246,5 @@
         <item>@string/promote_to_member</item>
         <item>@string/handover_leader</item>
     </string-array>
+
 </resources>

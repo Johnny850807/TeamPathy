@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
     <data>
+        <import type="android.view.View"/>
         <variable
             name="obj"
             type="com.ood.clean.waterball.teampathy.Domain.Model.Member.MemberIdCard"/>
@@ -108,6 +109,86 @@
                         android:id="@+id/member_current_task_groupname_id_card_item"/>
                 </LinearLayout>
             </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{obj.recordEmpty ? View.GONE : View.VISIBLE}">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/caseoverRewards"
+                    android:text="@string/caseover_rewards"
+                    android:textColor="@color/app_black_word_color"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginEnd="8dp"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:layout_toRightOf="@+id/caseoverRewards"
+                    android:layout_toEndOf="@+id/caseoverRewards"
+                    android:layout_centerVertical="true"
+                    android:background="#c7c6c6"/>
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:visibility="@{obj.recordEmpty ? View.GONE : View.VISIBLE}">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="7dp"
+                    android:layout_marginRight="7dp"
+                    android:text="@string/partake_reward"
+                    android:textColor="#000769"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{String.valueOf(obj.records[0].point) + @string/point}"
+                    android:textColor="#1d1d1d"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:visibility="@{obj.recordEmpty ? View.GONE : View.VISIBLE}">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="7dp"
+                    android:layout_marginRight="7dp"
+                    android:text="@string/position_reward"
+                    android:textColor="#000769"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{String.valueOf(obj.records[1].point) + @string/point}"
+                    android:textColor="#1d1d1d"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:visibility="@{obj.recordEmpty ? View.GONE : View.VISIBLE}">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="7dp"
+                    android:layout_marginRight="7dp"
+                    android:text="@string/tasks_contribution_reward"
+                    android:textColor="#000769"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{String.valueOf(obj.records[2].point) + @string/point}"
+                    android:textColor="#1d1d1d"/>
+            </LinearLayout>
+
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </layout>

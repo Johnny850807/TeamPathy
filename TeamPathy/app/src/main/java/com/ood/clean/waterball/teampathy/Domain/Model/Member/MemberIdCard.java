@@ -7,6 +7,7 @@ import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask;
 public class MemberIdCard {
     private Member member;
     private TodoTask dointTask;
+    private RewardRecord[] records;
 
     public MemberIdCard(){}
 
@@ -37,5 +38,17 @@ public class MemberIdCard {
 
     public int getUserId(){
         return member.getUserId();
+    }
+
+    public boolean isRecordEmpty(){
+        return records.length == 0;
+    }
+
+    public RewardRecord[] getRecords() {
+        return records;
+    }
+
+    public void setRecords(RewardRecord[] records) {
+        this.records = records;
     }
 }
