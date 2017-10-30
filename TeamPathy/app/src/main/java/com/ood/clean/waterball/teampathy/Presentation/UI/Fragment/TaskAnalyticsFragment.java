@@ -18,9 +18,6 @@ import com.ood.clean.waterball.teampathy.MyApp;
 import com.ood.clean.waterball.teampathy.Presentation.Presenter.WbsConsolePresenterImp;
 import com.ood.clean.waterball.teampathy.R;
 
-import java.util.Arrays;
-import java.util.List;
-
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -55,18 +52,35 @@ public class TaskAnalyticsFragment extends BaseFragment {
     }
 
     private class MyFragmentPageAdapter extends FragmentPagerAdapter {
-
-        private final List<String> taskAnalysisSections;
+        private final String CONSOLE;
+        private final String WBS;
+        private final String GANTT;
+        private final String REVIEW_TASK;
+        private final String[] TASK_ANALYSIS_SECTIONS;
 
         public MyFragmentPageAdapter(FragmentManager fm) {
             super(fm);
-            taskAnalysisSections = Arrays.asList(getResources().getStringArray(R.array.task_analysis_sections));
+            CONSOLE = getString(R.string.console);
+            WBS = getString(R.string.wbs);
+            GANTT = getString(R.string.gantt);
+            REVIEW_TASK = getString(R.string.task_review_section);
+            TASK_ANALYSIS_SECTIONS = getTaskAnalysisSectionsByMemberAndProjectState();
+        }
+
+        private String[] getTaskAnalysisSectionsByMemberAndProjectState(){
+            // if the project has done the caseover or the member is not a manager, the operation section should be hidden.
+            if (project.isCaseover() || member.isNotManager())
+                return new String[]{WBS, GANTT};
+            else if (member.isManager()) // if the member is a manager,
+                return new String[]{CONSOLE, WBS, GANTT, REVIEW_TASK};
+
+            throw new IllegalStateException("No matched state.");
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             super.getPageTitle(position);
-            return taskAnalysisSections.get(position);
+            return TASK_ANALYSIS_SECTIONS[position];
         }
 
         @Override
@@ -76,36 +90,37 @@ public class TaskAnalyticsFragment extends BaseFragment {
               into the presenter in order to ensure all the fragments would be updated
               at the same time whenever the wbs updated.
              */
-            switch (position)
-            {
-                case 0:
-                    WbsConsoleFragment consolefragment = new WbsConsoleFragment();
-                    wbsConsolePresenterImp.putWbsUpdatedListener("console", consolefragment);
-                    return consolefragment;
-                case 1:
-                    ChartWebViewFragment wbsfragment = ChartWebViewFragment.newInstance(
-                            ChartWebViewFragment.XslType.WBS);
-                    wbsConsolePresenterImp.putWbsUpdatedListener("wbs", wbsfragment);
-                    return wbsfragment;
-                case 2:
-                    ChartWebViewFragment ganttfragment = ChartWebViewFragment.newInstance(
-                            ChartWebViewFragment.XslType.GanttChart);
-                    wbsConsolePresenterImp.putWbsUpdatedListener("gantt", ganttfragment);
-                    return ganttfragment;
-                default:
-                    return new TaskPendingFragment();
-            }
-        }
-/*
-        private Fragment createFragmentAndPutAsWbsUpdatedListener(){
+            String section = TASK_ANALYSIS_SECTIONS[position];
 
-        }*/
+            if (section.equals(CONSOLE))
+            {
+                WbsConsoleFragment consolefragment = new WbsConsoleFragment();
+                wbsConsolePresenterImp.putWbsUpdatedListener("console", consolefragment);
+                return consolefragment;
+            }
+            else if (section.equals(WBS))
+            {
+                ChartWebViewFragment wbsfragment = ChartWebViewFragment.newInstance(
+                        ChartWebViewFragment.XslType.WBS);
+                wbsConsolePresenterImp.putWbsUpdatedListener("wbs", wbsfragment);
+                return wbsfragment;
+            }
+            else if (section.equals(GANTT))
+            {
+                ChartWebViewFragment ganttfragment = ChartWebViewFragment.newInstance(
+                        ChartWebViewFragment.XslType.GanttChart);
+                wbsConsolePresenterImp.putWbsUpdatedListener("gantt", ganttfragment);
+                return ganttfragment;
+            }
+            else if (section.equals(REVIEW_TASK))
+                return new TaskPendingFragment();
+            else
+                throw new IllegalStateException("No matched section name: got " + section);
+        }
 
         @Override
         public int getCount() {
-            if (!member.isNotManager())  // manager and leader has one more workspace to review the tasks
-                return taskAnalysisSections.size() ;
-            return taskAnalysisSections.size() - 1;
+            return TASK_ANALYSIS_SECTIONS.length;
         }
     }
 

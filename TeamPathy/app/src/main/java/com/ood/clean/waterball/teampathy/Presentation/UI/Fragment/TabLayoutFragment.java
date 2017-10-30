@@ -26,7 +26,13 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+
 public class TabLayoutFragment extends BaseFragment implements TabLayoutView{
+
+    /**
+     * The project sections include Timeline, Forum, Todolist, Office as default.
+     * If the project has done the caseover, the Todolist should not exist anymore.
+     */
     private String[] SECTIONS;
     @Inject Member member;
     @Inject Project project;
@@ -89,10 +95,6 @@ public class TabLayoutFragment extends BaseFragment implements TabLayoutView{
     }
 
 
-    /**
-     * The project's section include Timeline, Forum, Todolist, Office as default.
-     * If the project has done the caseover, the Todolist should not exist anymore.
-     */
     private class MyFragmentPageAdapter extends FragmentPagerAdapter {
         private final String TIMELINEWALL;
         private final String FORUM;

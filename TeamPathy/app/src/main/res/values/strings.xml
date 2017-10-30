@@ -116,12 +116,18 @@
     <string name="please_input_search_keyword">請填入搜尋關鍵字</string>
     <string name="password_length_should_be_longer_than_7">密碼長度必須大於7</string>
 
+    <string name="console">控制台</string>
+    <string name="wbs">工作結構圖</string>
+    <string name="gantt">甘特圖</string>
+    <string name="task_review_section">審核工作區</string>
+
     <string-array name="task_analysis_sections">
-        <item>控制台</item>>
-        <item>工作結構圖</item>
-        <item>甘特圖</item>
-        <item>審核工作區</item>
+        <item>@string/console</item>
+        <item>@string/wbs</item>
+        <item>@string/gantt</item>
+        <item>@string/task_review_section</item>
     </string-array>
+
 
     <string-array name="wbs_console_todotask_actions">
         <item>編輯工作項目</item>

@@ -37,6 +37,9 @@ public class Member implements Serializable{
         return memberDetails.getPosition().isMember();
     }
 
+    /**
+     * @return the member is a leader or a manager
+     */
     public boolean isManager(){
         return !memberDetails.getPosition().isMember();
     }
