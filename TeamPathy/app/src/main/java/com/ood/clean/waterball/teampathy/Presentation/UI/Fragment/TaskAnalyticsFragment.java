@@ -9,6 +9,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,6 +19,7 @@ import com.ood.clean.waterball.teampathy.Domain.Model.Member.Member;
 import com.ood.clean.waterball.teampathy.Domain.Model.Project;
 import com.ood.clean.waterball.teampathy.MyApp;
 import com.ood.clean.waterball.teampathy.Presentation.Presenter.WbsConsolePresenterImp;
+import com.ood.clean.waterball.teampathy.Presentation.UI.Dialog.ProjectCaseoverDialogFragment;
 import com.ood.clean.waterball.teampathy.R;
 
 import javax.inject.Inject;
@@ -26,6 +30,7 @@ import butterknife.ButterKnife;
 public class TaskAnalyticsFragment extends BaseFragment {
     @BindView(R.id.tablayout) TabLayout tabLayout;
     @BindView(R.id.viewpager) ViewPager viewPager;
+    ProjectCaseoverDialogFragment caseoverDialogFragment = new ProjectCaseoverDialogFragment();
     MyFragmentPageAdapter adapter;
     @Inject Member member;
     @Inject Project project;
@@ -41,7 +46,21 @@ public class TaskAnalyticsFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this,view);
         MyApp.getWbsComponent(getActivity()).inject(this);
+        setHasOptionsMenu(!project.isCaseclosed());
         initiateViewPager();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.caseover_on_toolbar, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.caseclosed)
+            showAlertDialogFragment(caseoverDialogFragment);
+        return true;
     }
 
     private void initiateViewPager(){
@@ -69,7 +88,7 @@ public class TaskAnalyticsFragment extends BaseFragment {
 
         private String[] getTaskAnalysisSectionsByMemberAndProjectState(){
             // if the project has done the caseover or the member is not a manager, the operation section should be hidden.
-            if (project.isCaseover() || member.isNotManager())
+            if (project.isCaseclosed() || member.isNotManager())
                 return new String[]{WBS, GANTT};
             else if (member.isManager()) // if the member is a manager,
                 return new String[]{CONSOLE, WBS, GANTT, REVIEW_TASK};

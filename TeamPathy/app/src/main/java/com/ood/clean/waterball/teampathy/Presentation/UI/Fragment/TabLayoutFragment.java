@@ -39,17 +39,6 @@ public class TabLayoutFragment extends BaseFragment implements TabLayoutView{
     @BindView(R.id.viewpager) ViewPager viewPager;
     @BindView(R.id.tablayout) TabLayout tabLayout;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        SECTIONS = getProjectSectionsByProjectCaseoverDoneOrNot();
-    }
-
-    private String[] getProjectSectionsByProjectCaseoverDoneOrNot(){
-        return project.isCaseover() ? getResources().getStringArray(R.array.project_sections_caseover) :
-                getResources().getStringArray(R.array.project_sections);
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -79,7 +68,13 @@ public class TabLayoutFragment extends BaseFragment implements TabLayoutView{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this,view);
         MyApp.getProjectComponent(getActivity()).inject(this);
+        SECTIONS = getProjectSectionsByProjectCaseoverDoneOrNot();
         setupPages();
+    }
+
+    private String[] getProjectSectionsByProjectCaseoverDoneOrNot(){
+        return project.isCaseclosed() ? getResources().getStringArray(R.array.project_sections_caseover) :
+                getResources().getStringArray(R.array.project_sections);
     }
 
     @Override

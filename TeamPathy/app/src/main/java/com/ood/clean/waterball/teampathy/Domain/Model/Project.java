@@ -16,7 +16,7 @@ public class Project extends BaseEntity {
     private String category;
     private String imageUrl;
     private String password = NO_PASSWORD;
-    private boolean caseover = false;
+    private boolean caseclosed = false;
     private boolean hasPassword = false;
 
     public Project(){}
@@ -44,7 +44,7 @@ public class Project extends BaseEntity {
         if (!(imageUrl == null) && !(imageUrl.isEmpty()))
             fields.put("imageUrl", imageUrl);
         fields.put("password", password);
-        fields.put("caseover", String.valueOf(caseover));
+        fields.put("caseclosed", String.valueOf(caseclosed));
         return fields;
     }
 
@@ -100,12 +100,12 @@ public class Project extends BaseEntity {
         this.issueCategoryList = issueCategoryList;
     }
 
-    public boolean isCaseover() {
-        return caseover;
+    public boolean isCaseclosed() {
+        return caseclosed;
     }
 
-    public void setCaseover(boolean caseover) {
-        this.caseover = caseover;
+    public void setCaseclosed(boolean caseclosed) {
+        this.caseclosed = caseclosed;
     }
 
     @Override

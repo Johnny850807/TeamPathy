@@ -1,13 +1,13 @@
 package com.ood.clean.waterball.teampathy.Presentation.UI.Activity;
 
 
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -66,8 +66,7 @@ public class BaseActivity extends AppCompatActivity implements BasePresenter.Bas
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base_page);
         ButterKnife.bind(this);
-        MyApp.getUserComponent(this)
-                .inject(this);
+        MyApp.getUserComponent(this).inject(this);
         setupViews();
     }
 
@@ -178,14 +177,14 @@ public class BaseActivity extends AppCompatActivity implements BasePresenter.Bas
                     R.id.container);
         }
 
-        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+        @TargetApi(Build.VERSION_CODES.KITKAT)
         @Override
         protected Transition getEnterTransition() {
             return TransitionInflater.from(context).inflateTransition(R.transition.auto_transition);
 
         }
 
-        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+        @TargetApi(Build.VERSION_CODES.KITKAT)
         @Override
         protected Transition getExitTransition() {
             return TransitionInflater.from(context).inflateTransition(R.transition.auto_transition);

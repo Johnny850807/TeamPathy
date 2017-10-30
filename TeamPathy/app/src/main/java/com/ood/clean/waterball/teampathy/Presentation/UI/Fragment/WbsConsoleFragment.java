@@ -7,9 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -29,7 +26,6 @@ import com.ood.clean.waterball.teampathy.Presentation.Presenter.WbsConsolePresen
 import com.ood.clean.waterball.teampathy.Presentation.UI.Dialog.AssignTaskDialogFragment;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Dialog.CreateTaskGroupDialogFragment;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Dialog.CreateTodoTaskDialogFragment;
-import com.ood.clean.waterball.teampathy.Presentation.UI.Dialog.ProjectCaseoverDialogFragment;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Factory.TaskItemViewFactory;
 import com.ood.clean.waterball.teampathy.R;
 
@@ -57,7 +53,6 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
     @Inject TaskItemViewFactory taskItemViewFactory;
     @Inject WbsConsolePresenterImp presenterImp;
     @Inject Member member;
-    private ProjectCaseoverDialogFragment caseoverDialogFragment = new ProjectCaseoverDialogFragment();
     private TaskItem taskRoot;
 
     /**
@@ -86,7 +81,6 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_wbs_console,container,false);
     }
 
@@ -97,19 +91,6 @@ public class WbsConsoleFragment extends BaseFragment implements WbsConsolePresen
         MyApp.getWbsComponent(getActivity()).inject(this);
         presenterImp.setWbsView(this);
         setupWbsConsoleView();
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.caseover_on_toolbar, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.caseover)
-            showAlertDialogFragment(caseoverDialogFragment);
-        return true;
     }
 
     private void setupWbsConsoleView() {

@@ -68,8 +68,7 @@ public class ProjectsFragment extends BaseFragment implements ProjectsPresenter.
     }
 
     private void inject() {
-        MyApp.getUserComponent(getActivity())
-                .inject(this);
+        MyApp.getUserComponent(getActivity()).inject(this);
     }
 
     @Nullable
