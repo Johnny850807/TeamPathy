@@ -28,7 +28,6 @@ import com.ood.clean.waterball.teampathy.Domain.Model.ProjectSection;
 import com.ood.clean.waterball.teampathy.Domain.Model.Timeline;
 import com.ood.clean.waterball.teampathy.Domain.Model.User;
 import com.ood.clean.waterball.teampathy.MyApp;
-import com.ood.clean.waterball.teampathy.MyUtils.IndexSet;
 import com.ood.clean.waterball.teampathy.MyUtils.NormalDateConverter;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.CrudPresenter;
 import com.ood.clean.waterball.teampathy.Presentation.Presenter.TimelinesPresenterImp;
@@ -39,7 +38,9 @@ import com.ood.clean.waterball.teampathy.databinding.FragmentTimelinePageBinding
 import com.ood.clean.waterball.teampathy.databinding.TimelineItemBinding;
 
 import java.text.ParseException;
-import java.util.TreeSet;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -56,7 +57,7 @@ public class TimelinesFragment extends BaseFragment implements CrudPresenter.Cru
     @Inject User user;
     @Inject TimelinesPresenterImp presenterImp;
     FragmentTimelinePageBinding binding;
-    IndexSet<Timeline> timelines = new IndexSet<>(new TreeSet<Timeline>());
+    List<Timeline> timelines = new ArrayList<>();
     BroadcastReceiver receiver = new TimelineBroadcastReceiver();
 
     @Nullable
@@ -120,6 +121,7 @@ public class TimelinesFragment extends BaseFragment implements CrudPresenter.Cru
     @Override
     public void loadEntity(Timeline timeline) {
         timelines.add(timeline);
+        Collections.sort(timelines);
         adapter.notifyDataSetChanged();
     }
 
@@ -282,7 +284,11 @@ public class TimelinesFragment extends BaseFragment implements CrudPresenter.Cru
                     else if (eventType.contains("delete"))
                         timelines.remove(timeline);
                     else if (eventType.contains("put"))
-                        timelines.update(timeline);
+                    {
+                        if (timelines.contains(timeline))
+                            timelines.remove(timeline);
+                        timelines.add(timeline);
+                    }
 
                     adapter.notifyDataSetChanged();
                 }

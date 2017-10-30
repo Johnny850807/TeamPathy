@@ -50,7 +50,7 @@ public class ReviewTaskPresenterImp implements ReviewTaskPresenter {
         try {
             TodoTask clone = todoTask.clone();
             clone.setStatus(TodoTask.Status.assigned);
-            WbsCommand wbsCommand = WbsCommand.updateTaskItem(todoTask.getName(), clone);
+            WbsCommand wbsCommand = WbsCommand.updateTaskItem(todoTask.getName(), todoTask, clone);
             executeWbsCommand.execute(new DefaultObserver<TaskItem>() {
                 @Override
                 public void onNext(@NonNull TaskItem taskItem) {}
@@ -71,7 +71,7 @@ public class ReviewTaskPresenterImp implements ReviewTaskPresenter {
         try{
             TodoTask clone = todoTask.clone();
             clone.setStatus(TodoTask.Status.pass);
-            WbsCommand command = WbsCommand.updateTaskItem(todoTask.getName(), clone);
+            WbsCommand command = WbsCommand.updateTaskItem(todoTask.getName(), todoTask, clone);
             executeWbsCommand.execute(new DefaultObserver<TaskItem>() {
                 @Override
                 public void onNext(@NonNull TaskItem taskItem) {}

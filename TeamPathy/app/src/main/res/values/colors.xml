@@ -12,7 +12,7 @@
 
     <color name="timeline_colors_task">#d1fafd</color>
     <color name="timeline_colors_jotting">#ddffde</color>
-    <color name="timeline_colors_announce">#fdffd5</color>
+    <color name="timeline_colors_notify">#fdffd5</color>
 
     <color name="triangle_tuggle_color">@color/almost_white</color>
     <color name="task_group_color">#00aeff</color>

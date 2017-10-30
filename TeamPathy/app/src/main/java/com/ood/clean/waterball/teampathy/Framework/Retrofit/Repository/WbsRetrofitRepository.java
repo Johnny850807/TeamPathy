@@ -7,6 +7,7 @@ import com.ood.clean.waterball.teampathy.Domain.DI.Scope.ProjectScope;
 import com.ood.clean.waterball.teampathy.Domain.Exception.validator.ExceptionValidator;
 import com.ood.clean.waterball.teampathy.Domain.Model.Project;
 import com.ood.clean.waterball.teampathy.Domain.Model.ReviewTaskCard;
+import com.ood.clean.waterball.teampathy.Domain.Model.User;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.TodoTask;
 import com.ood.clean.waterball.teampathy.Domain.Model.WBS.WbsCommand;
 import com.ood.clean.waterball.teampathy.Domain.Repository.WbsRepository;
@@ -24,9 +25,11 @@ import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 @ProjectScope
 public class WbsRetrofitRepository implements WbsRepository {
+    private User user;
     private Project project;
     private ExceptionValidator exceptionValidator;
     private WbsApi wbsApi;
@@ -34,9 +37,9 @@ public class WbsRetrofitRepository implements WbsRepository {
     @Inject
     public WbsRetrofitRepository(ExceptionValidator exceptionValidator,
                                  Retrofit retrofit,
-                                 Project project) {
+                                 User user, Project project) {
         this.exceptionValidator = exceptionValidator;
-
+        this.user = user;
         this.wbsApi = RetrofitHelper.provideWbsRetrofit().create(WbsApi.class);
         this.project = project;
     }
@@ -54,8 +57,9 @@ public class WbsRetrofitRepository implements WbsRepository {
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy dd MMM.")
                 .create();
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), gson.toJson(command));
-        ResponseModel<String> response = wbsApi.executeWbsCommand(project.getId(), body).execute().body();
+        String bodyJson = gson.toJson(command);
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), bodyJson);
+        ResponseModel<String> response = wbsApi.executeWbsCommand(project.getId(), user.getId(), body).execute().body();
 
         exceptionValidator.validate(response);
         return response.getData();
@@ -98,6 +102,7 @@ public class WbsRetrofitRepository implements WbsRepository {
         @Headers("Content-Type: application/json")
         @POST(RESOURCE)
         public Call<ResponseModel<String>> executeWbsCommand(@Path("projectId") int projectId,
+                                                             @Query("userId") int userId,
                                                              @Body RequestBody command);
     }
 }

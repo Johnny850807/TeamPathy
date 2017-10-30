@@ -160,7 +160,7 @@ public class AssignTaskDialogFragment extends DialogFragment implements AssignTa
             copy.setAssignedId(memberId);
             copy.setAssignedUserImageUrl(card.getMember().getUser().getImageUrl());
             copy.setStatus(TodoTask.Status.assigned);
-            WbsCommand command = WbsCommand.updateTaskItem(copy.getName(), copy);
+            WbsCommand command = WbsCommand.updateTaskItem(copy.getName(), todoTask, copy);
             Log.d("wbs", new Gson().toJson(command));
             baseView.showProgressDialog();
             wbsPresenter.executeCommand(command);

@@ -9,6 +9,7 @@ public class WbsCommand {
     private String name;
     private Type type;
     private Data data;
+    private Data before;
 
     public WbsCommand(Action action, String parent, String name, Type type, TaskItem data) {
         this.action = action;
@@ -16,6 +17,12 @@ public class WbsCommand {
         this.name = name;
         this.type = type;
         this.data = parseData(data);
+        this.before = null;
+    }
+
+    public WbsCommand(Action action, String parent, String name, Type type, TaskItem before, TaskItem data) {
+        this(action, parent, name, type, data);
+        this.before = parseData(before);
     }
 
     private Data parseData(TaskItem data){
@@ -28,9 +35,9 @@ public class WbsCommand {
         return new WbsCommand(Action.create, parentName, data.getName(), type, data);
     }
 
-    public static WbsCommand updateTaskItem(String originalName,TaskItem data){
+    public static WbsCommand updateTaskItem(String originalName, TaskItem before, TaskItem data){
         Type type = getType(data);
-        return new WbsCommand(Action.update, "", originalName, type, data);
+        return new WbsCommand(Action.update, "", originalName, type, before, data);
     }
 
     public static WbsCommand removeTaskItem(TaskItem data){

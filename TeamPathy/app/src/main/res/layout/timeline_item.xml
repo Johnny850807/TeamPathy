@@ -18,7 +18,7 @@
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
         app:cardCornerRadius="12dp"
-        app:cardBackgroundColor="@{obj.category == Category.announce ? @color/timeline_colors_announce : obj.category == Category.jotting ? @color/timeline_colors_jotting : @color/timeline_colors_task}"
+        app:cardBackgroundColor="@{obj.category == Category.notify ? @color/timeline_colors_notify : obj.category == Category.jotting ? @color/timeline_colors_jotting : @color/timeline_colors_task}"
         android:layout_marginTop="@dimen/item_margin_top"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp">
@@ -55,7 +55,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:textColor="@color/app_black_word_color"
-                android:text="@{obj.category == Category.announce ? @string/announce : obj.category == Category.jotting ? @string/jotting : @string/task}"/>
+                android:text="@{obj.category == Category.notify ? @string/notify : obj.category == Category.jotting ? @string/jotting : @string/task}"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -74,8 +74,8 @@
                     android:layout_below="@id/pictureImg"
                     android:id="@+id/contentTxt"
                     android:maxLines="1"
+                    app:timelineContent="@{obj}"
                     android:ellipsize="end"
-                    android:text="@{obj.content}"
                     android:textColor="@color/app_black_word_color"
                     android:textSize="15sp" />
         </RelativeLayout>

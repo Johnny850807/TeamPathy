@@ -159,7 +159,7 @@
     <string name="set_as_doing">設為執行中</string>
     <string name="cancel_doing">取消執行中</string>
 
-    <string name="announce">通知</string>
+    <string name="notify">通知</string>
     <string name="task">工作</string>
     <string name="jotting">心情小語</string>
 
@@ -265,5 +265,27 @@
         <item>@string/forum</item>
         <item>@string/office</item>
     </string-array>
+    
+    
+    <!--Timeline task-->
+    <string name="task_create" formatted="false">%s 新增了工作 %s</string>
+    <string name="task_delete" formatted="false">%s 刪除了工作 %s</string>
+    <string name="task_doing" formatted="false">%s 正在執行 %s</string>
+    <string name="task_undoing" formatted="false">%s 取消執行 %s</string>
+    <string name="task_commit" formatted="false">%s 提交了 %s </string>
+    <string name="task_uncommit" formatted="false">%s 取消提交了 %s </string>
+    <string name="task_pass" formatted="false">%s 審核通過了 %s</string>
+    <string name="task_reject" formatted="false">%s 審核駁回了 %s</string>
+    <string name="task_assigned" formatted="false">%s 指派了工作 %s 給 %s</string>
+
+    <!--Timeline notify-->
+    <string name="notify_issue_post" formatted="false">%s 在討論區發布了一篇文章 %s</string>
+    <string name="notify_issue_comment_post" formatted="false">%s 在 %s 進行了回應</string>
+    <string name="notify_edit_project_info" formatted="false">%s 更改了專案資訊</string>
+    <string name="notify_handover_leader" formatted="false">%s 跟 %s 進行了團長交接</string>
+    <string name="notify_position_change" formatted="false">%s 的職位已被調整為 %s </string>
+    <string name="notify_member_join" formatted="false">%s 加入了專案</string>
+    <string name="notify_member_boot" formatted="false">%s 從專案中被踢除了</string>
+
 
 </resources>

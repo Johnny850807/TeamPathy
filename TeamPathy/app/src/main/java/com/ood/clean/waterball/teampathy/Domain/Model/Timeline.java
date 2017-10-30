@@ -10,7 +10,9 @@ import java.util.Map;
 public class Timeline extends PostDateEntity {
     private User poster;
     private String content;
-    private Category category = Category.jotting;   //todo to test gson deserialize
+    private String complement;
+    private String obj;
+    private Category category = Category.jotting;
 
     public Timeline(){}
 
@@ -25,6 +27,22 @@ public class Timeline extends PostDateEntity {
         fields.put("content", content);
         fields.put("category",category.toString());
         return fields;
+    }
+
+    public String getObj() {
+        return obj;
+    }
+
+    public void setObj(String obj) {
+        this.obj = obj;
+    }
+
+    public String getComplement() {
+        return complement;
+    }
+
+    public void setComplement(String complement) {
+        this.complement = complement;
     }
 
     public String getContent() {
@@ -62,7 +80,7 @@ public class Timeline extends PostDateEntity {
     }
 
     public enum Category{
-        jotting, announce, task
+        jotting, notify, task
     }
 
 }

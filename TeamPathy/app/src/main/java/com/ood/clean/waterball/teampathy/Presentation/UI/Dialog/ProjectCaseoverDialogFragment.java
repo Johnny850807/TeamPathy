@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.ood.clean.waterball.teampathy.Domain.Model.Member.Member;
-import com.ood.clean.waterball.teampathy.MyApp;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.BasePresenter;
 import com.ood.clean.waterball.teampathy.Presentation.Presenter.ProjectCaseoverPresenterImp;
 import com.ood.clean.waterball.teampathy.R;
@@ -44,13 +43,17 @@ public class ProjectCaseoverDialogFragment extends MakeSureToCancelBaseDialogFra
     }
 
     private void bindAndInject(View view) {
-        MyApp.getProjectComponent(getActivity()).inject(this);
         ButterKnife.bind(this, view);
     }
 
     @Override
     protected View.OnClickListener getOnPositiveButtonClickListener() {
-        return null;
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        };
     }
 
 

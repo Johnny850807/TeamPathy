@@ -65,8 +65,9 @@ public class RetrofitProjectModule {
     @Provides @ProjectScope
     public WbsRepository provideWbsRepository(ExceptionValidator exceptionValidator,
                                               @Named("WbsRetrofit")Retrofit retrofit,
+                                              User user,
                                               Project project){
-        return new WbsRetrofitRepository(exceptionValidator, retrofit, project);
+        return new WbsRetrofitRepository(exceptionValidator, retrofit, user, project);
     }
 
 }
