@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 
 import com.ood.clean.waterball.teampathy.Domain.Model.Member.Member;
 import com.ood.clean.waterball.teampathy.Domain.Model.Project;
-import com.ood.clean.waterball.teampathy.Domain.Model.ProjectSection;
 import com.ood.clean.waterball.teampathy.MyApp;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.TabLayoutView;
 import com.ood.clean.waterball.teampathy.R;
@@ -28,11 +27,22 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class TabLayoutFragment extends BaseFragment implements TabLayoutView{
+    private String[] SECTIONS;
     @Inject Member member;
     @Inject Project project;
     @BindView(R.id.viewpager) ViewPager viewPager;
     @BindView(R.id.tablayout) TabLayout tabLayout;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        SECTIONS = getProjectSectionsByProjectCaseoverDoneOrNot();
+    }
+
+    private String[] getProjectSectionsByProjectCaseoverDoneOrNot(){
+        return project.isCaseover() ? getResources().getStringArray(R.array.project_sections_caseover) :
+                getResources().getStringArray(R.array.project_sections);
+    }
 
     @Nullable
     @Override
@@ -74,41 +84,54 @@ public class TabLayoutFragment extends BaseFragment implements TabLayoutView{
     private void setupPages() {
         viewPager.setAdapter(new MyFragmentPageAdapter(getChildFragmentManager()));
         // keep all fragments within viewpager alive
-        viewPager.setOffscreenPageLimit(ProjectSection.values().length);
+        viewPager.setOffscreenPageLimit(SECTIONS.length);
         tabLayout.setupWithViewPager(viewPager);
     }
 
 
+    /**
+     * The project's section include Timeline, Forum, Todolist, Office as default.
+     * If the project has done the caseover, the Todolist should not exist anymore.
+     */
     private class MyFragmentPageAdapter extends FragmentPagerAdapter {
-
-        private final String[] projectSections;
+        private final String TIMELINEWALL;
+        private final String FORUM;
+        private final String TODOLIST;
+        private final String OFFICE;
 
         public MyFragmentPageAdapter(FragmentManager fm) {
             super(fm);
-            projectSections = getResources().getStringArray(R.array.project_sections);
+            TIMELINEWALL = getString(R.string.timeline_wall);
+            FORUM = getString(R.string.forum);
+            TODOLIST = getString(R.string.todolist);
+            OFFICE = getString(R.string.office);
         }
+
 
         @Override
         public CharSequence getPageTitle(int position) {
             super.getPageTitle(position);
-            return projectSections[position];
+            return SECTIONS[position];
         }
 
         @Override
         public Fragment getItem(int position) {
-            if (position == ProjectSection.TIMELINE.ordinal())
+            String section = SECTIONS[position];
+            if (section.equals(TIMELINEWALL))
                 return new TimelinesFragment();
-            else if (position == ProjectSection.FORUM.ordinal())
+            else if (section.equals(FORUM))
                 return new IssuesFragment();
-            else if (position == ProjectSection.TODOLIST.ordinal())
+            else if (section.equals(TODOLIST))
                return TodolistFragment.newInstance(member, false);
-            else
+            else if (section.equals(OFFICE))
                 return new OfficeFragment();
+
+            throw new IllegalStateException("No matched section name : got " + section);
         }
 
         @Override
         public int getCount() {
-            return projectSections.length;
+            return SECTIONS.length;
         }
 
     }

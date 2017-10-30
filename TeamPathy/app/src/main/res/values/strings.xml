@@ -20,13 +20,6 @@
     <string name="title_activity_project">ProjectActivity</string>
     <string name="action_settings">Settings</string>
 
-    <string-array name="project_sections">
-        <item>動態牆</item>>
-        <item>討論區</item>
-        <item>代辦清單</item>
-        <item>辦公室</item>
-    </string-array>
-
     <string-array name="month_names">
         <item>Jan.</item>
         <item>Feb.</item>
@@ -204,7 +197,7 @@
         <item>從相簿挑選照片</item>
     </string-array>
 
-    <string name="point">pt</string>
+    <string name="point"> pt</string>
     <string name="choose_the_review_option">選擇欲進行之審核動作</string>
 
     <string-array name="review_task_options">
@@ -230,10 +223,11 @@
     <string name="contribution">貢獻度</string>
     <string name="no_more_remind">下次不再提醒</string>
     <string name="cwhenyou_cannot_edit_the_task_after_pass">通過審核之後就不能在編輯此工作項目囉！</string>
-    <string name="caseover_rewards">結案獎勵</string>
+    <string name="caseover_rewards">結案獎勵結算</string>
     <string name="position_reward">職位獎勵</string>
     <string name="partake_reward">參與度獎勵</string>
-    <string name="tasks_contribution_reward">工作貢獻值獎勵</string>
+    <string name="tasks_contribution_reward">工作貢獻比例獎勵</string>
+    <string name="project_caseover">專案結案</string>
 
     <string-array name="office_options">
         <item>@string/watch_todolist</item>
@@ -245,6 +239,24 @@
         <item>@string/promote_to_manager</item>
         <item>@string/promote_to_member</item>
         <item>@string/handover_leader</item>
+    </string-array>
+
+    <string name="timeline_wall">動態牆</string>
+    <string name="forum">討論區</string>
+    <string name="todolist">代辦清單</string>
+    <string name="office">辦公室</string>
+
+    <string-array name="project_sections">
+        <item>@string/timeline_wall</item>
+        <item>@string/forum</item>
+        <item>@string/todolist</item>
+        <item>@string/office</item>
+    </string-array>
+
+    <string-array name="project_sections_caseover">
+        <item>@string/timeline_wall</item>
+        <item>@string/forum</item>
+        <item>@string/office</item>
     </string-array>
 
 </resources>

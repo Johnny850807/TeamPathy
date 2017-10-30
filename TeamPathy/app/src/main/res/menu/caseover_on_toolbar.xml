@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/save_and_update_wbs"
-        android:orderInCategory="0"
-        android:name="@string/save_charts"
-        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/caseover"
+        app:showAsAction="ifRoom"
+        android:title="@string/project_caseover" />
 </menu>

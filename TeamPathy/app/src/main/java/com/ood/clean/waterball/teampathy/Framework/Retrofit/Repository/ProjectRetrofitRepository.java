@@ -107,6 +107,13 @@ public class ProjectRetrofitRepository implements ProjectRepository {
         return null;
     }
 
+    @Override
+    public void caseover(Project project) throws Exception {
+        ResponseModel<Void> response = projectApi.caseover(project.getId()).execute().body();
+
+        exceptionValidator.validate(response);
+    }
+
 
     interface ProjectApi{
         String RESOURCE = "projects";
@@ -132,5 +139,8 @@ public class ProjectRetrofitRepository implements ProjectRepository {
         public Call<ResponseModel<Void>> joinProject(@Path("projectId") int projectId,
                                                      @Query("userId") int userId,
                                                           @Query("password") String password);
+
+        @POST (RESOURCE + "/{projectId}/caseover")
+        public Call<ResponseModel<Void>> caseover(@Path("projectId") int projectId);
     }
 }

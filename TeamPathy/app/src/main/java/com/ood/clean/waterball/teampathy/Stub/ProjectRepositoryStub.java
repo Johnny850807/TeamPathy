@@ -108,4 +108,9 @@ public class ProjectRepositoryStub implements ProjectRepository {
     public List<Member> getMemberList() throws Exception {
         return null;
     }
+
+    @Override
+    public void caseover(Project project) throws Exception {
+
+    }
 }
