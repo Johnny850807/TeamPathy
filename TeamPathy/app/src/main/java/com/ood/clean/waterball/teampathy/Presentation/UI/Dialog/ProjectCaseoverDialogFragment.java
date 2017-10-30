@@ -1,15 +1,14 @@
 package com.ood.clean.waterball.teampathy.Presentation.UI.Dialog;
 
 import android.app.Dialog;
-import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import com.ood.clean.waterball.teampathy.Domain.Model.Member.Member;
 import com.ood.clean.waterball.teampathy.MyApp;
-import com.ood.clean.waterball.teampathy.MyUtils.TeamPathyDialogFactory;
-import com.ood.clean.waterball.teampathy.Presentation.Presenter.ProjectsPresenterImp;
+import com.ood.clean.waterball.teampathy.Presentation.Interfaces.BasePresenter;
+import com.ood.clean.waterball.teampathy.Presentation.Presenter.ProjectCaseoverPresenterImp;
 import com.ood.clean.waterball.teampathy.R;
 
 import javax.inject.Inject;
@@ -17,19 +16,28 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 
 
-public class ProjectCaseoverDialogFragment extends DialogFragment {
-    @Inject ProjectsPresenterImp presenterImp;
+public class ProjectCaseoverDialogFragment extends MakeSureToCancelBaseDialogFragment {
+    private BasePresenter.BaseView baseView;
+    @Inject ProjectCaseoverPresenterImp projectCaseoverPresenterImp;
     @Inject Member member;
 
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return TeamPathyDialogFactory.templateBuilder(getActivity())
-                .setTitle(R.string.project_caseover)
-                .setView(createView())
-                .create();
+    public void setBaseView(BasePresenter.BaseView baseView) {
+        this.baseView = baseView;
     }
 
-    private View createView(){
+    @Override
+    protected Dialog onCustomDialogSetting(AlertDialog alertDialog) {
+        alertDialog.setTitle(R.string.project_caseover);
+        return alertDialog;
+    }
+
+    @Override
+    protected String getPositiveButtonText() {
+        return getString(R.string.confirm_to_close_case);
+    }
+
+    @Override
+    protected View onViewCreated() {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.project_caseover_dialog, null);
         bindAndInject(view);
         return view;
@@ -39,4 +47,12 @@ public class ProjectCaseoverDialogFragment extends DialogFragment {
         MyApp.getProjectComponent(getActivity()).inject(this);
         ButterKnife.bind(this, view);
     }
+
+    @Override
+    protected View.OnClickListener getOnPositiveButtonClickListener() {
+        return null;
+    }
+
+
+
 }

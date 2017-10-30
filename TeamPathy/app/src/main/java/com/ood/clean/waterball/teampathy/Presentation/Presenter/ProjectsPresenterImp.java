@@ -9,7 +9,6 @@ import com.ood.clean.waterball.teampathy.Domain.UseCase.Project.CreateProject;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Project.GetMemberInfo;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Project.GetUserProjectList;
 import com.ood.clean.waterball.teampathy.Domain.UseCase.Utils.UploadImage;
-import com.ood.clean.waterball.teampathy.Presentation.Interfaces.CrudPresenter;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.ProjectsPresenter;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.TakePhotoView;
 
@@ -20,7 +19,7 @@ import javax.inject.Inject;
 import io.reactivex.annotations.NonNull;
 
 @UserScope
-public class ProjectsPresenterImp implements CrudPresenter<Project> {
+public class ProjectsPresenterImp implements ProjectsPresenter {
     private ProjectsPresenter.ProjectView projectsView;
     private TakePhotoView takePhotoView;
     private GetUserProjectList getUserProjectList;
@@ -120,5 +119,6 @@ public class ProjectsPresenterImp implements CrudPresenter<Project> {
         getUserProjectList.dispose();
         uploadImage.dispose();
     }
+
 
 }

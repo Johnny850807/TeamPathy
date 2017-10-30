@@ -251,6 +251,7 @@
     <string name="forum">討論區</string>
     <string name="todolist">代辦清單</string>
     <string name="office">辦公室</string>
+    <string name="confirm_to_close_case">確認結案</string>
 
     <string-array name="project_sections">
         <item>@string/timeline_wall</item>

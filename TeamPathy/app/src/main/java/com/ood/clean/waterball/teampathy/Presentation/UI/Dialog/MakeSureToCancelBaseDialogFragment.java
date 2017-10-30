@@ -25,8 +25,16 @@ public abstract class MakeSureToCancelBaseDialogFragment extends DialogFragment 
     private AlertDialog.Builder createBaseBuilder(){
         return TeamPathyDialogFactory.templateBuilder(getActivity())
                 .setView(onViewCreated())
-                .setPositiveButton(R.string.confirm, null)
-                .setNegativeButton(R.string.cancel, null);
+                .setPositiveButton(getPositiveButtonText(), null)
+                .setNegativeButton(getNegativeButtonText(), null);
+    }
+
+    protected String getPositiveButtonText(){
+        return getString(R.string.confirm);
+    }
+
+    protected String getNegativeButtonText(){
+        return getString(R.string.cancel);
     }
 
     private AlertDialog setupMakeSureToCancelDialog(final AlertDialog alertDialog){
