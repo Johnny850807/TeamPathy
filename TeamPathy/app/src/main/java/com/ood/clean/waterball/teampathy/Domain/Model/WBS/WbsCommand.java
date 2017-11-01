@@ -42,7 +42,7 @@ public class WbsCommand {
 
     public static WbsCommand removeTaskItem(TaskItem data){
         Type type = getType(data);
-        return new WbsCommand(Action.remove, "", data.getName(), type, data);
+        return new WbsCommand(Action.remove, "", data.getName(), type, data, data);
     }
 
     private static <T extends TaskItem> Type getType(T data){

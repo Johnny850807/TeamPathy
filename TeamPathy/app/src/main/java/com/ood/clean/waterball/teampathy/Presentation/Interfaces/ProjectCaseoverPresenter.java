@@ -12,5 +12,6 @@ public interface ProjectCaseoverPresenter extends LifetimePresenter{
     {
         void onProjectProgressInfoLoaded(ProjectProgressInfo projectProgressInfo);
         void onCaseoverDone();
+        void onError(Throwable err);
     }
 }

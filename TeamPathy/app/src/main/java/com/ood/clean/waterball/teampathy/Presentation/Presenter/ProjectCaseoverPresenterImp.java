@@ -42,8 +42,14 @@ public class ProjectCaseoverPresenterImp implements ProjectCaseoverPresenter{
     public void doTheProjectCaseover(Project project) {
         doProjectCaseOver.execute(new DefaultObserver<Void>() {
             @Override
-            public void onNext(@NonNull Void aVoid) {
+            public void onNext(@NonNull Void aVoid) {}
+            @Override
+            public void onComplete() {
                 caseoverView.onCaseoverDone();
+            }
+            @Override
+            public void onError(Throwable exception) {
+                caseoverView.onError(exception);
             }
         }, project);
     }

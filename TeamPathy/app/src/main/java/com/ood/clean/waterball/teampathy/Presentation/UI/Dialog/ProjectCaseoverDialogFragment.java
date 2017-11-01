@@ -71,7 +71,10 @@ public class ProjectCaseoverDialogFragment extends MakeSureToCancelBaseDialogFra
             @Override
             public void onClick(View view) {
                 if (binding.getObj().getDonePercentage() == 100)
+                {
                     projectCaseoverPresenterImp.doTheProjectCaseover(project);
+                    baseView.showProgressDialog();
+                }
                 else
                     TeamPathyDialogFactory.templateBuilder(getActivity())
                                         .setTitle(R.string.caseover)
@@ -83,6 +86,7 @@ public class ProjectCaseoverDialogFragment extends MakeSureToCancelBaseDialogFra
 
     @Override
     public void onCaseoverDone() {
+        baseView.hideProgressDialog();
         TeamPathyDialogFactory.templateBuilder(getActivity())
                 .setTitle(R.string.project_case_closed_successfully)
                 .setMessage(R.string.all_exp_calculated_done_congratulation)
@@ -92,5 +96,13 @@ public class ProjectCaseoverDialogFragment extends MakeSureToCancelBaseDialogFra
         getActivity().getSupportFragmentManager().popBackStack();
 
         dismiss();
+    }
+
+    @Override
+    public void onError(Throwable err) {
+        TeamPathyDialogFactory.templateBuilder(getActivity())
+                .setTitle(R.string.error)
+                .setMessage(err.getMessage())
+                .show();
     }
 }
