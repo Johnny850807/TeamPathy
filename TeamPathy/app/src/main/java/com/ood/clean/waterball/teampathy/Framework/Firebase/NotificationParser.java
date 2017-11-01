@@ -3,9 +3,14 @@ package com.ood.clean.waterball.teampathy.Framework.Firebase;
 import android.content.Context;
 import android.support.annotation.StringRes;
 
+import com.ood.clean.waterball.teampathy.Domain.Model.Timeline;
+import com.ood.clean.waterball.teampathy.Domain.Model.User;
+import com.ood.clean.waterball.teampathy.Presentation.MyDataBinder;
 import com.ood.clean.waterball.teampathy.R;
 
 import java.util.Map;
+
+import static com.ood.clean.waterball.teampathy.R.string.timeline;
 
 
 public class NotificationParser {
@@ -48,7 +53,7 @@ public class NotificationParser {
 
     private String parseEntityByEvent(String event){
         if (event.contains("timeline"))
-            return getString(R.string.timeline);
+            return getString(timeline);
         if (event.contains("issue"))
             return getString(R.string.issue);
         if (event.contains("comment"))
@@ -59,7 +64,21 @@ public class NotificationParser {
     // content -> date
     private String parseContentByData(Map<String, String> data) {
         if (data.containsKey("content"))
-            return data.get("content");
+        {
+            if (data.containsKey("category") && (data.get("category").equals("notify") || data.get("category").equals("task")))
+            {
+                Timeline timeline = new Timeline();
+                timeline.setContent(data.get("content"));
+                timeline.setCategory(Timeline.Category.valueOf(data.get("category")));
+                timeline.setPoster(new User(data.get("posterName")));
+                timeline.setComplement(data.get("complement"));
+                timeline.setObj(data.get("obj"));
+                return MyDataBinder.getBindedTimelineContent(context, timeline);
+            }
+            else
+                return data.get("content");
+
+        }
         for (String key : data.keySet())
             if (key.contains("date"))
                 return data.get(key);

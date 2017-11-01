@@ -14,6 +14,7 @@ import com.ood.clean.waterball.teampathy.MyUtils.TeamPathyDialogFactory;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.BasePresenter;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.ProjectCaseoverPresenter;
 import com.ood.clean.waterball.teampathy.Presentation.Presenter.ProjectCaseoverPresenterImp;
+import com.ood.clean.waterball.teampathy.Presentation.UI.Fragment.TabLayoutFragment;
 import com.ood.clean.waterball.teampathy.R;
 import com.ood.clean.waterball.teampathy.databinding.ProjectCaseoverDialogBinding;
 
@@ -87,6 +88,7 @@ public class ProjectCaseoverDialogFragment extends MakeSureToCancelBaseDialogFra
     @Override
     public void onCaseoverDone() {
         baseView.hideProgressDialog();
+        project.setCaseclosed(true);
         TeamPathyDialogFactory.templateBuilder(getActivity())
                 .setTitle(R.string.project_case_closed_successfully)
                 .setMessage(R.string.all_exp_calculated_done_congratulation)
@@ -94,7 +96,9 @@ public class ProjectCaseoverDialogFragment extends MakeSureToCancelBaseDialogFra
                 .show();
 
         getActivity().getSupportFragmentManager().popBackStack();
+        getActivity().getSupportFragmentManager().popBackStack();
 
+        getBaseView().getPageController().changePage(new TabLayoutFragment());
         dismiss();
     }
 

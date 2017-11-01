@@ -1,5 +1,6 @@
 package com.ood.clean.waterball.teampathy.Presentation;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.databinding.BindingAdapter;
 import android.widget.ImageView;
@@ -29,7 +30,7 @@ public final class MyDataBinder {
 
     @BindingAdapter("circleImageUrl")
     public static void loadCircleImage(ImageView view, String url) {
-        GlideHelper.loadToCircularImage(view.getContext(),view,url);
+        GlideHelper.loadToCircularImage(view.getContext(), view, url);
     }
 
     @BindingAdapter("markdownContent")
@@ -38,17 +39,19 @@ public final class MyDataBinder {
     }
 
 
-
     @BindingAdapter("timelineContent")
     public static void bindTimelineContent(TextView textView, Timeline timeline) {
-        Resources resources = textView.getResources();
+        String content = getBindedTimelineContent(textView.getContext(), timeline);
+        textView.setText(content);
+    }
+
+    public static String getBindedTimelineContent(Context context, Timeline timeline) {
+        Resources resources = context.getResources();
         if (timeline.getCategory() == Timeline.Category.jotting)
-            textView.setText(timeline.getContent());
-        else
-        {
+            return timeline.getContent();
+        else {
             String content = null;
-            switch (timeline.getContent())
-            {
+            switch (timeline.getContent()) {
                 case "task_assigned":
                     content = resources.getString(R.string.task_assigned, timeline.getPoster().getName(), timeline.getComplement(), timeline.getObj());
                     break;
@@ -100,8 +103,8 @@ public final class MyDataBinder {
                 default:
                     throw new IllegalStateException("No matched timeline action : got " + timeline.getContent());
             }
-            textView.setText(content);
+            return content;
         }
-
     }
+
 }
