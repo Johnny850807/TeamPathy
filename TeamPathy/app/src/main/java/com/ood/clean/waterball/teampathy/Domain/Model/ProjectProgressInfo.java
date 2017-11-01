@@ -86,4 +86,9 @@ public class ProjectProgressInfo {
     public void setSum(int sum) {
         this.sum = sum;
     }
+
+    public int getDonePercentage(){
+        float percentage = (getDone() * 1.0f / getSum()) * 100;
+        return (int) percentage;
+    }
 }

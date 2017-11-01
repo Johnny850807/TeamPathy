@@ -70,7 +70,13 @@ public class ProjectCaseoverDialogFragment extends MakeSureToCancelBaseDialogFra
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                projectCaseoverPresenterImp.doTheProjectCaseover(project);
+                if (binding.getObj().getDonePercentage() == 100)
+                    projectCaseoverPresenterImp.doTheProjectCaseover(project);
+                else
+                    TeamPathyDialogFactory.templateBuilder(getActivity())
+                                        .setTitle(R.string.caseover)
+                                        .setMessage(R.string.all_task_should_be_done_to_do_caseover)
+                                        .show();
             }
         };
     }
@@ -78,9 +84,13 @@ public class ProjectCaseoverDialogFragment extends MakeSureToCancelBaseDialogFra
     @Override
     public void onCaseoverDone() {
         TeamPathyDialogFactory.templateBuilder(getActivity())
-                .setTitle("專案已成功結案！")
-                .setMessage("所有獎勵值都已結算！可在辦公室的成員卡片上面看見各項獎勵值，恭喜！")
+                .setTitle(R.string.project_case_closed_successfully)
+                .setMessage(R.string.all_exp_calculated_done_congratulation)
                 .setPositiveButton(R.string.confirm, null)
                 .show();
+
+        getActivity().getSupportFragmentManager().popBackStack();
+
+        dismiss();
     }
 }

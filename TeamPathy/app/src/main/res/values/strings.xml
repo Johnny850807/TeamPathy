@@ -286,13 +286,17 @@
     <string name="notify_position_change" formatted="false">%s 的職位已被調整為 %s </string>
     <string name="notify_member_join" formatted="false">%s 加入了專案</string>
     <string name="notify_member_boot" formatted="false">%s 從專案中被踢除了</string>
-    <string name="done_task_number">已完成項目:</string>
-    <string name="not_done_task_amount">未完成項目:</string>
-    <string name="not_reviewed_task_amount">尚未審核:</string>
-    <string name="not_assigned_task_amount">尚未分配項目:</string>
+    <string name="done_task_number">已完成項目:&#160;</string>
+    <string name="not_done_task_amount">未完成項目:&#160;</string>
+    <string name="not_reviewed_task_amount">尚未審核:&#160;</string>
+    <string name="not_assigned_task_amount">尚未分配項目:&#160;</string>
 
     <string name="done">Done</string>
     <string name="NotDone">Not Done</string>
     <string name="percentage">%</string>
+    <string name="project_case_closed_successfully">專案已成功結案！</string>
+    <string name="all_exp_calculated_done_congratulation">所有獎勵值都已結算！可在辦公室的成員卡片上面看見各項獎勵值，恭喜！</string>
+    <string name="caseover">結案</string>
+    <string name="all_task_should_be_done_to_do_caseover">所有工作完成度必須為100%才能進行結案動作唷！</string>
 
 </resources>
