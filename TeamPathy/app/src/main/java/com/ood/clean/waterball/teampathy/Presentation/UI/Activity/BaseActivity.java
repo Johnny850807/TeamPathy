@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -68,10 +69,13 @@ public class BaseActivity extends AppCompatActivity implements BasePresenter.Bas
         ButterKnife.bind(this);
         MyApp.getUserComponent(this).inject(this);
         setupViews();
+        Log.d("myLog", String.valueOf(getResources().getDisplayMetrics().density * 160));
     }
 
     private void setupViews() {
         setSupportActionBar(toolbar);
+
+        toolbar.setLogo(R.drawable.actionbar_icon);
         progressDialog = TeamPathyDialogFactory.createProgressDialog(this);
         loadContainer();
         setupDrawer();

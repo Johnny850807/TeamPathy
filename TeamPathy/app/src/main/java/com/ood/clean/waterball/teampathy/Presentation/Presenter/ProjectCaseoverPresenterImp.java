@@ -32,14 +32,11 @@ public class ProjectCaseoverPresenterImp implements ProjectCaseoverPresenter{
         getWbs.execute(new DefaultObserver<TaskItem>() {
             @Override
             public void onNext(@NonNull TaskItem taskItem) {
-                caseoverView.onProjectProgressInfoLoaded(createProjectProgressInfoFromWbs(taskItem));
+                caseoverView.onProjectProgressInfoLoaded(new ProjectProgressInfo(taskItem.toList()));
             }
         }, project);
     }
 
-    private ProjectProgressInfo createProjectProgressInfoFromWbs(TaskItem taskItem){
-        return new ProjectProgressInfo();
-    }
 
     @Override
     public void doTheProjectCaseover(Project project) {

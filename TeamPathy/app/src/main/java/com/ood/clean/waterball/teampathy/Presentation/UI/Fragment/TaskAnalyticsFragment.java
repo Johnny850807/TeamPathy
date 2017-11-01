@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,7 +28,13 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TaskAnalyticsFragment extends BaseFragment {
+public class TaskAnalyticsFragment extends BaseFragment{
+    private String CONSOLE;
+    private String WBS;
+    private String GANTT;
+    private String REVIEW_TASK;
+    private String[] TASK_ANALYSIS_SECTIONS;
+
     @BindView(R.id.tablayout) TabLayout tabLayout;
     @BindView(R.id.viewpager) ViewPager viewPager;
     ProjectCaseoverDialogFragment caseoverDialogFragment = new ProjectCaseoverDialogFragment();
@@ -35,6 +42,7 @@ public class TaskAnalyticsFragment extends BaseFragment {
     @Inject Member member;
     @Inject Project project;
     @Inject WbsConsolePresenterImp wbsConsolePresenterImp;
+
 
     @Nullable
     @Override
@@ -46,8 +54,28 @@ public class TaskAnalyticsFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this,view);
         MyApp.getWbsComponent(getActivity()).inject(this);
+        caseoverDialogFragment.setBaseView(getBaseView());
+        initStringResources();
         setHasOptionsMenu(!project.isCaseclosed());
         initiateViewPager();
+    }
+
+    private void initStringResources(){
+        CONSOLE = getString(R.string.console);
+        WBS = getString(R.string.wbs);
+        GANTT = getString(R.string.gantt);
+        REVIEW_TASK = getString(R.string.task_review_section);
+        TASK_ANALYSIS_SECTIONS = getTaskAnalysisSectionsByMemberAndProjectState();
+    }
+
+    private String[] getTaskAnalysisSectionsByMemberAndProjectState(){
+        // if the project has done the caseover or the member is not a manager, the operation section should be hidden.
+        if (project.isCaseclosed() || member.isNotManager())
+            return new String[]{WBS, GANTT};
+        else if (member.isManager()) // if the member is a manager,
+            return new String[]{CONSOLE, WBS, GANTT, REVIEW_TASK};
+
+        throw new IllegalStateException("No matched state.");
     }
 
     @Override
@@ -66,34 +94,34 @@ public class TaskAnalyticsFragment extends BaseFragment {
     private void initiateViewPager(){
         adapter = new MyFragmentPageAdapter(getChildFragmentManager());
         viewPager.setOffscreenPageLimit(adapter.getCount());
-        viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
+        ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                Log.d("myLog", "onPageScrolled");
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Log.d("myLog", "onPageSelected");
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                Log.d("myLog", "onPageScrollStateChanged");
+            }
+        };
+        viewPager.addOnPageChangeListener(onPageChangeListener);
+        viewPager.setAdapter(adapter);
     }
 
+
+
     private class MyFragmentPageAdapter extends FragmentPagerAdapter {
-        private final String CONSOLE;
-        private final String WBS;
-        private final String GANTT;
-        private final String REVIEW_TASK;
-        private final String[] TASK_ANALYSIS_SECTIONS;
+
 
         public MyFragmentPageAdapter(FragmentManager fm) {
             super(fm);
-            CONSOLE = getString(R.string.console);
-            WBS = getString(R.string.wbs);
-            GANTT = getString(R.string.gantt);
-            REVIEW_TASK = getString(R.string.task_review_section);
-            TASK_ANALYSIS_SECTIONS = getTaskAnalysisSectionsByMemberAndProjectState();
-        }
-
-        private String[] getTaskAnalysisSectionsByMemberAndProjectState(){
-            // if the project has done the caseover or the member is not a manager, the operation section should be hidden.
-            if (project.isCaseclosed() || member.isNotManager())
-                return new String[]{WBS, GANTT};
-            else if (member.isManager()) // if the member is a manager,
-                return new String[]{CONSOLE, WBS, GANTT, REVIEW_TASK};
-
-            throw new IllegalStateException("No matched state.");
         }
 
         @Override

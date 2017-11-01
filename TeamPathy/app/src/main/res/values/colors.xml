@@ -25,4 +25,7 @@
     <color name="todotask_pass_color">#b4ffc0</color>
 
     <color name="done_task">#009318</color>
+
+    <color name="gray_number">#818181</color>
+    <color name="red_number">#fd2929</color>
 </resources>

@@ -37,6 +37,8 @@ public final class MyDataBinder {
         view.loadMarkdown(content);
     }
 
+
+
     @BindingAdapter("timelineContent")
     public static void bindTimelineContent(TextView textView, Timeline timeline) {
         Resources resources = textView.getResources();

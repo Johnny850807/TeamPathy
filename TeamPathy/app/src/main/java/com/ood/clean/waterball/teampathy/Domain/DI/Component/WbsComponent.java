@@ -5,6 +5,7 @@ import com.ood.clean.waterball.teampathy.Domain.DI.Scope.WbsScope;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Dialog.AssignTaskDialogFragment;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Dialog.CreateTaskGroupDialogFragment;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Dialog.CreateTodoTaskDialogFragment;
+import com.ood.clean.waterball.teampathy.Presentation.UI.Dialog.ProjectCaseoverDialogFragment;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Fragment.ChartWebViewFragment;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Fragment.TaskAnalyticsFragment;
 import com.ood.clean.waterball.teampathy.Presentation.UI.Fragment.TaskPendingFragment;
@@ -26,4 +27,5 @@ public interface WbsComponent {
     void inject(CreateTaskGroupDialogFragment createTodoTaskDialogFragment);
     void inject(AssignTaskDialogFragment assignTaskDialogFragment);
     void inject(TaskAnalyticsFragment taskAnalyticsFragment);
+    void inject(ProjectCaseoverDialogFragment projectCaseoverDialogFragment);
 }
