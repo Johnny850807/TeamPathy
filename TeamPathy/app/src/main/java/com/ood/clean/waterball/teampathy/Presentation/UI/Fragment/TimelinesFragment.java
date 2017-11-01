@@ -177,6 +177,7 @@ public class TimelinesFragment extends BaseFragment implements CrudPresenter.Cru
     @Override
     public void onRefresh() {
         getBaseView().showProgressBar();
+        timelines.clear();
         presenterImp.loadEntities(page);  // todo page control
     }
 

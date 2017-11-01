@@ -14,7 +14,6 @@ import com.ood.clean.waterball.teampathy.MyUtils.TeamPathyDialogFactory;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.BasePresenter;
 import com.ood.clean.waterball.teampathy.Presentation.Interfaces.ProjectCaseoverPresenter;
 import com.ood.clean.waterball.teampathy.Presentation.Presenter.ProjectCaseoverPresenterImp;
-import com.ood.clean.waterball.teampathy.Presentation.UI.Fragment.TabLayoutFragment;
 import com.ood.clean.waterball.teampathy.R;
 import com.ood.clean.waterball.teampathy.databinding.ProjectCaseoverDialogBinding;
 
@@ -96,9 +95,7 @@ public class ProjectCaseoverDialogFragment extends MakeSureToCancelBaseDialogFra
                 .show();
 
         getActivity().getSupportFragmentManager().popBackStack();
-        getActivity().getSupportFragmentManager().popBackStack();
 
-        getBaseView().getPageController().changePage(new TabLayoutFragment());
         dismiss();
     }
 

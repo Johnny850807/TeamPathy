@@ -47,7 +47,7 @@ public class TimelinesPresenterImp implements CrudPresenter<Timeline>{
                 exception.printStackTrace();
                 timelinesView.onOperationTimeout(exception);
             }
-        } , page);
+        } , 0);
     }
 
     @Override
