@@ -49,7 +49,7 @@ public class WbsRetrofitRepository implements WbsRepository {
         ResponseModel<String> response = wbsApi.getWbs(project.getId()).execute().body();
 
         exceptionValidator.validate(response);
-        return response.getData();
+        return response.getData().trim();
     }
 
     @Override

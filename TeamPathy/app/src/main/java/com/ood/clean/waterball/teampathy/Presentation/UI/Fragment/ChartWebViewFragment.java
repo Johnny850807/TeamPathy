@@ -4,6 +4,7 @@ package com.ood.clean.waterball.teampathy.Presentation.UI.Fragment;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,6 +89,7 @@ public class ChartWebViewFragment extends BaseFragment implements ChartWebViewPr
 
     @Override
     public void onWebPageFinish(String html) {
+        Log.d("XSL", html);
         webview.loadData(html,"text/html; charset=utf-8", "utf-8");
         progressBar.setVisibility(View.GONE);
         webview.setVisibility(View.VISIBLE);

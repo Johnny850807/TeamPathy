@@ -56,7 +56,6 @@ public class RetrofitApplicationModule {
                 .build();
 
         return new Retrofit.Builder()
-                .client(okHttpClient)
                 .baseUrl(ServerConstant.BASE_SERVER_API_URL);
     }
 
