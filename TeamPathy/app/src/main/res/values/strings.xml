@@ -167,8 +167,8 @@
     <string name="deleteAction">刪除了</string>
     <string name="putAction">編輯了</string>
 
-    <string name="signInAction">新增了</string>
-    <string name="signOutAction">刪除了</string>
+    <string name="signInAction">登入了</string>
+    <string name="signOutAction">登出了</string>
 
     <string name="timeline">動態</string>
     <string name="issue">文章</string>

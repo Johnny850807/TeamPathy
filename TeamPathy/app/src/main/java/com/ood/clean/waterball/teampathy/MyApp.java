@@ -31,7 +31,6 @@ public class MyApp extends Application {
     private WbsComponent wbsComponent;
 
 
-
     @Override
     public void onCreate() {
         super.onCreate();
